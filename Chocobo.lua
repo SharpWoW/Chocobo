@@ -16,7 +16,7 @@
 --]]
 
 local Chocobo = {
-	Version	= 2.0,
+	Version	= 2.1,
 	Loaded	= false,
 	Mounted	= false,
 	Songs	= {
@@ -77,7 +77,7 @@ function Chocobo_OnEvent(self, event, ...)
 		end
 		if (CHOCOBO_ENABLED == nil) then
 			--Should be fired on first launch, set the saved variable to default value
-			Chocobo_Msg("Enabled variable not set, setting Enabled varibale to TRUE")
+			Chocobo_Msg("Enabled variable not set, setting Enabled variable to TRUE")
 			CHOCOBO_ENABLED = true
 		end
 	elseif (event == "UNIT_AURA" and select(1, ...) == "player") then
