@@ -21,7 +21,9 @@ local Chocobo = {
 	Mounted	= false,
 	Songs	= {
 		"Interface\\AddOns\\Chocobo\\music\\chocobo.mp3",
-		"Interface\\AddOns\\Chocobo\\music\\chocobo_ffiv.mp3"
+		"Interface\\AddOns\\Chocobo\\music\\chocobo_ffiv.mp3",
+		"Interface\\AddOns\\Chocobo\\music\\chocobo_ffxii.mp3",
+		"Interface\\AddOns\\Chocobo\\music\\chocobo_ffxiii.mp3"
 	},
 	Names	= {
 		"Black Hawkstrider",
@@ -73,6 +75,11 @@ function Chocobo_OnEvent(self, event, ...)
 			Chocobo_Msg("AllMounts variable not set, setting AllMounts variable to FALSE")
 			CHOCOBO_ALLMOUNTS = false
 		end
+		if (CHOCOBO_ENABLED == nil) then
+			--Should be fired on first launch, set the saved variable to default value
+			Chocobo_Msg("Enabled variable not set, setting Enabled varibale to TRUE")
+			CHOCOBO_ENABLED = true
+		end
 	elseif (event == "UNIT_AURA" and select(1, ...) == "player") then
 		local unitName = select(1, ...)
 		Chocobo_DebugMsg("UNIT_AURA Event Detected (" .. unitName .. ")")
@@ -97,17 +104,19 @@ function Chocobo_OnUpdate(_, elapsed)
 			--Loop through all the "hawkstrider" names to see if the player is mounted on one or check if allmounts (override) is true
 			if (HasHawkstrider() or CHOCOBO_ALLMOUNTS) then
 				Chocobo_DebugMsg("Player is on a hawkstrider or CHOCOBO_ALLMOUNTS is set to true")
-				--Check so that the player is not already mounted
-				if (Chocobo.Mounted == false) then
-					Chocobo_DebugMsg("Playing music")
-					Chocobo.Mounted = true
-					--Note that in 4.0.1 PlayMusic will NOT stop the game music currently playing. There is no fix for this (Stupid Blizzard)
-					local songID = math.random(1, 2)
-					Chocobo_DebugMsg(string.format("Playing song id |cff00CCFF%d|r (|cff00CCFF%s|r)", songID, Chocobo.Songs[songID]))
-					PlayMusic(Chocobo.Songs[songID])
+				if (CHOCOBO_ENABLED) then --Check if AddOn is enabled
+					if (Chocobo.Mounted == false) then --Check so that the player is not already mounted
+						Chocobo_DebugMsg("Playing music")
+						Chocobo.Mounted = true
+						--Note that in 4.0.1 PlayMusic will NOT stop the game music currently playing. There is no fix for this (Stupid Blizzard)
+						local songID = math.random(1, 4)
+						Chocobo_DebugMsg(string.format("Playing song id |cff00CCFF%d|r (|cff00CCFF%s|r)", songID, Chocobo.Songs[songID]))
+						PlayMusic(Chocobo.Songs[songID])
+					else --If the player has already mounted
+						Chocobo_DebugMsg("Player was already mounted, song already playing")
+					end
 				else
-					--If the player has already mounted
-					Chocobo_DebugMsg("Player was already mounted, song already playing")
+					Chocobo_DebugMsg("AddOn currently disabled, not playing music")
 				end
 			else
 				--Playeris not on a hawkstrider
@@ -139,15 +148,27 @@ function HasHawkstrider()
 	return false --Else return false
 end
 
-function Chocobo_Msg(msg)
+function Chocobo_Toggle() --Toggle the AddOn on and off
+	if (CHOCOBO_ENABLED) then --If the addon is enabled
+		CHOCOBO_ENABLED = false --Disable it
+		StopMusic()
+		Chocobo_Msg("AddOn |cffFF0000DISABLED|r") --Print status
+		Chocobo_DebugMsg("Music stopped")
+	else --If the addon is disabled
+		CHOCOBO_ENABLED = true --Enable it
+		Chocobo_Msg("AddOn |cff00FF00ENABLED|r") --Print status
+	end
+end
+
+function Chocobo_Msg(msg) --Send a normal message
 	DEFAULT_CHAT_FRAME:AddMessage("\124cff00FF00[Chocobo AddOn]\124r " .. msg)
 end
 
-function Chocobo_ErrorMsg(msg)
+function Chocobo_ErrorMsg(msg) --Send an error message, these are prefixed with the word "ERROR" in red
 	DEFAULT_CHAT_FRAME:AddMessage("\124cff00FF00[Chocobo AddOn]\124r \124cffFF0000ERROR:\124r " .. msg)
 end
 
-function Chocobo_DebugMsg(msg)
+function Chocobo_DebugMsg(msg) --Send a debug message, these are only sent when debugging is enabled and are prefixed by the word "Debug" in yellow
 	if (CHOCOBO_DEBUG == true) then
 		DEFAULT_CHAT_FRAME:AddMessage("\124cff00FF00[Chocobo AddOn]\124r \124cffFFFF00DEBUG:\124r " .. msg)
 	end
@@ -162,6 +183,8 @@ function SlashCmdList.CHOCOBO(msg, editBox)
 	elseif (msg == "hawkstrider") then
 		Chocobo_Msg("Now playing chocobo on hawkstriders only!")
 		CHOCOBO_ALLMOUNTS = false
+	elseif (msg == "toggle") then
+		Chocobo_Toggle()
 	elseif (msg == "debug") then
 		if (CHOCOBO_DEBUG) then
 			Chocobo_Msg("Debugging is enabled")
@@ -178,6 +201,7 @@ function SlashCmdList.CHOCOBO(msg, editBox)
 		Chocobo_Msg("Commands:")
 		Chocobo_Msg("allmounts: play chocobo song on any mount")
 		Chocobo_Msg("hawkstrider: only play chocobo song on hawkstriders")
+		Chocobo_Msg("toggle: Toggle the AddOn on and off")
 		Chocobo_Msg("debug: check debug status, type enable or disable after to enable or disable debugging")
 	end
 end
