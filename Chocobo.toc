@@ -1,8 +1,8 @@
 ## Interface: 40000
-## Version: 2.1
+## Version: 2.2
 ## Title: Chocobo
-## Notes: Plays the Chocobo song when you mount on a hawkstrider! |cffFF0000Version 2.1|r |cff00CCFFBy F16Gaming|r
+## Notes: Plays the Chocobo song when you mount on a hawkstrider! |cffFF0000Version 2.2|r |cff00CCFFBy F16Gaming|r
 ## Author: F16Gaming
-##SavedVariables: CHOCOBO_ALLMOUNTS, CHOCOBO_DEBUG, CHOCOBO_ENABLED
+##SavedVariables: CHOCOBO_ALLMOUNTS, CHOCOBO_DEBUG, CHOCOBO_MUSIC, CHOCOBO_ENABLED
 
 Chocobo.lua

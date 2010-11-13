@@ -16,14 +16,15 @@
 --]]
 
 local Chocobo = {
-	Version	= 2.1,
+	Version	= 2.2,
 	Loaded	= false,
 	Mounted	= false,
-	Songs	= {
-		"Interface\\AddOns\\Chocobo\\music\\chocobo.mp3",
-		"Interface\\AddOns\\Chocobo\\music\\chocobo_ffiv.mp3",
-		"Interface\\AddOns\\Chocobo\\music\\chocobo_ffxii.mp3",
-		"Interface\\AddOns\\Chocobo\\music\\chocobo_ffxiii.mp3"
+	MusicDir = "Interface\\AddOns\\Chocobo\\music\\",
+	Songs	= { --Default songs loaded on first run
+		"chocobo.mp3",
+		"chocobo_ffiv.mp3",
+		"chocobo_ffxii.mp3",
+		"chocobo_ffxiii.mp3"
 	},
 	Names	= {
 		"Black Hawkstrider",
@@ -75,6 +76,14 @@ function Chocobo_OnEvent(self, event, ...)
 			Chocobo_Msg("AllMounts variable not set, setting AllMounts variable to FALSE")
 			CHOCOBO_ALLMOUNTS = false
 		end
+		if (CHOCOBO_MUSIC == nil) then --If the song list is empty
+			--Populate the table with default songs
+			Chocobo_Msg("Music list is empty, adding default values")
+			CHOCOBO_MUSIC = {}
+			for _,v in pairs(Chocobo.Songs) do --Add all of the default songs
+				Chocobo_AddMusic(v)
+			end
+		end
 		if (CHOCOBO_ENABLED == nil) then
 			--Should be fired on first launch, set the saved variable to default value
 			Chocobo_Msg("Enabled variable not set, setting Enabled variable to TRUE")
@@ -102,16 +111,16 @@ function Chocobo_OnUpdate(_, elapsed)
 		if (IsMounted()) then
 			Chocobo_DebugMsg("Player is mounted")
 			--Loop through all the "hawkstrider" names to see if the player is mounted on one or check if allmounts (override) is true
-			if (HasHawkstrider() or CHOCOBO_ALLMOUNTS) then
+			if (Chocobo_HasHawkstrider() or CHOCOBO_ALLMOUNTS) then
 				Chocobo_DebugMsg("Player is on a hawkstrider or CHOCOBO_ALLMOUNTS is set to true")
 				if (CHOCOBO_ENABLED) then --Check if AddOn is enabled
 					if (Chocobo.Mounted == false) then --Check so that the player is not already mounted
 						Chocobo_DebugMsg("Playing music")
 						Chocobo.Mounted = true
 						--Note that in 4.0.1 PlayMusic will NOT stop the game music currently playing. There is no fix for this (Stupid Blizzard)
-						local songID = math.random(1, 4)
-						Chocobo_DebugMsg(string.format("Playing song id |cff00CCFF%d|r (|cff00CCFF%s|r)", songID, Chocobo.Songs[songID]))
-						PlayMusic(Chocobo.Songs[songID])
+						local songID = math.random(1, #CHOCOBO_MUSIC) --"#CHOCOBO_MUSIC" = number of fields in CHOCOBO_MUSIC
+						Chocobo_DebugMsg(string.format("Playing song id |cff00CCFF%d|r (|cff00CCFF%s|r)", songID, CHOCOBO_MUSIC[songID]))
+						PlayMusic(CHOCOBO_MUSIC[songID])
 					else --If the player has already mounted
 						Chocobo_DebugMsg("Player was already mounted, song already playing")
 					end
@@ -134,7 +143,7 @@ function Chocobo_OnUpdate(_, elapsed)
 	end
 end
 
-function HasHawkstrider()
+function Chocobo_HasHawkstrider()
 	for i=1,40 do --Loop through all 40 possible active buffs
 		local name,_,_,_,_,_,_,_,_,_,id = UnitAura("player", i) --Get the name and spellID of the buff
 		if (name == nil or id == nil) then return false end
@@ -146,6 +155,45 @@ function HasHawkstrider()
 		end
 	end
 	return false --Else return false
+end
+
+function Chocobo_PrintMusic() --Print all the songs currently in list to chat
+	for k,v in pairs(CHOCOBO_MUSIC) do
+		Chocobo_Msg(string.format("\124cff00CCFF%i: %s\124r", k, v))
+	end
+end
+
+function Chocobo_AddMusic(songName) --Add a song the the list
+	songName = Chocobo.MusicDir .. songName
+	for _,v in pairs(CHOCOBO_MUSIC) do --Loop through all the songs currently in the list and...
+		if (v == songName) then --... make sure it isn't there already
+			Chocobo_ErrorMsg("Song already exists in list")
+			return
+		end
+	end
+	table.insert(CHOCOBO_MUSIC, songName) --Insert the song into list
+	Chocobo_Msg("Added |cff00CCFF" .. songName .. "|r to the music list!")
+end
+
+function Chocobo_RemoveMusic(songName) --Remove a song from the list
+	songName = Chocobo.MusicDir .. songName
+	for k,v in pairs(CHOCOBO_MUSIC) do --Loop through all the songs in the list until...
+		if (v == songName) then --... the desired one is found and then...
+			table.remove(CHOCOBO_MUSIC, k) --... remove it from the list.
+			Chocobo_Msg("Removed |cff00CCFF" .. songName .. "|r from the music list!")
+			return
+		end
+	end
+	Chocobo_ErrorMsg("Unable to find the specified song in list")
+end
+
+function Chocobo_ResetMusic() --Resets the values in CHOCOBO_MUSIC to default
+	Chocobo_Msg("Resetting music list to DEFAULT")
+	CHOCOBO_MUSIC = nil --"Erase" the data from CHOCOBO_MUSIC
+	CHOCOBO_MUSIC = {} --Make it a new table
+	for _,v in pairs(Chocobo.Songs) do --Add all the default songs again
+		Chocobo_AddMusic(v)
+	end
 end
 
 function Chocobo_Toggle() --Toggle the AddOn on and off
@@ -177,31 +225,56 @@ end
 SLASH_CHOCOBO1 = "/chocobo"
 function SlashCmdList.CHOCOBO(msg, editBox)
 	msg = string.lower(msg)
-	if (msg == "allmounts") then
+	local command, arg = msg:match("^(%S*)%s*(.-)$")
+	if (command == "allmounts") then
 		Chocobo_Msg("Now playing chocobo on all mounts!")
 		CHOCOBO_ALLMOUNTS = true
-	elseif (msg == "hawkstrider") then
+	elseif (command == "hawkstrider") then
 		Chocobo_Msg("Now playing chocobo on hawkstriders only!")
 		CHOCOBO_ALLMOUNTS = false
-	elseif (msg == "toggle") then
+	elseif (command == "toggle") then
 		Chocobo_Toggle()
-	elseif (msg == "debug") then
-		if (CHOCOBO_DEBUG) then
-			Chocobo_Msg("Debugging is enabled")
+	elseif (command == "add") then
+		if (arg ~= "") then
+			Chocobo_AddMusic(arg)
 		else
-			Chocobo_Msg("Debugging is disabled")
+			Chocobo_Msg("Syntax: add songName")
 		end
-	elseif (msg == "debug enable") then
-		Chocobo_Msg("Debugging enabled!")
-		CHOCOBO_DEBUG = true
-	elseif (msg == "debug disable") then
-		Chocobo_Msg("Debugging disabled!")
-		CHOCOBO_DEBUG = false
+	elseif (command == "remove") then
+		if (arg ~= "") then
+			Chocobo_RemoveMusic(arg)
+		else
+			Chocobo_Msg("Syntax: remove songName")
+		end
+	elseif (command == "list") then
+		Chocobo_PrintMusic()
+	elseif (command == "reset") then
+		Chocobo_ResetMusic()
+	elseif (command == "debug") then
+		if (arg == "enable") then
+			Chocobo_Msg("Debugging enabled!")
+			CHOCOBO_DEBUG = true
+		elseif (arg == "disable") then
+			Chocobo_Msg("Debugging disabled!")
+			CHOCOBO_DEBUG = false
+		else
+			if (CHOCOBO_DEBUG) then
+				Chocobo_Msg("Debugging is enabled")
+			else
+				Chocobo_Msg("Debugging is disabled")
+			end
+		end
 	else
+		--This list is growing rather large, perhaps there is a better way to print it?
 		Chocobo_Msg("Commands:")
 		Chocobo_Msg("allmounts: play chocobo song on any mount")
 		Chocobo_Msg("hawkstrider: only play chocobo song on hawkstriders")
 		Chocobo_Msg("toggle: Toggle the AddOn on and off")
+		Chocobo_Msg("add songName: Adds a music file with name \"songName\" (including file extension)")
+		Chocobo_Msg("remove songName: Removes a music file with name \"songName\" (including file extension)")
+		Chocobo_Msg("(Note that the remove command will not remove the file from the system, only from the song list ingame)")
+		Chocobo_Msg("list: List all the songs in the song list")
+		Chocobo_Msg("reset: Reset to song list to default values (THIS WILL WIPE ANY CUSTOM SONGS YOU HAVE SET)")
 		Chocobo_Msg("debug: check debug status, type enable or disable after to enable or disable debugging")
 	end
 end
