@@ -21,6 +21,7 @@ local Chocobo = {
 	Mounted	= false,
 	MusicDir = "Interface\\AddOns\\Chocobo\\music\\",
 	Songs	= { --Default songs loaded on first run
+		--Please note that you can't add custom songs here, this is only used when restoring default settings or on initial startup
 		"chocobo.mp3",
 		"chocobo_ffiv.mp3",
 		"chocobo_ffxii.mp3",
