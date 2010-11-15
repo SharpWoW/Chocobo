@@ -78,7 +78,6 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 				<OnClick>ChocoboOptionsFrame:Hide();</OnClick>
 			</Scripts>
 		</Button>
-		
 		<Frame name="$parent_Description">
 			<Size>
 				<AbsDimension x="370" y="33" />

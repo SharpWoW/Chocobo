@@ -249,6 +249,10 @@ function Chocobo_DebugMsg(msg) --Send a debug message, these are only sent when 
 	end
 end
 
+function Chocobo_GetVersion()
+	return Chocobo.Version
+end
+
 SLASH_CHOCOBO1 = "/chocobo"
 function SlashCmdList.CHOCOBO(msg, editBox)
 	msg = string.lower(msg)

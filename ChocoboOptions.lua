@@ -10,6 +10,7 @@ function ChocoboOptions_UpdateInfo()
 	ChocoboOptionsFrame_StatusLabel:SetText(string.format("AddOn is %s.", AddOnState))
 	ChocoboOptionsFrame_MountLabel:SetText(MountState)
 	ChocoboOptionsFrame_DebugLabel:SetText(string.format("Debugging is %s.", DebugState))
+	ChocoboOptionsFrame_DescriptionLabel:SetText("Configure the AddOn!|nv" .. Chocobo_GetVersion())
 end
 
 function ChocoboOptions_AddSong()
