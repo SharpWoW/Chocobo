@@ -1,0 +1,421 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+
+<Frame name="ChocoboOptionsFrame" parent="UIParent" hidden="true" enableMouse="true" movable="true">
+	<Size>
+		<AbsDimension x="400" y="410" />
+	</Size>
+	<Anchors>
+		<Anchor point="CENTER" />
+	</Anchors>
+	<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+		<EdgeSize>
+			<AbsValue val="32" />
+		</EdgeSize>
+		<TileSize>
+			<AbsValue val="32" />
+		</TileSize>
+		<BackgroundInsets>
+			<AbsInset left="11" right="12" top="12" bottom="11" />
+		</BackgroundInsets>
+	</Backdrop>
+	<Scripts>
+		<OnLoad>ChocoboOptions_UpdateInfo();</OnLoad>
+		<OnShow>ChocoboOptions_UpdateInfo();</OnShow>
+		<OnMouseDown>self:StartMoving();</OnMouseDown>
+		<OnMouseUp>self:StopMovingOrSizing();</OnMouseUp>
+	</Scripts>
+	
+	<Layers>
+		<Layer level="ARTWORK">
+			<Texture name="$parent_TitleBorder" file="Interface\DialogFrame\UI-DialogBox-Header">
+				<Size>
+					<AbsDimension x="300" y="50" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOP">
+						<Offset>
+							<AbsDimension x="0" y="8" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+			</Texture>
+			<FontString name="$parent_TitleString" font="Fonts\FRIZQT__.TTF" text="Chocobo Options">
+				<Size>
+					<AbsDimension x="140" y="0" />
+				</Size>
+				<Anchors>
+					<Anchor point="TOP">
+						<Offset>
+							<AbsDimension x="0" y="-1" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<FontHeight>
+					<AbsValue val="12" />
+				</FontHeight>
+				<Color r="1" g="0.8196079" b="0" />
+				<Shadow>
+					<Color r="0" g="0" b="0" />
+					<Offset>
+						<AbsDimension x="1" y="-1" />
+					</Offset>
+				</Shadow>
+			</FontString>
+		</Layer>
+	</Layers>
+	<Frames>
+		<Button name="$parent_CloseButton" inherits="UIPanelCloseButton">
+			<Anchors>
+				<Anchor point="TOPRIGHT">
+					<Offset>
+						<AbsDimension x="-3" y="-3" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Scripts>
+				<OnClick>ChocoboOptionsFrame:Hide();</OnClick>
+			</Scripts>
+		</Button>
+		
+		<Frame name="$parent_Description">
+			<Size>
+				<AbsDimension x="370" y="33" />
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT">
+					<Offset>
+						<AbsDimension x="14" y="-28" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Layers>
+				<Layer>
+					<FontString name="$parentLabel" font="Fonts\FRIZQT__.TTF" text="Configure the AddOn!">
+						<Anchors>
+							<Anchor point="TOPLEFT" />
+							<Anchor point="BOTTOMRIGHT" />
+						</Anchors>
+						<FontHeight>
+							<AbsValue val="12" />
+						</FontHeight>
+						<Color r="1" g="0.8196079" b="0" />
+						<Shadow>
+							<Color r="0" g="0" b="0" />
+							<Offset>
+								<AbsDimension x="1" y="-1" />
+							</Offset>
+						</Shadow>
+					</FontString>
+				</Layer>
+			</Layers>
+		</Frame>
+		<Frame name="$parent_SongsPanel">
+			<Size>
+				<AbsDimension x="370" y="95" />
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT">
+					<Offset>
+						<AbsDimension x="14" y="-67" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Backdrop bgFile="Interface\Tooltips\UI-Tooltip\UI-Tooltip-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+				<BackgroundInsets>
+					<AbsInset left="5" right="5" top="5" bottom="5" />
+				</BackgroundInsets>
+				<TileSize>
+					<AbsValue val="16" />
+				</TileSize>
+				<EdgeSize>
+					<AbsValue val="16" />
+				</EdgeSize>
+			</Backdrop>
+			<Frames>
+				<Frame name="$parent_Song">
+					<Size>
+						<AbsDimension x="360" y="18" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset>
+								<AbsDimension x="5" y="-8" />
+							</Offset>
+						</Anchor>
+					</Anchors>
+					<Layers>
+						<Layer>
+							<FontString name="$parentDesc" font="Fonts\FRIZQT__.TTF" text="Add/Remove, reset and list songs">
+								<Anchors>
+									<Anchor point="TOPLEFT" />
+									<Anchor point="BOTTOMRIGHT" />
+								</Anchors>
+								<FontHeight>
+									<AbsValue val="12" />
+								</FontHeight>
+								<Color r="1" g="0.8196079" b="0" />
+								<Shadow>
+									<Color r="0" g="0" b="0" />
+									<Offset>
+										<AbsDimension x="1" y="-1" />
+									</Offset>
+								</Shadow>
+							</FontString>
+						</Layer>
+					</Layers>
+				</Frame>
+				<EditBox name="$parent_SongEditBox" letters="100" enableMouse="true" inherits="InputBoxTemplate">
+					<Size>
+						<AbsDimension x="150" y="22" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset>
+								<AbsDimension x="110" y="-32" />
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</EditBox>
+				<Button name="$parent_AddSong" text="Add" inherits="OptionsButtonTemplate">
+					<Size>
+						<AbsDimension x="60" y="22" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset>
+								<AbsDimension x="54" y="-60" />
+							</Offset>
+						</Anchor>
+					</Anchors>
+					<Scripts>
+						<OnClick>ChocoboOptions_AddSong();</OnClick>
+					</Scripts>
+				</Button>
+				<Button name="$parent_RemoveSong" text="Remove" inherits="OptionsButtonTemplate">
+					<Size>
+						<AbsDimension x="60" y="22" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset>
+								<AbsDimension x="120" y="-60" />
+							</Offset>
+						</Anchor>
+					</Anchors>
+					<Scripts>
+						<OnClick>ChocoboOptions_RemoveSong();</OnClick>
+					</Scripts>
+				</Button>
+				<Button name="$parent_ResetSongs" text="Reset" inherits="OptionsButtonTemplate">
+					<Size>
+						<AbsDimension x="60" y="22" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset>
+								<AbsDimension x="186" y="-60" />
+							</Offset>
+						</Anchor>
+					</Anchors>
+					<Scripts>
+						<OnClick>Chocobo_ResetMusic();</OnClick>
+					</Scripts>
+				</Button>
+				<Button name="$parent_ListSongs" text="List" inherits="OptionsButtonTemplate">
+					<Size>
+						<AbsDimension x="60" y="22" />
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset>
+								<AbsDimension x="252" y="-60" />
+							</Offset>
+						</Anchor>
+					</Anchors>
+					<Scripts>
+						<OnClick>Chocobo_PrintMusic();</OnClick>
+					</Scripts>
+				</Button>
+			</Frames>
+		</Frame>
+		<Button name="$parent_OnlyHawk" text="Play music on|nhawkstrider only" inherits="OptionsButtonTemplate">
+			<Size>
+				<AbsDimension x="150" y="50" />
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT">
+					<Offset>
+						<AbsDimension x="44" y="-168" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Scripts>
+				<OnClick>Chocobo_FilterMount(true); ChocoboOptions_UpdateInfo();</OnClick>
+			</Scripts>
+		</Button>
+		<Button name="$parent_AllMounts" text="Play music|non all mounts" inherits="OptionsButtonTemplate">
+			<Size>
+				<AbsDimension x="150" y="50" />
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT">
+					<Offset>
+						<AbsDimension x="200" y="-168" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Scripts>
+				<OnClick>Chocobo_FilterMount(false); ChocoboOptions_UpdateInfo();</OnClick>
+			</Scripts>
+		</Button>
+		<Button name="$parent_DebugOn" text="Enable debugging" inherits="OptionsButtonTemplate">
+			<Size>
+				<AbsDimension x="150" y="50" />
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT">
+					<Offset>
+						<AbsDimension x="44" y="-224" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Scripts>
+				<OnClick>Chocobo_Debug("enable"); ChocoboOptions_UpdateInfo();</OnClick>
+			</Scripts>
+		</Button>
+		<Button name="$parent_DebugOff" text="Disable debugging" inherits="OptionsButtonTemplate">
+			<Size>
+				<AbsDimension x="150" y="50" />
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT">
+					<Offset>
+						<AbsDimension x="200" y="-224" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Scripts>
+				<OnClick>Chocobo_Debug("disable"); ChocoboOptions_UpdateInfo();</OnClick>
+			</Scripts>
+		</Button>
+		<Button name="$parent_ToggleButton" text="Toggle AddOn on and off" inherits="OptionsButtonTemplate">
+			<Size>
+				<AbsDimension x="200" y="38" />
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT">
+					<Offset>
+						<AbsDimension x="100" y="-280" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Scripts>
+				<OnClick>Chocobo_Toggle(); ChocoboOptions_UpdateInfo();</OnClick>
+			</Scripts>
+		</Button>
+		
+		<Frame name="$parent_Status">
+			<Size>
+				<AbsDimension x="370" y="18" />
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT">
+					<Offset>
+						<AbsDimension x="14" y="-322" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Layers>
+				<Layer>
+					<FontString name="$parentLabel" font="Fonts\FRIZQT__.TTF" text="AddOn is %STATE%">
+						<Anchors>
+							<Anchor point="TOPLEFT" />
+							<Anchor point="BOTTOMRIGHT" />
+						</Anchors>
+						<FontHeight>
+							<AbsValue val="12" />
+						</FontHeight>
+						<Color r="1" g="0.8196079" b="0" />
+						<Shadow>
+							<Color r="0" g="0" b="0" />
+							<Offset>
+								<AbsDimension x="1" y="-1" />
+							</Offset>
+						</Shadow>
+					</FontString>
+				</Layer>
+			</Layers>
+		</Frame>
+		<Frame name="$parent_Mount">
+			<Size>
+				<AbsDimension x="370" y="18" />
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT">
+					<Offset>
+						<AbsDimension x="14" y="-346" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Layers>
+				<Layer>
+					<FontString name="$parentLabel" font="Fonts\FRIZQT__.TTF" text="%MOUNTSTATUS%">
+						<Anchors>
+							<Anchor point="TOPLEFT" />
+							<Anchor point="BOTTOMRIGHT" />
+						</Anchors>
+						<FontHeight>
+							<AbsValue val="12" />
+						</FontHeight>
+						<Color r="1" g="0.8196079" b="0" />
+						<Shadow>
+							<Color r="0" g="0" b="0" />
+							<Offset>
+								<AbsDimension x="1" y="-1" />
+							</Offset>
+						</Shadow>
+					</FontString>
+				</Layer>
+			</Layers>
+		</Frame>
+		<Frame name="$parent_Debug">
+			<Size>
+				<AbsDimension x="370" y="18" />
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT">
+					<Offset>
+						<AbsDimension x="14" y="-370" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Layers>
+				<Layer>
+					<FontString name="$parentLabel" font="Fonts\FRIZQT__.TTF" text="Debugging is %DEBUGSTATE%">
+						<Anchors>
+							<Anchor point="TOPLEFT" />
+							<Anchor point="BOTTOMRIGHT" />
+						</Anchors>
+						<FontHeight>
+							<AbsValue val="12" />
+						</FontHeight>
+						<Color r="1" g="0.8196079" b="0" />
+						<Shadow>
+							<Color r="0" g="0" b="0" />
+							<Offset>
+								<AbsDimension x="1" y="-1" />
+							</Offset>
+						</Shadow>
+					</FontString>
+				</Layer>
+			</Layers>
+		</Frame>
+		
+		
+		
+	</Frames>
+</Frame>
+
+</Ui>

@@ -16,7 +16,7 @@
 --]]
 
 local Chocobo = {
-	Version	= 2.2,
+	Version	= 2.3,
 	Loaded	= false,
 	Mounted	= false,
 	MusicDir = "Interface\\AddOns\\Chocobo\\music\\",
@@ -197,6 +197,32 @@ function Chocobo_ResetMusic() --Resets the values in CHOCOBO_MUSIC to default
 	end
 end
 
+function Chocobo_FilterMount(filter)
+	if (filter == true) then
+		Chocobo_Msg("Now playing chocobo on hawkstriders only!")
+		CHOCOBO_ALLMOUNTS = false
+	else
+		Chocobo_Msg("Now playing chocobo on all mounts!")
+		CHOCOBO_ALLMOUNTS = true
+	end
+end
+
+function Chocobo_Debug(set)
+	if (set == "enable" or set == "on") then
+		Chocobo_Msg("Debugging enabled!")
+		CHOCOBO_DEBUG = true
+	elseif (set == "disable" or set == "off") then
+		Chocobo_Msg("Debugging disabled!")
+		CHOCOBO_DEBUG = false
+	else
+		if (CHOCOBO_DEBUG) then
+			Chocobo_Msg("Debugging is enabled")
+		else
+			Chocobo_Msg("Debugging is disabled")
+		end
+	end
+end
+
 function Chocobo_Toggle() --Toggle the AddOn on and off
 	if (CHOCOBO_ENABLED) then --If the addon is enabled
 		CHOCOBO_ENABLED = false --Disable it
@@ -227,12 +253,12 @@ SLASH_CHOCOBO1 = "/chocobo"
 function SlashCmdList.CHOCOBO(msg, editBox)
 	msg = string.lower(msg)
 	local command, arg = msg:match("^(%S*)%s*(.-)$")
-	if (command == "allmounts") then
-		Chocobo_Msg("Now playing chocobo on all mounts!")
-		CHOCOBO_ALLMOUNTS = true
+	if (command == "options") then
+		ChocoboOptionsFrame:Show()
+	elseif (command == "allmounts") then
+		Chocobo_FilterMount(false)
 	elseif (command == "hawkstrider") then
-		Chocobo_Msg("Now playing chocobo on hawkstriders only!")
-		CHOCOBO_ALLMOUNTS = false
+		Chocobo_FilterMount(true)
 	elseif (command == "toggle") then
 		Chocobo_Toggle()
 	elseif (command == "add") then
@@ -252,19 +278,7 @@ function SlashCmdList.CHOCOBO(msg, editBox)
 	elseif (command == "reset") then
 		Chocobo_ResetMusic()
 	elseif (command == "debug") then
-		if (arg == "enable") then
-			Chocobo_Msg("Debugging enabled!")
-			CHOCOBO_DEBUG = true
-		elseif (arg == "disable") then
-			Chocobo_Msg("Debugging disabled!")
-			CHOCOBO_DEBUG = false
-		else
-			if (CHOCOBO_DEBUG) then
-				Chocobo_Msg("Debugging is enabled")
-			else
-				Chocobo_Msg("Debugging is disabled")
-			end
-		end
+		Chocobo_Debug(arg)
 	else
 		--This list is growing rather large, perhaps there is a better way to print it?
 		Chocobo_Msg("Commands:")
