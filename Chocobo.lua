@@ -265,7 +265,7 @@ function Chocobo_ErrorMsg(msg) --Send an error message, these are prefixed with 
 end
 
 function Chocobo_DebugMsg(msg) --Send a debug message, these are only sent when debugging is enabled and are prefixed by the word "Debug" in yellow
-	if (CHOCOBO_DEBUG == true) then
+	if (Chocobo.Global["DEBUG"] == true) then
 		DEFAULT_CHAT_FRAME:AddMessage("\124cff00FF00[Chocobo AddOn]\124r \124cffFFFF00DEBUG:\124r " .. msg)
 	end
 end
