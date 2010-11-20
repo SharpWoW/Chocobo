@@ -26,7 +26,6 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 		<OnMouseDown>self:StartMoving();</OnMouseDown>
 		<OnMouseUp>self:StopMovingOrSizing();</OnMouseUp>
 	</Scripts>
-	
 	<Layers>
 		<Layer level="ARTWORK">
 			<Texture name="$parent_TitleBorder" file="Interface\DialogFrame\UI-DialogBox-Header">
@@ -411,10 +410,6 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 				</Layer>
 			</Layers>
 		</Frame>
-		
-		
-		
 	</Frames>
 </Frame>
-
 </Ui>

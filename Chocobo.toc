@@ -3,7 +3,7 @@
 ## Title: Chocobo
 ## Notes: Plays the Chocobo song when you mount on a hawkstrider! |cffFF0000Version 2.3|r |cff00CCFFBy F16Gaming|r
 ## Author: F16Gaming
-##SavedVariables: CHOCOBO_ALLMOUNTS, CHOCOBO_DEBUG, CHOCOBO_MUSIC, CHOCOBO_ENABLED
+## SavedVariables: CHOCOBO
 
 Chocobo.lua
 ChocoboOptions.lua
