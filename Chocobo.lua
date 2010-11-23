@@ -16,7 +16,7 @@
 --]]
 
 local Chocobo = {
-	Version	= 2.3,
+	Version	= 2.5,
 	Loaded	= false,
 	Mounted	= false,
 	MusicDir = "Interface\\AddOns\\Chocobo\\music\\",
@@ -39,6 +39,7 @@ local Chocobo = {
 		"Swift Pink Hawkstrider",
 		"Swift Purple Hawkstrider",
 		"Swift Red Hawkstrider",
+		"Swift Warstrider"
 		"Swift White Hawkstrider"
 	},
 	IDs	= {
@@ -52,6 +53,7 @@ local Chocobo = {
 		33660, --Swift Pink Hawkstrider
 		35027, --Swift Purple Hawkstrider
 		65639, --Swift Red Hawkstrider
+		35028, --Swift Warstrider (Thanks Khormin for pointing it out)
 		46628  --Swift White Hawkstrider
 	}
 }
@@ -68,7 +70,7 @@ function Chocobo_OnEvent(self, event, ...)
 			Chocobo_Msg("Enjoy your chocobo!")
 			Chocobo.Loaded = true
 		end
-		if (_G["CHOCOBO"] == nil) then _G["CHOCOBO"] = {} end
+		if (type(_G["CHOCOBO"]) ~= "table") then _G["CHOCOBO"] = {} end
 		Chocobo.Global = _G["CHOCOBO"]
 		if (Chocobo.Global["DEBUG"] == nil) then
 			--Should be fired on first launch, set the saved variable to default value
