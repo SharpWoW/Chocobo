@@ -39,7 +39,7 @@ local Chocobo = {
 		"Swift Pink Hawkstrider",
 		"Swift Purple Hawkstrider",
 		"Swift Red Hawkstrider",
-		"Swift Warstrider"
+		"Swift Warstrider",
 		"Swift White Hawkstrider"
 	},
 	IDs	= {
