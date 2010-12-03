@@ -21,7 +21,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 		</BackgroundInsets>
 	</Backdrop>
 	<Scripts>
-		<OnLoad>ChocoboOptions_UpdateInfo();</OnLoad>
+		<OnLoad>ChocoboOptions_OnLoad();</OnLoad>
 		<OnShow>ChocoboOptions_UpdateInfo();</OnShow>
 		<OnMouseDown>self:StartMoving();</OnMouseDown>
 		<OnMouseUp>self:StopMovingOrSizing();</OnMouseUp>
@@ -40,7 +40,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 					</Anchor>
 				</Anchors>
 			</Texture>
-			<FontString name="$parent_TitleString" font="Fonts\FRIZQT__.TTF" text="Chocobo Options">
+			<FontString name="$parent_TitleString" font="Fonts\FRIZQT__.TTF" text="">
 				<Size>
 					<AbsDimension x="140" y="0" />
 				</Size>
@@ -90,7 +90,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 			</Anchors>
 			<Layers>
 				<Layer>
-					<FontString name="$parentLabel" font="Fonts\FRIZQT__.TTF" text="Configure the AddOn!">
+					<FontString name="$parentLabel" font="Fonts\FRIZQT__.TTF" text="">
 						<Anchors>
 							<Anchor point="TOPLEFT" />
 							<Anchor point="BOTTOMRIGHT" />
@@ -145,7 +145,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 					</Anchors>
 					<Layers>
 						<Layer>
-							<FontString name="$parentDesc" font="Fonts\FRIZQT__.TTF" text="Add/Remove, reset and list songs">
+							<FontString name="$parentDesc" font="Fonts\FRIZQT__.TTF" text="">
 								<Anchors>
 									<Anchor point="TOPLEFT" />
 									<Anchor point="BOTTOMRIGHT" />
@@ -176,7 +176,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 						</Anchor>
 					</Anchors>
 				</EditBox>
-				<Button name="$parent_AddSong" text="Add" inherits="OptionsButtonTemplate">
+				<Button name="$parent_AddSong" text="" inherits="OptionsButtonTemplate">
 					<Size>
 						<AbsDimension x="60" y="22" />
 					</Size>
@@ -191,7 +191,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 						<OnClick>ChocoboOptions_AddSong();</OnClick>
 					</Scripts>
 				</Button>
-				<Button name="$parent_RemoveSong" text="Remove" inherits="OptionsButtonTemplate">
+				<Button name="$parent_RemoveSong" text="" inherits="OptionsButtonTemplate">
 					<Size>
 						<AbsDimension x="60" y="22" />
 					</Size>
@@ -206,7 +206,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 						<OnClick>ChocoboOptions_RemoveSong();</OnClick>
 					</Scripts>
 				</Button>
-				<Button name="$parent_ResetSongs" text="Reset" inherits="OptionsButtonTemplate">
+				<Button name="$parent_ResetSongs" text="" inherits="OptionsButtonTemplate">
 					<Size>
 						<AbsDimension x="60" y="22" />
 					</Size>
@@ -221,7 +221,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 						<OnClick>Chocobo_ResetMusic();</OnClick>
 					</Scripts>
 				</Button>
-				<Button name="$parent_ListSongs" text="List" inherits="OptionsButtonTemplate">
+				<Button name="$parent_ListSongs" text="" inherits="OptionsButtonTemplate">
 					<Size>
 						<AbsDimension x="60" y="22" />
 					</Size>
@@ -238,7 +238,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 				</Button>
 			</Frames>
 		</Frame>
-		<Button name="$parent_OnlyHawk" text="Play music on|nhawkstrider only" inherits="OptionsButtonTemplate">
+		<Button name="$parent_OnlyHawk" text="" inherits="OptionsButtonTemplate">
 			<Size>
 				<AbsDimension x="150" y="50" />
 			</Size>
@@ -253,7 +253,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 				<OnClick>Chocobo_FilterMount(true); ChocoboOptions_UpdateInfo();</OnClick>
 			</Scripts>
 		</Button>
-		<Button name="$parent_AllMounts" text="Play music|non all mounts" inherits="OptionsButtonTemplate">
+		<Button name="$parent_AllMounts" text="" inherits="OptionsButtonTemplate">
 			<Size>
 				<AbsDimension x="150" y="50" />
 			</Size>
@@ -268,7 +268,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 				<OnClick>Chocobo_FilterMount(false); ChocoboOptions_UpdateInfo();</OnClick>
 			</Scripts>
 		</Button>
-		<Button name="$parent_DebugOn" text="Enable debugging" inherits="OptionsButtonTemplate">
+		<Button name="$parent_DebugOn" text="" inherits="OptionsButtonTemplate">
 			<Size>
 				<AbsDimension x="150" y="50" />
 			</Size>
@@ -283,7 +283,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 				<OnClick>Chocobo_Debug("enable"); ChocoboOptions_UpdateInfo();</OnClick>
 			</Scripts>
 		</Button>
-		<Button name="$parent_DebugOff" text="Disable debugging" inherits="OptionsButtonTemplate">
+		<Button name="$parent_DebugOff" text="" inherits="OptionsButtonTemplate">
 			<Size>
 				<AbsDimension x="150" y="50" />
 			</Size>
@@ -298,7 +298,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 				<OnClick>Chocobo_Debug("disable"); ChocoboOptions_UpdateInfo();</OnClick>
 			</Scripts>
 		</Button>
-		<Button name="$parent_ToggleButton" text="Toggle AddOn on and off" inherits="OptionsButtonTemplate">
+		<Button name="$parent_ToggleButton" text="" inherits="OptionsButtonTemplate">
 			<Size>
 				<AbsDimension x="200" y="38" />
 			</Size>

@@ -5,6 +5,16 @@
 ## Author: F16Gaming
 ## SavedVariables: CHOCOBO
 
+locales\enUS.lua
+#locales\deDE.lua
+#locales\esES.lua
+#locales\esMX.lua
+#locales\frFR.lua
+#locales\koKR.lua
+#locales\ruRU.lua
+#locales\zhCN.lua
+#locales\zhTW.lua
+
 Chocobo.lua
 ChocoboOptions.lua
 ChocoboOptions.xml
