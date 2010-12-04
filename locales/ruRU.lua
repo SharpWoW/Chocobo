@@ -3,5 +3,5 @@ if (GetLocale() == "ruRU") then
 	
 	--@localization(locale="ruRU", format="lua_additive_table", handle-unlocalized="english")@
 	
-	setmetatable(L, ChocoboLocale_Default)
+	setmetatable(L, {__index=ChocoboLocale_Default})
 end

@@ -3,5 +3,5 @@ if (GetLocale() == "zhCN") then
 	
 	--@localization(locale="zhCN", format="lua_additive_table", handle-unlocalized="english")@
 	
-	setmetatable(L, ChocoboLocale_Default)
+	setmetatable(L, {__index=ChocoboLocale_Default})
 end

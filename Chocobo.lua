@@ -138,7 +138,7 @@ function Chocobo_OnUpdate(_, elapsed)
 					Chocobo_DebugMsg(L["DisabledNotPlaying"])
 				end
 			else --Player is not on a hawkstrider
-				Chocobo_DebugMsg(L["NoHawkStrider"])
+				Chocobo_DebugMsg(L["NoHawkstrider"])
 			end
 		else --When the player has dismounted
 			if (Chocobo.Mounted) then

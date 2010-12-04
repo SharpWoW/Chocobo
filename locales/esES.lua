@@ -3,5 +3,5 @@ if (GetLocale() == "esES") then
 	
 	--@localization(locale="esES", format="lua_additive_table", handle-unlocalized="english")@
 	
-	setmetatable(L, ChocoboLocale_Default)
+	setmetatable(L, {__index=ChocoboLocale_Default})
 end

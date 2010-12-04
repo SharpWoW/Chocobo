@@ -178,12 +178,12 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 				</EditBox>
 				<Button name="$parent_AddSong" text="" inherits="OptionsButtonTemplate">
 					<Size>
-						<AbsDimension x="60" y="22" />
+						<AbsDimension x="80" y="22" />
 					</Size>
 					<Anchors>
 						<Anchor point="TOPLEFT">
 							<Offset>
-								<AbsDimension x="54" y="-60" />
+								<AbsDimension x="24" y="-60" />
 							</Offset>
 						</Anchor>
 					</Anchors>
@@ -193,12 +193,12 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 				</Button>
 				<Button name="$parent_RemoveSong" text="" inherits="OptionsButtonTemplate">
 					<Size>
-						<AbsDimension x="60" y="22" />
+						<AbsDimension x="80" y="22" />
 					</Size>
 					<Anchors>
 						<Anchor point="TOPLEFT">
 							<Offset>
-								<AbsDimension x="120" y="-60" />
+								<AbsDimension x="105" y="-60" />
 							</Offset>
 						</Anchor>
 					</Anchors>
@@ -208,12 +208,12 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 				</Button>
 				<Button name="$parent_ResetSongs" text="" inherits="OptionsButtonTemplate">
 					<Size>
-						<AbsDimension x="60" y="22" />
+						<AbsDimension x="80" y="22" />
 					</Size>
 					<Anchors>
 						<Anchor point="TOPLEFT">
 							<Offset>
-								<AbsDimension x="186" y="-60" />
+								<AbsDimension x="187" y="-60" />
 							</Offset>
 						</Anchor>
 					</Anchors>
@@ -223,12 +223,12 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 				</Button>
 				<Button name="$parent_ListSongs" text="" inherits="OptionsButtonTemplate">
 					<Size>
-						<AbsDimension x="60" y="22" />
+						<AbsDimension x="80" y="22" />
 					</Size>
 					<Anchors>
 						<Anchor point="TOPLEFT">
 							<Offset>
-								<AbsDimension x="252" y="-60" />
+								<AbsDimension x="267" y="-60" />
 							</Offset>
 						</Anchor>
 					</Anchors>
@@ -300,12 +300,12 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 		</Button>
 		<Button name="$parent_ToggleButton" text="" inherits="OptionsButtonTemplate">
 			<Size>
-				<AbsDimension x="200" y="38" />
+				<AbsDimension x="240" y="38" />
 			</Size>
 			<Anchors>
 				<Anchor point="TOPLEFT">
 					<Offset>
-						<AbsDimension x="100" y="-280" />
+						<AbsDimension x="80" y="-280" />
 					</Offset>
 				</Anchor>
 			</Anchors>
