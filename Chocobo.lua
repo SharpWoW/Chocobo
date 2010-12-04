@@ -128,7 +128,6 @@ function Chocobo_OnUpdate(_, elapsed)
 					if (Chocobo.Mounted == false) then --Check so that the player is not already mounted
 						Chocobo_DebugMsg(L["PlayingMusic"])
 						Chocobo.Mounted = true
-						--Note that in 4.0.1 PlayMusic will NOT stop the game music currently playing. There is no fix for this (Stupid Blizzard)
 						local songID = math.random(1, #Chocobo.Global["MUSIC"]) --"#Chocobo.Global["MUSIC"]" = number of fields in Chocobo.Global["MUSIC"]
 						Chocobo_DebugMsg((L["PlayingSong"]):format(songID, Chocobo.Global["MUSIC"][songID]))
 						PlayMusic(Chocobo.Global["MUSIC"][songID])
@@ -138,17 +137,14 @@ function Chocobo_OnUpdate(_, elapsed)
 				else
 					Chocobo_DebugMsg(L["DisabledNotPlaying"])
 				end
-			else
-				--Player is not on a hawkstrider
+			else --Player is not on a hawkstrider
 				Chocobo_DebugMsg(L["NoHawkStrider"])
 			end
-		else
-			--When the player has dismounted
+		else --When the player has dismounted
 			if (Chocobo.Mounted) then
 				Chocobo_DebugMsg(L["NotMounted"])
 				Chocobo.Mounted = false
-				--Note that StopMusic() will also stop any other custom music playing (such as from EpicMusicPlayer)
-				StopMusic()
+				StopMusic() --Note that StopMusic() will also stop any other custom music playing (such as from EpicMusicPlayer)
 			end
 		end
 	end
