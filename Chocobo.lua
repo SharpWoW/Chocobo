@@ -16,7 +16,7 @@
 --]]
 
 local Chocobo = {
-	Version	= 2.5,
+	Version	= tonumber(GetAddOnMetadata("Chocobo", "Version")),
 	Loaded	= false,
 	Mounted	= false,
 	MusicDir = "Interface\\AddOns\\Chocobo\\music\\",
@@ -54,7 +54,8 @@ local Chocobo = {
 		35027, --Swift Purple Hawkstrider
 		65639, --Swift Red Hawkstrider
 		35028, --Swift Warstrider (Thanks Khormin for pointing it out)
-		46628  --Swift White Hawkstrider
+		46628, --Swift White Hawkstrider
+		RavenLord = 41252  --Raven Lord (If enabled in options)
 	}
 }
 
@@ -83,6 +84,10 @@ function Chocobo_OnEvent(self, event, ...)
 			--Should be fired on first launch, set the saved variable to default value
 			Chocobo_Msg(L["AllMountsNotSet"])
 			Chocobo.Global["ALLMOUNTS"] = false
+		end
+		if (Chocobo.Global["RAVENLORD"] == nil) then
+			Chocobo_Msg(L["RavenLordNotSet"])
+			Chocobo.Global["RAVENLORD"] = false
 		end
 		if (Chocobo.Global["MUSIC"] == nil) then --If the song list is empty
 			--Populate the table with default songs
@@ -156,6 +161,14 @@ function Chocobo_HasHawkstrider()
 		if (name == nil or id == nil) then return false end
 		for _,v in pairs(Chocobo.IDs) do --Compare the ID to the ones in the table to see if they match
 			if (id == v) then --If they do, report that the player has a hawkstrider and return true
+				if (id == Chocobo.IDs.RavenLord) then
+					if (Chocobo.Global["RAVENLORD"]) then
+						Chocobo_DebugMsg((L["CurrentMount"]):format(name))
+						return true
+					else
+						return false
+					end
+				end
 				Chocobo_DebugMsg((L["CurrentMount"]):format(name))
 				return true
 			end
@@ -231,6 +244,15 @@ function Chocobo_Debug(set)
 		else
 			Chocobo_Msg(L["DebugIsDisabled"])
 		end
+	end
+end
+
+function Chocobo_RavenLordToggle()
+	Chocobo.Global["RAVENLORD"] = not Chocobo.Global["RAVENLORD"]
+	if (Chocobo.Global["RAVENLORD"]) then
+		Chocobo_Msg(L["RavenLordTrue"])
+	else
+		Chocobo_Msg(L["RavenLordFalse"])
 	end
 end
 
