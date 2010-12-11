@@ -313,7 +313,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 				<OnClick>Chocobo_Toggle(); ChocoboOptions_UpdateInfo();</OnClick>
 			</Scripts>
 		</Button>
-		<CheckButton name="$parent_RavenLordToggle" inherits="UICheckButtonTemplate">
+		<CheckButton name="$parent_RavenLordToggle" inherits="OptionsCheckButtonTemplate">
 			<Size>
 				<AbsDimension x="40" y="40" />
 			</Size>
