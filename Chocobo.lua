@@ -16,7 +16,7 @@
 --]]
 
 local Chocobo = {
-	Version	= tonumber(GetAddOnMetadata("Chocobo", "Version")),
+	Version	= GetAddOnMetadata("Chocobo", "Version"),
 	Loaded	= false,
 	Mounted	= false,
 	MusicDir = "Interface\\AddOns\\Chocobo\\music\\",
