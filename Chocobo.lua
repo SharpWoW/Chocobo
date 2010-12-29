@@ -59,6 +59,10 @@ local Chocobo = {
 	}
 }
 
+--@debug@
+if (Chocobo.Version == "@".."project-version".."@") then Chocobo.Version = "Development" end
+--@end-debug@
+
 local t = 0
 
 local L = _G["ChocoboLocale"]
