@@ -43,19 +43,22 @@ local Chocobo = {
 		"Swift White Hawkstrider"
 	},
 	IDs	= {
-		35022, --Black Hawkstrider
-		35020, --Blue Hawkstrider
-		35018, --Purple Hawkstrider
-		34795, --Red Hawkstrider
-		63642, --Silvermoon Hawkstrider
-		66091, --Sunreaver Hawkstrider
-		35025, --Swift Green Hawkstrider
-		33660, --Swift Pink Hawkstrider
-		35027, --Swift Purple Hawkstrider
-		65639, --Swift Red Hawkstrider
-		35028, --Swift Warstrider (Thanks Khormin for pointing it out)
-		46628, --Swift White Hawkstrider
-		RavenLord = 41252  --Raven Lord (If enabled in options)
+		Hawkstriders = {
+			35022, --Black Hawkstrider
+			35020, --Blue Hawkstrider
+			35018, --Purple Hawkstrider
+			34795, --Red Hawkstrider
+			63642, --Silvermoon Hawkstrider
+			66091, --Sunreaver Hawkstrider
+			35025, --Swift Green Hawkstrider
+			33660, --Swift Pink Hawkstrider
+			35027, --Swift Purple Hawkstrider
+			65639, --Swift Red Hawkstrider
+			35028, --Swift Warstrider (Thanks Khormin for pointing it out)
+			46628  --Swift White Hawkstrider
+		},
+		RavenLord = 41252,  --Raven Lord (If enabled in options)
+		DruidForms = {33943, 40120} --When AllMounts is enabled
 	}
 }
 
@@ -128,10 +131,11 @@ function Chocobo_OnUpdate(_, elapsed)
 		--Unregister the OnUpdate script
 		ChocoboFrame:SetScript("OnUpdate", nil)
 		--Is the player mounted?
-		if (IsMounted()) then
+		local Mounted = Chocobo_HasMount()
+		if (IsMounted() or Mounted) then --More efficient way to make it also detect flight form here?
 			Chocobo_DebugMsg(L["PlayerIsMounted"])
 			--Loop through all the "hawkstrider" names to see if the player is mounted on one or check if allmounts (override) is true
-			if (Chocobo_HasHawkstrider() or Chocobo.Global["ALLMOUNTS"]) then
+			if (Mounted or Chocobo.Global["ALLMOUNTS"]) then
 				Chocobo_DebugMsg(L["PlayerOnHawkstrider"])
 				if (Chocobo.Global["ENABLED"]) then --Check if AddOn is enabled
 					if (Chocobo.Mounted == false) then --Check so that the player is not already mounted
@@ -159,26 +163,31 @@ function Chocobo_OnUpdate(_, elapsed)
 	end
 end
 
-function Chocobo_HasHawkstrider()
+function Chocobo_HasBuff(ids)
 	for i=1,40 do --Loop through all 40 possible active buffs
 		local name,_,_,_,_,_,_,_,_,_,id = UnitAura("player", i) --Get the name and spellID of the buff
 		if (name == nil or id == nil) then return false end
-		for _,v in pairs(Chocobo.IDs) do --Compare the ID to the ones in the table to see if they match
-			if (id == v) then --If they do, report that the player has a hawkstrider and return true
-				if (id == Chocobo.IDs.RavenLord) then
-					if (Chocobo.Global["RAVENLORD"]) then
-						Chocobo_DebugMsg((L["CurrentMount"]):format(name))
-						return true
-					else
-						return false
-					end
-				end
+		for _,v in pairs(ids) do --Compare the ID to the ones in the supplied table to see if they match
+			if (id == v) then --If they do, report that the player has the buff and return true
 				Chocobo_DebugMsg((L["CurrentMount"]):format(name))
 				return true
 			end
 		end
 	end
 	return false --Else return false
+end
+
+function Chocobo_HasMount()
+	--Reset the Hawkstriders table to avoid it being cluttered with all the other IDs (nicer workaround to this?)
+	Chocobo.IDs.Hawkstriders = {35022,35020,35018,34795,63642,66091,35025,33660,35027,65639,35028,46628}
+	local MountIDs = Chocobo.IDs.Hawkstriders
+	if (Chocobo.Global["RAVENLORD"]) then
+		table.insert(MountIDs, Chocobo.IDs.RavenLord)
+	end
+	if (Chocobo.Global["ALLMOUNTS"]) then -- Add druid flight forms
+		for _,v in pairs(Chocobo.IDs.DruidForms) do table.insert(MountIDs, v) end
+	end
+	return Chocobo_HasBuff(MountIDs)
 end
 
 function Chocobo_PrintMusic() --Print all the songs currently in list to chat
