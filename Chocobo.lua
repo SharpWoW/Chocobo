@@ -57,7 +57,7 @@ local Chocobo = {
 			35028, --Swift Warstrider (Thanks Khormin for pointing it out)
 			46628  --Swift White Hawkstrider
 		},
-		RavenLord = 41252,  --Raven Lord (If enabled in options)
+		RavenLord = {41252},  --Raven Lord (If enabled in options)
 		DruidForms = {33943, 40120} --When AllMounts is enabled
 	}
 }
@@ -163,24 +163,16 @@ function Chocobo_OnUpdate(_, elapsed)
 	end
 end
 
-function Chocobo_HasBuff(ids, extra)
-	buffids = {}
-	extra = extra or nil
-	for _,v in pairs(ids) do
-		table.insert(buffids, v)
-	end
-	if type(extra) == "table" then
-		for _,v in pairs(extra) do
-			table.insert(buffids, v)
-		end
-	end
-	for i=1,40 do --Loop through all 40 possible active buffs
-		local name,_,_,_,_,_,_,_,_,_,id = UnitAura("player", i) --Get the name and spellID of the buff
-		if name == nil or id == nil then return false end
-		for _,v in pairs(buffids) do --Compare the ID to the ones in the supplied table to see if they match
-			if id == v then --If they do, report that the player has the buff and return true
-				Chocobo_DebugMsg((L["CurrentMount"]):format(name))
-				return true
+function Chocobo_HasBuff(idtable)
+	for _,ids in pairs(idtable) do
+		for i=1,40 do --Loop through all 40 possible active buffs
+			local name,_,_,_,_,_,_,_,_,_,id = UnitAura("player", i) --Get the name and spellID of the buff
+			if name == nil or id == nil then return false end
+			for _,v in pairs(ids) do --Compare the ID to the ones in the supplied table to see if they match
+				if id == v then --If they do, report that the player has the buff and return true
+					Chocobo_DebugMsg((L["CurrentMount"]):format(name))
+					return true
+				end
 			end
 		end
 	end
@@ -188,14 +180,14 @@ function Chocobo_HasBuff(ids, extra)
 end
 
 function Chocobo_HasMount()
-	local ExtraIDs = {}
+	local idcoll = {Chocobo.IDs.Hawkstriders}
 	if Chocobo.Global["RAVENLORD"] then
-		table.insert(ExtraIDs, Chocobo.IDs.RavenLord)
+		table.insert(idcoll, Chocobo.IDs.RavenLord)
 	end
 	if Chocobo.Global["ALLMOUNTS"] then -- Add druid flight forms
-		for _,v in pairs(Chocobo.IDs.DruidForms) do table.insert(ExtraIDs, v) end
+		table.insert(idcoll, Chocobo.IDs.DruidForms)
 	end
-	return Chocobo_HasBuff(Chocobo.IDs.Hawkstriders, ExtraIDs)
+	return Chocobo_HasBuff(idcoll)
 end
 
 function Chocobo_PrintMusic() --Print all the songs currently in list to chat
