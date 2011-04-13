@@ -63,7 +63,7 @@ local Chocobo = {
 }
 
 --@debug@
-if (Chocobo.Version == "@".."project-version".."@") then Chocobo.Version = "Development" end
+if Chocobo.Version == "@".."project-version".."@" then Chocobo.Version = "Development" end
 --@end-debug@
 
 local t = 0
@@ -72,31 +72,31 @@ local L = _G["ChocoboLocale"]
 
 function Chocobo_OnEvent(self, event, ...)
 	Chocobo_DebugMsg("OnEvent Fired")
-	if (event == "ADDON_LOADED") then
+	if event == "ADDON_LOADED" then
 		--Currently, this seems a bit bugged when having multiple addons. The "loaded" message will disappear sometimes.
 		local addonName = select(1, ...)
-		if (addonName == "Chocobo") then
+		if addonName == "Chocobo" then
 			Chocobo_Msg((L["AddOnLoaded"]):format(Chocobo.Version))
 			Chocobo_Msg(L["Enjoy"])
 			Chocobo.Loaded = true
 		end
-		if (type(_G["CHOCOBO"]) ~= "table") then _G["CHOCOBO"] = {} end
+		if type(_G["CHOCOBO"]) ~= "table" then _G["CHOCOBO"] = {} end
 		Chocobo.Global = _G["CHOCOBO"]
-		if (Chocobo.Global["DEBUG"] == nil) then
+		if Chocobo.Global["DEBUG"] == nil then
 			--Should be fired on first launch, set the saved variable to default value
 			Chocobo_Msg(L["DebugNotSet"])
 			Chocobo.Global["DEBUG"] = false
 		end
-		if (Chocobo.Global["ALLMOUNTS"] == nil) then
+		if Chocobo.Global["ALLMOUNTS"] == nil then
 			--Should be fired on first launch, set the saved variable to default value
 			Chocobo_Msg(L["AllMountsNotSet"])
 			Chocobo.Global["ALLMOUNTS"] = false
 		end
-		if (Chocobo.Global["RAVENLORD"] == nil) then
+		if Chocobo.Global["RAVENLORD"] == nil then
 			Chocobo_Msg(L["RavenLordNotSet"])
 			Chocobo.Global["RAVENLORD"] = false
 		end
-		if (Chocobo.Global["MUSIC"] == nil) then --If the song list is empty
+		if Chocobo.Global["MUSIC"] == nil then --If the song list is empty
 			--Populate the table with default songs
 			Chocobo_Msg(L["NoMusic"])
 			Chocobo.Global["MUSIC"] = {}
@@ -104,21 +104,21 @@ function Chocobo_OnEvent(self, event, ...)
 				Chocobo_AddMusic(v)
 			end
 		end
-		if (Chocobo.Global["ENABLED"] == nil) then
+		if Chocobo.Global["ENABLED"] == nil then
 			--Should be fired on first launch, set the saved variable to default value
 			Chocobo_Msg(L["EnabledNotSet"])
 			Chocobo.Global["ENABLED"] = true
 		end
-	elseif (event == "UNIT_AURA" and select(1, ...) == "player") then
+	elseif event == "UNIT_AURA" and select(1, ...) == "player" then
 		local unitName = select(1, ...)
 		Chocobo_DebugMsg((L["Event_UNIT_AURA"]):format(unitName))
-		if (Chocobo.Loaded == false) then
+		if Chocobo.Loaded == false then
 			--This should NOT happen
 			Chocobo_ErrorMsg(L["NotLoaded"])
 		end
 		t = 0
 		ChocoboFrame:SetScript("OnUpdate", Chocobo_OnUpdate)
-	elseif (event == "PLAYER_LOGOUT") then
+	elseif event == "PLAYER_LOGOUT" then
 		--Save local copy of globals
 		_G["CHOCOBO"] = Chocobo.Global
 	end
@@ -127,18 +127,18 @@ end
 function Chocobo_OnUpdate(_, elapsed)
 	t = t + elapsed
 	--When 1 second has elapsed, this is because it takes ~0.5 secs from the event detection for IsMounted() to return true.
-	if (t >= 1) then
+	if t >= 1 then
 		--Unregister the OnUpdate script
 		ChocoboFrame:SetScript("OnUpdate", nil)
 		--Is the player mounted?
 		local Mounted = Chocobo_HasMount()
-		if (IsMounted() or Mounted) then --More efficient way to make it also detect flight form here?
+		if IsMounted() or Mounted then --More efficient way to make it also detect flight form here?
 			Chocobo_DebugMsg(L["PlayerIsMounted"])
 			--Loop through all the "hawkstrider" names to see if the player is mounted on one or check if allmounts (override) is true
-			if (Mounted or Chocobo.Global["ALLMOUNTS"]) then
+			if Mounted or Chocobo.Global["ALLMOUNTS"] then
 				Chocobo_DebugMsg(L["PlayerOnHawkstrider"])
-				if (Chocobo.Global["ENABLED"]) then --Check if AddOn is enabled
-					if (Chocobo.Mounted == false) then --Check so that the player is not already mounted
+				if Chocobo.Global["ENABLED"] then --Check if AddOn is enabled
+					if Chocobo.Mounted == false then --Check so that the player is not already mounted
 						Chocobo_DebugMsg(L["PlayingMusic"])
 						Chocobo.Mounted = true
 						local songID = math.random(1, #Chocobo.Global["MUSIC"]) --"#Chocobo.Global["MUSIC"]" = number of fields in Chocobo.Global["MUSIC"]
@@ -154,7 +154,7 @@ function Chocobo_OnUpdate(_, elapsed)
 				Chocobo_DebugMsg(L["NoHawkstrider"])
 			end
 		else --When the player has dismounted
-			if (Chocobo.Mounted) then
+			if Chocobo.Mounted then
 				Chocobo_DebugMsg(L["NotMounted"])
 				Chocobo.Mounted = false
 				StopMusic() --Note that StopMusic() will also stop any other custom music playing (such as from EpicMusicPlayer)
@@ -163,12 +163,22 @@ function Chocobo_OnUpdate(_, elapsed)
 	end
 end
 
-function Chocobo_HasBuff(ids)
+function Chocobo_HasBuff(ids, extra)
+	buffids = {}
+	extra = extra or nil
+	for _,v in pairs(ids) do
+		table.insert(buffids, v)
+	end
+	if type(extra) == "table" then
+		for _,v in pairs(extra) do
+			table.insert(buffids, v)
+		end
+	end
 	for i=1,40 do --Loop through all 40 possible active buffs
 		local name,_,_,_,_,_,_,_,_,_,id = UnitAura("player", i) --Get the name and spellID of the buff
-		if (name == nil or id == nil) then return false end
-		for _,v in pairs(ids) do --Compare the ID to the ones in the supplied table to see if they match
-			if (id == v) then --If they do, report that the player has the buff and return true
+		if name == nil or id == nil then return false end
+		for _,v in pairs(buffids) do --Compare the ID to the ones in the supplied table to see if they match
+			if id == v then --If they do, report that the player has the buff and return true
 				Chocobo_DebugMsg((L["CurrentMount"]):format(name))
 				return true
 			end
@@ -178,16 +188,14 @@ function Chocobo_HasBuff(ids)
 end
 
 function Chocobo_HasMount()
-	--Reset the Hawkstriders table to avoid it being cluttered with all the other IDs (nicer workaround to this?)
-	Chocobo.IDs.Hawkstriders = {35022,35020,35018,34795,63642,66091,35025,33660,35027,65639,35028,46628}
-	local MountIDs = Chocobo.IDs.Hawkstriders
-	if (Chocobo.Global["RAVENLORD"]) then
-		table.insert(MountIDs, Chocobo.IDs.RavenLord)
+	local ExtraIDs = {}
+	if Chocobo.Global["RAVENLORD"] then
+		table.insert(ExtraIDs, Chocobo.IDs.RavenLord)
 	end
-	if (Chocobo.Global["ALLMOUNTS"]) then -- Add druid flight forms
-		for _,v in pairs(Chocobo.IDs.DruidForms) do table.insert(MountIDs, v) end
+	if Chocobo.Global["ALLMOUNTS"] then -- Add druid flight forms
+		for _,v in pairs(Chocobo.IDs.DruidForms) do table.insert(ExtraIDs, v) end
 	end
-	return Chocobo_HasBuff(MountIDs)
+	return Chocobo_HasBuff(Chocobo.IDs.Hawkstriders, ExtraIDs)
 end
 
 function Chocobo_PrintMusic() --Print all the songs currently in list to chat
@@ -198,13 +206,13 @@ end
 
 function Chocobo_AddMusic(songName) --Add a song the the list
 	songName = Chocobo_Trim(songName)
-	if (songName == "" or songName == nil) then
+	if songName == "" or songName == nil then
 		Chocobo_ErrorMsg(L["NoFile"])
 		return
 	end
 	songName = Chocobo.MusicDir .. songName
 	for _,v in pairs(Chocobo.Global["MUSIC"]) do --Loop through all the songs currently in the list and...
-		if (v == songName) then --... make sure it isn't there already
+		if v == songName then --... make sure it isn't there already
 			Chocobo_ErrorMsg(L["AlreadyExists"])
 			return
 		end
@@ -216,7 +224,7 @@ end
 function Chocobo_RemoveMusic(songName) --Remove a song from the list
 	songName = Chocobo.MusicDir .. songName
 	for k,v in pairs(Chocobo.Global["MUSIC"]) do --Loop through all the songs in the list until...
-		if (v == songName) then --... the desired one is found and then...
+		if v == songName then --... the desired one is found and then...
 			table.remove(Chocobo.Global["MUSIC"], k) --... remove it from the list.
 			Chocobo_Msg((L["RemovedSong"]):format(songName))
 			return
@@ -235,7 +243,7 @@ function Chocobo_ResetMusic() --Resets the values in Chocobo.Global["MUSIC"] to 
 end
 
 function Chocobo_FilterMount(filter)
-	if (filter == true) then
+	if filter == true then
 		Chocobo_Msg(L["HawkstriderOnly"])
 		Chocobo.Global["ALLMOUNTS"] = false
 	else
@@ -245,14 +253,14 @@ function Chocobo_FilterMount(filter)
 end
 
 function Chocobo_Debug(set)
-	if (set == "enable" or set == "on") then
+	if set == "enable" or set == "on" then
 		Chocobo_Msg(L["DebuggingEnabled"])
 		Chocobo.Global["DEBUG"] = true
-	elseif (set == "disable" or set == "off") then
+	elseif set == "disable" or set == "off" then
 		Chocobo_Msg(L["DebuggingDisabled"])
 		Chocobo.Global["DEBUG"] = false
 	else
-		if (CHOCOBO_DEBUG) then
+		if CHOCOBO_DEBUG then
 			Chocobo_Msg(L["DebugIsEnabled"])
 		else
 			Chocobo_Msg(L["DebugIsDisabled"])
@@ -262,7 +270,7 @@ end
 
 function Chocobo_RavenLordToggle()
 	Chocobo.Global["RAVENLORD"] = not Chocobo.Global["RAVENLORD"]
-	if (Chocobo.Global["RAVENLORD"]) then
+	if Chocobo.Global["RAVENLORD"] then
 		Chocobo_Msg(L["RavenLordTrue"])
 	else
 		Chocobo_Msg(L["RavenLordFalse"])
@@ -270,7 +278,7 @@ function Chocobo_RavenLordToggle()
 end
 
 function Chocobo_Toggle() --Toggle the AddOn on and off
-	if (Chocobo.Global["ENABLED"]) then --If the addon is enabled
+	if Chocobo.Global["ENABLED"] then --If the addon is enabled
 		Chocobo.Global["ENABLED"] = false --Disable it
 		StopMusic()
 		Chocobo_Msg(L["AddOnDisabled"]) --Print status
@@ -300,7 +308,7 @@ function Chocobo_ErrorMsg(msg) --Send an error message, these are prefixed with 
 end
 
 function Chocobo_DebugMsg(msg) --Send a debug message, these are only sent when debugging is enabled and are prefixed by the word "Debug" in yellow
-	if (Chocobo.Global["DEBUG"] == true) then
+	if Chocobo.Global["DEBUG"] == true then
 		DEFAULT_CHAT_FRAME:AddMessage(L["DebugPrefix"] .. msg)
 	end
 end
@@ -313,31 +321,31 @@ SLASH_CHOCOBO1 = "/chocobo"
 function SlashCmdList.CHOCOBO(msg, editBox)
 	local command, arg = msg:match("^(%S*)%s*(.-)$")
 	command = command:lower()
-	if (command == "options") then
+	if command == "options" then
 		ChocoboOptionsFrame:Show()
-	elseif (command == "allmounts") then
+	elseif command == "allmounts" then
 		Chocobo_FilterMount(false)
-	elseif (command == "hawkstrider") then
+	elseif command == "hawkstrider" then
 		Chocobo_FilterMount(true)
-	elseif (command == "toggle") then
+	elseif command == "toggle" then
 		Chocobo_Toggle()
-	elseif (command == "add") then
-		if (arg ~= "") then
+	elseif command == "add" then
+		if arg ~= "" then
 			Chocobo_AddMusic(arg)
 		else
 			Chocobo_Msg(L["AddSyntax"])
 		end
-	elseif (command == "remove") then
-		if (arg ~= "") then
+	elseif command == "remove" then
+		if arg ~= "" then
 			Chocobo_RemoveMusic(arg)
 		else
 			Chocobo_Msg(L["RemoveSyntax"])
 		end
-	elseif (command == "list") then
+	elseif command == "list" then
 		Chocobo_PrintMusic()
-	elseif (command == "reset") then
+	elseif command == "reset" then
 		Chocobo_ResetMusic()
-	elseif (command == "debug") then
+	elseif command == "debug" then
 		Chocobo_Debug(arg:lower())
 	else
 		Chocobo_Msg(L["HelpMessage"])
