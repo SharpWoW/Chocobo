@@ -218,7 +218,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 						</Anchor>
 					</Anchors>
 					<Scripts>
-						<OnClick>Chocobo_ResetMusic();</OnClick>
+						<OnClick>Chocobo:ResetMusic();</OnClick>
 					</Scripts>
 				</Button>
 				<Button name="$parent_ListSongs" text="" inherits="OptionsButtonTemplate">
@@ -233,7 +233,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 						</Anchor>
 					</Anchors>
 					<Scripts>
-						<OnClick>Chocobo_PrintMusic();</OnClick>
+						<OnClick>Chocobo:PrintMusic();</OnClick>
 					</Scripts>
 				</Button>
 			</Frames>
@@ -250,7 +250,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 				</Anchor>
 			</Anchors>
 			<Scripts>
-				<OnClick>Chocobo_FilterMount(true); ChocoboOptions_UpdateInfo();</OnClick>
+				<OnClick>Chocobo:FilterMount(true); ChocoboOptions_UpdateInfo();</OnClick>
 			</Scripts>
 		</Button>
 		<Button name="$parent_AllMounts" text="" inherits="OptionsButtonTemplate">
@@ -265,7 +265,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 				</Anchor>
 			</Anchors>
 			<Scripts>
-				<OnClick>Chocobo_FilterMount(false); ChocoboOptions_UpdateInfo();</OnClick>
+				<OnClick>Chocobo:FilterMount(false); ChocoboOptions_UpdateInfo();</OnClick>
 			</Scripts>
 		</Button>
 		<Button name="$parent_DebugOn" text="" inherits="OptionsButtonTemplate">
@@ -280,7 +280,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 				</Anchor>
 			</Anchors>
 			<Scripts>
-				<OnClick>Chocobo_Debug("enable"); ChocoboOptions_UpdateInfo();</OnClick>
+				<OnClick>Chocobo:Debug("enable"); ChocoboOptions_UpdateInfo();</OnClick>
 			</Scripts>
 		</Button>
 		<Button name="$parent_DebugOff" text="" inherits="OptionsButtonTemplate">
@@ -295,7 +295,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 				</Anchor>
 			</Anchors>
 			<Scripts>
-				<OnClick>Chocobo_Debug("disable"); ChocoboOptions_UpdateInfo();</OnClick>
+				<OnClick>Chocobo:Debug("disable"); ChocoboOptions_UpdateInfo();</OnClick>
 			</Scripts>
 		</Button>
 		<Button name="$parent_ToggleButton" text="" inherits="OptionsButtonTemplate">
@@ -310,7 +310,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 				</Anchor>
 			</Anchors>
 			<Scripts>
-				<OnClick>Chocobo_Toggle(); ChocoboOptions_UpdateInfo();</OnClick>
+				<OnClick>Chocobo:Toggle(); ChocoboOptions_UpdateInfo();</OnClick>
 			</Scripts>
 		</Button>
 		<CheckButton name="$parent_RavenLordToggle" inherits="OptionsCheckButtonTemplate">
@@ -325,7 +325,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 				</Anchor>
 			</Anchors>
 			<Scripts>
-				<OnClick>Chocobo_RavenLordToggle(); ChocoboOptions_UpdateInfo();</OnClick>
+				<OnClick>Chocobo:RavenLordToggle(); ChocoboOptions_UpdateInfo();</OnClick>
 			</Scripts>
 		</CheckButton>
 		<Frame name="$parent_Status">

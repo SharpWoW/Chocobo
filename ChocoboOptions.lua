@@ -23,23 +23,23 @@ end
 
 function ChocoboOptions_UpdateInfo()
 	local AddOnState, MountState, DebugState = ""
-	local RavenLordState = Chocobo_GetGlobal("RAVENLORD")
-	if Chocobo_GetGlobal("ENABLED") then AddOnState = L["Options_Enabled"] else AddOnState = L["Options_Disabled"] end
-	if Chocobo_GetGlobal("ALLMOUNTS") then MountState = L["Options_AllMounts"] else MountState = L["Options_Hawkstrider"] end
-	if Chocobo_GetGlobal("DEBUG") then DebugState = L["Options_Enabled"] else DebugState = L["Options_Disabled"] end
+	local RavenLordState = Chocobo:GetGlobal("RAVENLORD")
+	if Chocobo:GetGlobal("ENABLED") then AddOnState = L["Options_Enabled"] else AddOnState = L["Options_Disabled"] end
+	if Chocobo:GetGlobal("ALLMOUNTS") then MountState = L["Options_AllMounts"] else MountState = L["Options_Hawkstrider"] end
+	if Chocobo:GetGlobal("DEBUG") then DebugState = L["Options_Enabled"] else DebugState = L["Options_Disabled"] end
 	ChocoboOptionsFrame_StatusLabel:SetText((L["Options_AddOnState"]):format(AddOnState))
 	ChocoboOptionsFrame_MountLabel:SetText(MountState)
 	ChocoboOptionsFrame_DebugLabel:SetText((L["Options_DebugState"]):format(DebugState))
-	ChocoboOptionsFrame_DescriptionLabel:SetText((L["Options_Description"]):format(Chocobo_GetVersion()))
+	ChocoboOptionsFrame_DescriptionLabel:SetText((L["Options_Description"]):format(Chocobo:GetVersion()))
 	ChocoboOptionsFrame_RavenLordToggle:SetChecked(RavenLordState)
 end
 
 function ChocoboOptions_AddSong()
 	local songName = ChocoboOptionsFrame_SongsPanel_SongEditBox:GetText()
-	Chocobo_AddMusic(songName)
+	Chocobo:AddMusic(songName)
 end
 
 function ChocoboOptions_RemoveSong()
 	local songName = ChocoboOptionsFrame_SongsPanel_SongEditBox:GetText()
-	Chocobo_RemoveMusic(songName)
+	Chocobo:RemoveMusic(songName)
 end
