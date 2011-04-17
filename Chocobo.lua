@@ -96,6 +96,7 @@ function Chocobo:OnEvent(frame, event, ...)
 			self.Global["ENABLED"] = true
 		end
 	elseif event == "UNIT_AURA" and select(1, ...) == "player" then
+		if not self.Global["ENABLED"] then return end -- Return if AddOn is not enabled
 		local unitName = select(1, ...)
 		self:DebugMsg((L["Event_UNIT_AURA"]):format(unitName))
 		if self.Loaded == false then
@@ -123,18 +124,14 @@ function Chocobo:OnUpdate(_, elapsed)
 			--Loop through all the "hawkstrider" names to see if the player is mounted on one or check if allmounts (override) is true
 			if Mounted or self.Global["ALLMOUNTS"] then
 				self:DebugMsg(L["PlayerOnHawkstrider"])
-				if self.Global["ENABLED"] then --Check if AddOn is enabled
-					if self.Mounted == false then --Check so that the player is not already mounted
-						self:DebugMsg(L["PlayingMusic"])
-						self.Mounted = true
-						local songID = math.random(1, #self.Global["MUSIC"]) --"#Chocobo.Global["MUSIC"]" = number of fields in Chocobo.Global["MUSIC"]
-						self:DebugMsg((L["PlayingSong"]):format(songID, self.Global["MUSIC"][songID]))
-						PlayMusic(self.Global["MUSIC"][songID])
-					else --If the player has already mounted
-						self:DebugMsg(L["AlreadyMounted"])
-					end
-				else
-					self:DebugMsg(L["DisabledNotPlaying"])
+				if self.Mounted == false then --Check so that the player is not already mounted
+					self:DebugMsg(L["PlayingMusic"])
+					self.Mounted = true
+					local songID = math.random(1, #self.Global["MUSIC"]) --"#Chocobo.Global["MUSIC"]" = number of fields in Chocobo.Global["MUSIC"]
+					self:DebugMsg((L["PlayingSong"]):format(songID, self.Global["MUSIC"][songID]))
+					PlayMusic(self.Global["MUSIC"][songID])
+				else --If the player has already mounted
+					self:DebugMsg(L["AlreadyMounted"])
 				end
 			else --Player is not on a hawkstrider
 				self:DebugMsg(L["NoHawkstrider"])
