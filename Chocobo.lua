@@ -15,7 +15,7 @@
 	CHOCOBO!!!
 --]]
 
-_G["Chocobo"] = {
+Chocobo = {
 	Version	= GetAddOnMetadata("Chocobo", "Version"),
 	Loaded	= false,
 	Mounted	= false,
