@@ -45,7 +45,8 @@ Chocobo = {
 		},
 		RavenLord = {41252},  --Raven Lord (If enabled in options)
 		DruidForms = {33943, 40120} --When AllMounts is enabled
-	}
+	},
+	Events = {}
 }
 
 --@debug@
@@ -58,57 +59,64 @@ local L = _G["ChocoboLocale"]
 
 function Chocobo:OnEvent(frame, event, ...)
 	self:DebugMsg("OnEvent Fired")
-	if event == "ADDON_LOADED" then
-		--Currently, this seems a bit bugged when having multiple addons. The "loaded" message will disappear sometimes.
-		local addonName = select(1, ...)
-		if addonName == "Chocobo" then
-			self:Msg((L["AddOnLoaded"]):format(self.Version))
-			self:Msg(L["Enjoy"])
-			self.Loaded = true
-		end
-		if type(_G["CHOCOBO"]) ~= "table" then _G["CHOCOBO"] = {} end
-		self.Global = _G["CHOCOBO"]
-		if self.Global["DEBUG"] == nil then
-			--Should be fired on first launch, set the saved variable to default value
-			self:Msg(L["DebugNotSet"])
-			self.Global["DEBUG"] = false
-		end
-		if self.Global["ALLMOUNTS"] == nil then
-			--Should be fired on first launch, set the saved variable to default value
-			self:Msg(L["AllMountsNotSet"])
-			self.Global["ALLMOUNTS"] = false
-		end
-		if self.Global["RAVENLORD"] == nil then
-			self:Msg(L["RavenLordNotSet"])
-			self.Global["RAVENLORD"] = false
-		end
-		if self.Global["MUSIC"] == nil then --If the song list is empty
-			--Populate the table with default songs
-			self:Msg(L["NoMusic"])
-			self.Global["MUSIC"] = {}
-			for _,v in pairs(self.Songs) do --Add all of the default songs
-				self:AddMusic(v)
-			end
-		end
-		if self.Global["ENABLED"] == nil then
-			--Should be fired on first launch, set the saved variable to default value
-			self:Msg(L["EnabledNotSet"])
-			self.Global["ENABLED"] = true
-		end
-	elseif event == "UNIT_AURA" and select(1, ...) == "player" then
-		if not self.Global["ENABLED"] then return end -- Return if AddOn is not enabled
-		local unitName = select(1, ...)
-		self:DebugMsg((L["Event_UNIT_AURA"]):format(unitName))
-		if self.Loaded == false then
-			--This should NOT happen
-			self:ErrorMsg(L["NotLoaded"])
-		end
-		t = 0
-		ChocoboFrame:SetScript("OnUpdate", function (_, elapsed) Chocobo:OnUpdate(_, elapsed) end)
-	elseif event == "PLAYER_LOGOUT" then
-		--Save local copy of globals
-		_G["CHOCOBO"] = self.Global
+	if Chocobo.Events[event] then Chocobo.Events[event](self, ...) end
+end
+
+function Chocobo.Events.ADDON_LOADED(self, ...)
+	--Currently, this seems a bit bugged when having multiple addons. The "loaded" message will disappear sometimes.
+	local addonName = (select(1, ...)):lower()
+	if addonName == "chocobo" then
+		self:Msg((L["AddOnLoaded"]):format(self.Version))
+		self:Msg(L["Enjoy"])
+		self.Loaded = true
 	end
+	if type(_G["CHOCOBO"]) ~= "table" then _G["CHOCOBO"] = {} end
+	self.Global = _G["CHOCOBO"]
+	if self.Global["DEBUG"] == nil then
+		--Should be fired on first launch, set the saved variable to default value
+		self:Msg(L["DebugNotSet"])
+		self.Global["DEBUG"] = false
+	end
+	if self.Global["ALLMOUNTS"] == nil then
+		--Should be fired on first launch, set the saved variable to default value
+		self:Msg(L["AllMountsNotSet"])
+		self.Global["ALLMOUNTS"] = false
+	end
+	if self.Global["RAVENLORD"] == nil then
+		self:Msg(L["RavenLordNotSet"])
+		self.Global["RAVENLORD"] = false
+	end
+	if self.Global["MUSIC"] == nil then --If the song list is empty
+		--Populate the table with default songs
+		self:Msg(L["NoMusic"])
+		self.Global["MUSIC"] = {}
+		for _,v in pairs(self.Songs) do --Add all of the default songs
+			self:AddMusic(v)
+		end
+	end
+	if self.Global["ENABLED"] == nil then
+		--Should be fired on first launch, set the saved variable to default value
+		self:Msg(L["EnabledNotSet"])
+		self.Global["ENABLED"] = true
+	end
+end
+
+function Chocobo.Events.UNIT_AURA(self, ...)
+	local unitName = (select(1, ...)):lower()
+	if not unitName == "player" then return end -- Return if the player's buffs were not affected
+	if not self.Global["ENABLED"] then return end -- Return if AddOn is not enabled
+	self:DebugMsg((L["Event_UNIT_AURA"]):format(unitName))
+	if self.Loaded == false then
+		--This should NOT happen
+		self:ErrorMsg(L["NotLoaded"])
+	end
+	t = 0
+	ChocoboFrame:SetScript("OnUpdate", function (_, elapsed) Chocobo:OnUpdate(_, elapsed) end)
+end
+
+function Chocobo.Events.PLAYER_LOGOUT(self, ...)
+	--Save local copy of globals
+	_G["CHOCOBO"] = self.Global
 end
 
 function Chocobo:OnUpdate(_, elapsed)
@@ -333,7 +341,7 @@ function SlashCmdList.CHOCOBO(msg, editBox)
 end
 
 --Create the frame, no need for an XML file!
-local ChocoboFrame = CreateFrame("Frame", "ChocoboFrame")
-ChocoboFrame:SetScript("OnEvent", function (frame, event, ...) Chocobo:OnEvent(frame, event, ...) end)
-ChocoboFrame:RegisterEvent("ADDON_LOADED")
-ChocoboFrame:RegisterEvent("UNIT_AURA")
+Chocobo.Frame = CreateFrame("Frame", "ChocoboFrame")
+Chocobo.Frame:SetScript("OnEvent", function (frame, event, ...) Chocobo:OnEvent(frame, event, ...) end)
+Chocobo.Frame:RegisterEvent("ADDON_LOADED")
+Chocobo.Frame:RegisterEvent("UNIT_AURA")
