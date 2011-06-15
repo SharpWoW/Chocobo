@@ -21,6 +21,7 @@ Chocobo = {
 	Mounted	= false,
 	MusicDir = "Interface\\AddOns\\Chocobo\\music\\",
 	Global	= {},
+	Events = {},
 	Songs	= { --Default songs loaded on first run
 		--Please note that you can't add custom songs here, this is only used when restoring default settings or on initial startup
 		"chocobo.mp3",
@@ -45,8 +46,7 @@ Chocobo = {
 		},
 		RavenLord = {41252},  --Raven Lord (If enabled in options)
 		DruidForms = {33943, 40120} --When AllMounts is enabled
-	},
-	Events = {}
+	}
 }
 
 --@debug@
@@ -286,7 +286,6 @@ function Chocobo:Trim(s)
   return (s:gsub("^%s*(.-)%s*$", "%1"))
 end
 
-
 function Chocobo:Msg(msg) --Send a normal message
 	DEFAULT_CHAT_FRAME:AddMessage(L["MsgPrefix"] .. msg)
 end
@@ -343,5 +342,6 @@ end
 --Create the frame, no need for an XML file!
 Chocobo.Frame = CreateFrame("Frame", "ChocoboFrame")
 Chocobo.Frame:SetScript("OnEvent", function (frame, event, ...) Chocobo:OnEvent(frame, event, ...) end)
-Chocobo.Frame:RegisterEvent("ADDON_LOADED")
-Chocobo.Frame:RegisterEvent("UNIT_AURA")
+for k,_ in pairs(Chocobo.Events) do
+	Chocobo.Frame:RegisterEvent(k)
+end
