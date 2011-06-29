@@ -44,7 +44,7 @@ Chocobo = {
 			35028, --Swift Warstrider (Thanks Khormin for pointing it out)
 			46628  --Swift White Hawkstrider
 		},
-		RavenLord = {41252},  --Raven Lord (If enabled in options)
+		RavenLord = {41252}, --Raven Lord (If enabled in options)
 		DruidForms = {33943, 40120} --When AllMounts is enabled
 	}
 }
