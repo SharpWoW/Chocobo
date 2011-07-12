@@ -155,12 +155,15 @@ function Chocobo:OnUpdate(_, elapsed)
 end
 
 function Chocobo:HasBuff(idtable)
-	for _,ids in pairs(idtable) do
-		for i=1,40 do --Loop through all 40 possible active buffs
-			local name,_,_,_,_,_,_,_,_,_,id = UnitAura("player", i) --Get the name and spellID of the buff
-			if name == nil or id == nil then return false end
-			for _,v in pairs(ids) do --Compare the ID to the ones in the supplied table to see if they match
-				if id == v then --If they do, report that the player has the buff and return true
+	local buffs = {}
+	for i=1,40 do --Loop through all 40 possible buff indexes
+		local name,_,_,_,_,_,_,_,_,_,id = UnitAura("player", i) --Get buff on index i
+		if name ~= nil and id ~= nil then buffs[name] = id else break end --Insert it into the buffs table
+	end
+	for name,id in pairs(buffs) do --Loop through all buffs found
+		for k,ids in pairs(idtable) do --Loop through all supplied ID tables
+			for _,v in pairs(ids) do --Loop through all IDs
+				if id == v then --Check if ID equals current buff ID and return true if it does
 					self:DebugMsg((L["CurrentMount"]):format(name))
 					return true
 				end
@@ -178,7 +181,7 @@ function Chocobo:HasMount()
 	if self.Global["ALLMOUNTS"] then -- Add druid flight forms
 		table.insert(idcoll, self.IDs.DruidForms)
 	end
-	return Chocobo:HasBuff(idcoll)
+	return self:HasBuff(idcoll)
 end
 
 function Chocobo:PrintMusic() --Print all the songs currently in list to chat
