@@ -51,9 +51,9 @@ L["DebugIsDisabled"]	= "Debugging is disabled"
 L["AddOnDisabled"]		= "AddOn |cffFF0000DISABLED|r"
 L["AddOnEnabled"]		= "AddOn |cff00FF00ENABLED|r"
 
-L["MsgPrefix"]			= "\124cff00FF00[Chocobo AddOn]\124r "
-L["ErrorPrefix"]		= "\124cff00FF00[Chocobo AddOn]\124r \124cffFF0000ERROR:\124r "
-L["DebugPrefix"]		= "\124cff00FF00[Chocobo AddOn]\124r \124cffFFFF00DEBUG:\124r "
+L["MsgPrefix"]			= "\124cff00FF00[Chocobo]\124r "
+L["ErrorPrefix"]		= "\124cff00FF00[Chocobo]\124r \124cffFF0000ERROR:\124r "
+L["DebugPrefix"]		= "\124cff00FF00[Chocobo]\124r \124cffFFFF00DEBUG:\124r "
 L["AddSyntax"]			= "Syntax: add songName"
 L["RemoveSyntax"]		= "Syntax: remove songName"
 L["HelpMessage"]		= [=[Commands:

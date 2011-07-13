@@ -57,6 +57,8 @@ local t = 0
 
 local L = _G["ChocoboLocale"]
 
+assert(L)
+
 function Chocobo:OnEvent(frame, event, ...)
 	self:DebugMsg("OnEvent Fired")
 	if Chocobo.Events[event] then Chocobo.Events[event](self, ...) end
@@ -158,7 +160,7 @@ function Chocobo:HasBuff(idtable)
 	local buffs = {}
 	for i=1,40 do --Loop through all 40 possible buff indexes
 		local name,_,_,_,_,_,_,_,_,_,id = UnitAura("player", i) --Get buff on index i
-		if name ~= nil and id ~= nil then buffs[name] = id else break end --Insert it into the buffs table
+		if name and id then buffs[name] = id else break end --Insert it into the buffs table
 	end
 	for name,id in pairs(buffs) do --Loop through all buffs found
 		for k,ids in pairs(idtable) do --Loop through all supplied ID tables
