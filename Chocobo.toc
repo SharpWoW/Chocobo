@@ -5,6 +5,12 @@
 ## Author: F16Gaming
 ## SavedVariables: CHOCOBO
 
+#@no-lib-strip@
+libs\LibStub\LibStub.lua
+libs\CallbackHandler-1.0\CallbackHandler-1.0.xml
+libs\LibDataBroker-1-1\LibDataBroker-1.1.lua
+#@end-no-lib-strip@
+
 locales\enUS.lua
 locales\deDE.lua
 locales\esES.lua
@@ -20,3 +26,4 @@ ChocoboOptions.lua
 ChocoboOptions.xml
 ChocoboInterfacePanel.lua
 ChocoboInterfacePanel.xml
+Broker_Chocobo.lua

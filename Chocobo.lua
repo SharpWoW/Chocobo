@@ -16,6 +16,7 @@
 --]]
 
 Chocobo = {
+	Name = "Chocobo",
 	Version	= GetAddOnMetadata("Chocobo", "Version"),
 	Loaded	= false,
 	Mounted	= false,
@@ -57,7 +58,7 @@ local t = 0
 
 local L = _G["ChocoboLocale"]
 
-assert(L)
+assert(L, "Chocobo Locales not loaded")
 
 function Chocobo:OnEvent(frame, event, ...)
 	self:DebugMsg("OnEvent Fired")
@@ -113,7 +114,7 @@ function Chocobo.Events.UNIT_AURA(self, ...)
 		self:ErrorMsg(L["NotLoaded"])
 	end
 	t = 0
-	ChocoboFrame:SetScript("OnUpdate", function (_, elapsed) Chocobo:OnUpdate(_, elapsed) end)
+	self.Frame:SetScript("OnUpdate", function (_, elapsed) Chocobo:OnUpdate(_, elapsed) end)
 end
 
 function Chocobo.Events.PLAYER_LOGOUT(self, ...)
@@ -126,7 +127,7 @@ function Chocobo:OnUpdate(_, elapsed)
 	--When 1 second has elapsed, this is because it takes ~0.5 secs from the event detection for IsMounted() to return true.
 	if t >= 1 then
 		--Unregister the OnUpdate script
-		ChocoboFrame:SetScript("OnUpdate", nil)
+		self.Frame:SetScript("OnUpdate", nil)
 		--Is the player mounted?
 		local Mounted = self:HasMount()
 		if IsMounted() or Mounted then --More efficient way to make it also detect flight form here?
