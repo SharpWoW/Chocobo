@@ -341,7 +341,17 @@ function SlashCmdList.CHOCOBO(msg, editBox)
 	elseif command == "debug" then
 		Chocobo:Debug(arg:lower())
 	else
-		Chocobo:Msg(L["HelpMessage"])
+		Chocobo:Msg(L["HelpMessage1"])
+		Chocobo:Msg(L["HelpMessage2"])
+		Chocobo:Msg(L["HelpMessage3"])
+		Chocobo:Msg(L["HelpMessage4"])
+		Chocobo:Msg(L["HelpMessage5"])
+		Chocobo:Msg(L["HelpMessage6"])
+		Chocobo:Msg(L["HelpMessage7"])
+		Chocobo:Msg(L["HelpMessage8"])
+		Chocobo:Msg(L["HelpMessage9"])
+		Chocobo:Msg(L["HelpMessage10"])
+		Chocobo:Msg(L["HelpMessage11"])
 	end
 end
 

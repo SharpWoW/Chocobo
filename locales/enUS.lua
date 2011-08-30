@@ -54,19 +54,19 @@ L["AddOnEnabled"]		= "AddOn |cff00FF00ENABLED|r"
 L["MsgPrefix"]			= "\124cff00FF00[Chocobo]\124r "
 L["ErrorPrefix"]		= "\124cff00FF00[Chocobo]\124r \124cffFF0000ERROR:\124r "
 L["DebugPrefix"]		= "\124cff00FF00[Chocobo]\124r \124cffFFFF00DEBUG:\124r "
-L["AddSyntax"]			= "Syntax: add songName"
-L["RemoveSyntax"]		= "Syntax: remove songName"
-L["HelpMessage"]		= [=[Commands:
-options: Show the GUI
-allmounts: play chocobo song on any mount
-hawkstrider: only play chocobo song on hawkstriders
-toggle: Toggle the AddOn on and off
-add songName: Adds a music file with name "songName" (including file extension)
-remove songName: Removes a music file with name "songName" (including file extension)
-(Note that the remove command will not remove the file from the system, only from the song list ingame)
-list: List all the songs in the song list
-reset: Reset to song list to default values (THIS WILL WIPE ANY CUSTOM SONGS YOU HAVE SET)
-debug: check debug status, type enable or disable after to enable or disable debugging]=]
+L["AddSyntax"]			= "Syntax: add <name of song>"
+L["RemoveSyntax"]		= "Syntax: remove <name of song>"
+L["HelpMessage1"]		= "Commands:"
+L["HelpMessage2"]		= "options: Show the GUI"
+L["HelpMessage3"]		= "allmounts: play chocobo song on any mount"
+L["HelpMessage4"]		= "hawkstrider: only play chocobo song on hawkstriders"
+L["HelpMessage5"]		= "toggle: Toggle the AddOn on and off"
+L["HelpMessage6"]		= "add <name of song>: Adds a music file with the name specified (including file extension)"
+L["HelpMessage7"]		= "remove <name of song>: Removes a music file with the name specified (including file extension)"
+L["HelpMessage8"]		= "(Note that the remove command will not remove the file from the system, only from the song list ingame)"
+L["HelpMessage9"]		= "list: List all the songs in the song list"
+L["HelpMessage10"]		= "reset: Reset to song list to default values (THIS WILL WIPE ANY CUSTOM SONGS YOU HAVE SET)"
+L["HelpMessage11"]		= "debug: check debug status, type enable or disable after to enable or disable debugging"
 
 --[[Chocobo Options]]--
 --The frame
