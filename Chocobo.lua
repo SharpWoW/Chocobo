@@ -157,19 +157,17 @@ function Chocobo:OnUpdate(_, elapsed)
 	end
 end
 
-function Chocobo:HasBuff(idtable)
+function Chocobo:HasBuff(idColl)
 	local buffs = {}
 	for i=1,40 do --Loop through all 40 possible buff indexes
 		local name,_,_,_,_,_,_,_,_,_,id = UnitAura("player", i) --Get buff on index i
 		if name and id then buffs[name] = id else break end --Insert it into the buffs table
 	end
 	for name,id in pairs(buffs) do --Loop through all buffs found
-		for k,ids in pairs(idtable) do --Loop through all supplied ID tables
-			for _,v in pairs(ids) do --Loop through all IDs
-				if id == v then --Check if ID equals current buff ID and return true if it does
-					self:DebugMsg((L["CurrentMount"]):format(name))
-					return true
-				end
+		for _,v in pairs(idColl) do --Loop through all supplied IDs
+			if id == v then --Check if ID equals current buff ID and return true if it does
+				self:DebugMsg((L["CurrentMount"]):format(name))
+				return true
 			end
 		end
 	end
@@ -177,12 +175,19 @@ function Chocobo:HasBuff(idtable)
 end
 
 function Chocobo:HasMount()
-	local idcoll = {self.IDs.Hawkstriders}
+	local idcoll = {}
+	for _,v in pairs(self.IDs.Hawkstriders) do
+		table.insert(idcoll, v)
+	end
 	if self.Global["RAVENLORD"] then
-		table.insert(idcoll, self.IDs.RavenLord)
+		for _,v in pairs(self.IDs.RavenLord) do
+			table.insert(idcoll, v)
+		end
 	end
 	if self.Global["ALLMOUNTS"] then -- Add druid flight forms
-		table.insert(idcoll, self.IDs.DruidForms)
+		for _,v in pairs(self.IDs.DruidForms) do
+			table.insert(idcoll, v)
+		end
 	end
 	return self:HasBuff(idcoll)
 end
