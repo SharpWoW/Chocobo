@@ -97,6 +97,10 @@ function Chocobo.Events.ADDON_LOADED(self, ...)
 			self:AddMusic(v)
 		end
 	end
+	if self.Global["MOUNTS"] == nil then
+		self:Msg(L["NoMounts"])
+		self.Global["MOUNTS"] = {}
+	end
 	if self.Global["ENABLED"] == nil then
 		--Should be fired on first launch, set the saved variable to default value
 		self:Msg(L["EnabledNotSet"])
@@ -112,6 +116,7 @@ function Chocobo.Events.UNIT_AURA(self, ...)
 	if self.Loaded == false then
 		--This should NOT happen
 		self:ErrorMsg(L["NotLoaded"])
+		return
 	end
 	t = 0
 	self.Frame:SetScript("OnUpdate", function (_, elapsed) Chocobo:OnUpdate(_, elapsed) end)
@@ -147,11 +152,11 @@ function Chocobo:OnUpdate(_, elapsed)
 			else --Player is not on a hawkstrider
 				self:DebugMsg(L["NoHawkstrider"])
 			end
-		else --When the player has dismounted
+		else -- When the player has dismounted
 			if self.Mounted then
 				self:DebugMsg(L["NotMounted"])
 				self.Mounted = false
-				StopMusic() --Note that StopMusic() will also stop any other custom music playing (such as from EpicMusicPlayer)
+				StopMusic() -- Note that StopMusic() will also stop any other custom music playing (such as from EpicMusicPlayer)
 			end
 		end
 	end
@@ -159,43 +164,50 @@ end
 
 function Chocobo:HasBuff(idColl)
 	local buffs = {}
-	for i=1,40 do --Loop through all 40 possible buff indexes
-		local name,_,_,_,_,_,_,_,_,_,id = UnitAura("player", i) --Get buff on index i
-		if name and id then buffs[name] = id else break end --Insert it into the buffs table
+	for i=1,40 do -- Loop through all 40 possible buff indexes
+		local name,_,_,_,_,_,_,_,_,_,id = UnitAura("player", i) -- Get buff on index i
+		-- Insert it into the buffs table, break if buff is nil (that means no other buffs exist on the player)
+		if name and id then buffs[name] = id else break end
 	end
-	for name,id in pairs(buffs) do --Loop through all buffs found
-		for _,v in pairs(idColl) do --Loop through all supplied IDs
-			if id == v then --Check if ID equals current buff ID and return true if it does
-				self:DebugMsg((L["CurrentMount"]):format(name))
-				return true
+	for name,id in pairs(buffs) do -- Loop through all buffs found
+		for _,v in pairs(idColl) do -- Loop through all supplied IDs
+			if type(v) == "number" then -- Check if the value is a number
+				if id == v then -- Check if ID equals current buff ID and return true if it does
+					self:DebugMsg((L["CurrentMount"]):format(name)) -- Print what mount the player is mounted on
+					return true
+				end
+			elseif type(v) == "string" then -- Check if the value is a string
+				if name:lower() == v:lower() then -- Check if name equals current buff name and return true if it does
+					self:DebugMsg((L["CurrentMount"]):format(name)) -- Print what mount the player is mounted on
+					return true
+				end
 			end
 		end
 	end
-	return false --Else return false
+	return false --Else return false (Player does not have the buff)
 end
 
 function Chocobo:HasMount()
-	local idcoll = {}
+	local mountColl = {}
 	for _,v in pairs(self.IDs.Hawkstriders) do
-		table.insert(idcoll, v)
+		table.insert(mountColl, v)
 	end
 	if self.Global["RAVENLORD"] then
 		for _,v in pairs(self.IDs.RavenLord) do
-			table.insert(idcoll, v)
+			table.insert(mountColl, v)
 		end
 	end
 	if self.Global["ALLMOUNTS"] then -- Add druid flight forms
 		for _,v in pairs(self.IDs.DruidForms) do
-			table.insert(idcoll, v)
+			table.insert(mountColl, v)
 		end
 	end
-	return self:HasBuff(idcoll)
-end
-
-function Chocobo:PrintMusic() --Print all the songs currently in list to chat
-	for k,v in pairs(self.Global["MUSIC"]) do
-		self:Msg(("\124cff00CCFF%i: %s\124r"):format(k, v))
+	if #self.Global["MOUNTS"] > 0 then
+		for _,v in pairs(self.Global["MOUNTS"]) do
+			table.insert(mountColl, v) -- Can be both a string and a number value
+		end
 	end
+	return self:HasBuff(mountColl)
 end
 
 function Chocobo:AddMusic(songName) --Add a song the the list
@@ -222,14 +234,20 @@ function Chocobo:RemoveMusic(songName) --Remove a song from the list
 		return
 	end
 	songName = self.MusicDir .. songName
-	for k,v in pairs(self.Global["MUSIC"]) do --Loop through all the songs in the list until...
+	for i,v in ipairs(self.Global["MUSIC"]) do --Loop through all the songs in the list until...
 		if v == songName then --... the desired one is found and then...
-			table.remove(self.Global["MUSIC"], k) --... remove it from the list.
+			table.remove(self.Global["MUSIC"], i) --... remove it from the list.
 			self:Msg((L["RemovedSong"]):format(songName))
 			return
 		end
 	end
 	self:ErrorMsg(L["SongNotFound"])
+end
+
+function Chocobo:PrintMusic() --Print all the songs currently in list to chat
+	for i,v in ipairs(self.Global["MUSIC"]) do
+		self:Msg(("\124cff00CCFF%i: %s\124r"):format(i, v))
+	end
 end
 
 function Chocobo:ResetMusic() --Resets the values in Chocobo.Global["MUSIC"] to default
@@ -239,6 +257,52 @@ function Chocobo:ResetMusic() --Resets the values in Chocobo.Global["MUSIC"] to 
 	for _,v in pairs(self.Songs) do --Add all the default songs again
 		self:AddMusic(v)
 	end
+end
+
+function Chocobo:AddMount(mount)
+	mount = self:Trim(mount)
+	mount = tonumber(mount) or mount
+	if mount == "" or mount == nil then
+		self:ErrorMsg(L["NoMount"])
+		return
+	end
+	local compare = tostring(mount):lower()
+	for _,v in pairs(self.Global["MOUNTS"]) do
+		if tostring(v):lower() == compare then
+			self:ErrorMsg(L["MountAlreadyExists"])
+			return
+		end
+	end
+	table.insert(self.Global["MOUNTS"], mount)
+	self:Msg((L["AddedMount"]):format(mount))
+end
+
+function Chocobo:RemoveMount(mount)
+	if mount == "" or mount == nil then
+		self:ErrorMsg(L["NoMount"])
+		return
+	end
+	mount = mount:lower()
+	for i,v in ipairs(self.Global["MOUNTS"]) do
+		if v:lower() == mount then 
+			table.remove(self.Global["MOUNTS"], i)
+			self:Msg((L["RemovedMount"]):format(mount))
+			return
+		end
+	end
+	self:ErrorMsg(L["MountNotFound"])
+end
+
+function Chocobo:PrintMounts()
+	for i,v in ipairs(self.Global["MOUNTS"]) do
+		self:Msg(("\124cff00CCFF%i: %s\124r"):format(i, v))
+	end
+end
+
+function Chocobo:ResetMounts()
+	self:Msg(L["ResetMounts"])
+	self.Global["MOUNTS"] = nil
+	self.Global["MOUNTS"] = {}
 end
 
 function Chocobo:FilterMount(filter)
@@ -333,7 +397,7 @@ function SlashCmdList.CHOCOBO(msg, editBox)
 		else
 			Chocobo:Msg(L["AddSyntax"])
 		end
-	elseif command == "remove" then
+	elseif command == "remove" or command == "del" then
 		if arg ~= "" then
 			Chocobo:RemoveMusic(arg)
 		else
@@ -343,6 +407,22 @@ function SlashCmdList.CHOCOBO(msg, editBox)
 		Chocobo:PrintMusic()
 	elseif command == "reset" then
 		Chocobo:ResetMusic()
+	elseif command == "addmount" then
+		if arg ~= "" then
+			Chocobo:AddMount(arg)
+		else
+			Chocobo:Msg(L["AddMountSyntax"])
+		end
+	elseif command == "removemount" or command == "delmount" then
+		if arg ~= "" then
+			Chocobo:RemoveMount(arg)
+		else
+			Chocobo:Msg(L["RemoveMountSyntax"])
+		end
+	elseif command == "listmounts" then
+		Chocobo:PrintMounts()
+	elseif command == "resetmounts" then
+		Chocobo:ResetMounts()
 	elseif command == "debug" then
 		Chocobo:Debug(arg:lower())
 	else
@@ -356,6 +436,10 @@ function SlashCmdList.CHOCOBO(msg, editBox)
 		Chocobo:Msg(L["HelpMessage8"])
 		Chocobo:Msg(L["HelpMessage9"])
 		Chocobo:Msg(L["HelpMessage10"])
+		Chocobo:Msg(L["HelpMessage12"])
+		Chocobo:Msg(L["HelpMessage13"])
+		Chocobo:Msg(L["HelpMessage14"])
+		Chocobo:Msg(L["HelpMessage15"])
 		Chocobo:Msg(L["HelpMessage11"])
 	end
 end

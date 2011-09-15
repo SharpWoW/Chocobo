@@ -11,6 +11,11 @@ function ChocoboOptions_OnLoad()
 	ChocoboOptionsFrame_SongsPanel_RemoveSong:SetText(L["Options_Remove"])
 	ChocoboOptionsFrame_SongsPanel_ResetSongs:SetText(L["Options_Reset"])
 	ChocoboOptionsFrame_SongsPanel_ListSongs:SetText(L["Options_List"])
+	ChocoboOptionsFrame_MountPanel_MountDesc:SetText(L["Options_MountPanelDesc"])
+	ChocoboOptionsFrame_MountPanel_AddMount:SetText(L["Options_Add"])
+	ChocoboOptionsFrame_MountPanel_RemoveMount:SetText(L["Options_Remove"])
+	ChocoboOptionsFrame_MountPanel_ResetMounts:SetText(L["Options_Reset"])
+	ChocoboOptionsFrame_MountPanel_ListMounts:SetText(L["Options_List"])
 	ChocoboOptionsFrame_OnlyHawk:SetText(L["Options_HawkstriderButton"])
 	ChocoboOptionsFrame_AllMounts:SetText(L["Options_AllMountsButton"])
 	ChocoboOptionsFrame_DebugOn:SetText(L["Options_EnableDebugging"])
@@ -42,4 +47,14 @@ end
 function ChocoboOptions_RemoveSong()
 	local songName = ChocoboOptionsFrame_SongsPanel_SongEditBox:GetText()
 	Chocobo:RemoveMusic(songName)
+end
+
+function ChocoboOptions_AddMount()
+	local mount = ChocoboOptionsFrame_MountPanel_MountEditBox:GetText()
+	Chocobo:AddMount(mount)
+end
+
+function ChocoboOptions_RemoveMount()
+	local mount = ChocoboOptionsFrame_MountPanel_MountEditBox:GetText()
+	Chocobo:RemoveMount(mount)
 end

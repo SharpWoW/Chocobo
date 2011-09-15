@@ -6,17 +6,21 @@
 local appname = "Chocobo"
 version = GetAddOnMetadata(appname, "Version")
 
+assert(_G["ChocoboLocale"], "Locales not loaded")
+
+local L = _G["ChocoboLocale"]
+
 data = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject("Broker_Chocobo", {
 	type = "launcher",
 	label = appname,
 	icon = "Interface\\AddOns\\Chocobo\\icon.tga",
-	text = "Open Chocobo options"
+	text = L["Broker_Text"]
 })
 
 function data.OnTooltipShow(tip)
 	bmhTip = CreateFrame("GameTooltip", "Broker_Chocobo_Tip") 
-	tip:AddLine("Broker Chocobo v" .. version)
-	tip:AddLine("Click - Open Chocobo Options")
+	tip:AddLine((L["Broker_Version"]):format(version))
+	tip:AddLine(L["Broker_Click"])
 end
 
 function data.OnClick(self, button)
