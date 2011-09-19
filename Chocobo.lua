@@ -244,7 +244,6 @@ function Chocobo:SoundCheck()
 		SetCVar("Sound_EnableAllSound", 1)
 		SetCVar("Sound_EnableSFX", 0)
 		SetCVar("Sound_EnableAmbience", 0)
-		SetCVar("Sound_EnableMusic", 0)
 		SetCVar("Sound_EnableMusic", 1)
 		if tonumber(GetCVar("Sound_MusicVolume")) <= 0 then
 			SetCVar("Sound_MusicVolume", 1.0)
