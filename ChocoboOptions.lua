@@ -21,8 +21,8 @@ function ChocoboOptions_OnLoad()
 	ChocoboOptionsFrame_DebugOn:SetText(L["Options_EnableDebugging"])
 	ChocoboOptionsFrame_DebugOff:SetText(L["Options_DisableDebugging"])
 	ChocoboOptionsFrame_ToggleButton:SetText(L["Options_ToggleButton"])
+	ChocoboOptionsFrame_OpenSoundControl:SetText(L["Options_OpenSoundControlButton"])
 	ChocoboOptionsFrame_RavenLordToggleText:SetText(L["Options_RavenLordToggle"])
-	
 	ChocoboOptions_UpdateInfo()
 end
 

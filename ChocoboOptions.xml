@@ -4,7 +4,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 
 <Frame name="ChocoboOptionsFrame" parent="UIParent" hidden="true" enableMouse="true" movable="true">
 	<Size>
-		<AbsDimension x="400" y="540" />
+		<AbsDimension x="400" y="578" />
 	</Size>
 	<Anchors>
 		<Anchor point="CENTER" />
@@ -442,6 +442,21 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 				<OnClick>Chocobo:Toggle(); ChocoboOptions_UpdateInfo();</OnClick>
 			</Scripts>
 		</Button>
+		<Button name="$parent_OpenSoundControl" text="" inherits="OptionsButtonTemplate">
+			<Size>
+				<AbsDimension x="240" y="38" />
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT">
+					<Offset>
+						<AbsDimension x="80" y="-415" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Scripts>
+				<OnClick>ChocoboOptionsFrame:Hide(); ChocoboSoundControlFrame:Show();</OnClick>
+			</Scripts>
+		</Button>
 		<CheckButton name="$parent_RavenLordToggle" inherits="OptionsCheckButtonTemplate">
 			<Size>
 				<AbsDimension x="40" y="40" />
@@ -449,7 +464,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 			<Anchors>
 				<Anchor point="TOPLEFT">
 					<Offset>
-						<AbsDimension x="15" y="-415" />
+						<AbsDimension x="15" y="-453" />
 					</Offset>
 				</Anchor>
 			</Anchors>
@@ -464,7 +479,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 			<Anchors>
 				<Anchor point="TOPLEFT">
 					<Offset>
-						<AbsDimension x="14" y="-457" />
+						<AbsDimension x="14" y="-495" />
 					</Offset>
 				</Anchor>
 			</Anchors>
@@ -496,7 +511,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 			<Anchors>
 				<Anchor point="TOPLEFT">
 					<Offset>
-						<AbsDimension x="14" y="-481" />
+						<AbsDimension x="14" y="-519" />
 					</Offset>
 				</Anchor>
 			</Anchors>
@@ -528,7 +543,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 			<Anchors>
 				<Anchor point="TOPLEFT">
 					<Offset>
-						<AbsDimension x="14" y="-505" />
+						<AbsDimension x="14" y="-543" />
 					</Offset>
 				</Anchor>
 			</Anchors>

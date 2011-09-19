@@ -24,6 +24,8 @@ locales\zhTW.lua
 Chocobo.lua
 ChocoboOptions.lua
 ChocoboOptions.xml
+ChocoboSoundControl.lua
+ChocoboSoundControl.xml
 ChocoboInterfacePanel.lua
 ChocoboInterfacePanel.xml
 Broker_Chocobo.lua

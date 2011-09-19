@@ -20,6 +20,7 @@ Chocobo = {
 	Version	= GetAddOnMetadata("Chocobo", "Version"),
 	Loaded	= false,
 	Mounted	= false,
+	Running = false, -- True if the OnUpdate handler is running.
 	MusicDir = "Interface\\AddOns\\Chocobo\\music\\",
 	Global	= {},
 	Events = {},
@@ -61,7 +62,6 @@ local L = _G["ChocoboLocale"]
 assert(L, "Chocobo Locales not loaded")
 
 function Chocobo:OnEvent(frame, event, ...)
-	self:DebugMsg("OnEvent Fired")
 	if Chocobo.Events[event] then Chocobo.Events[event](self, ...) end
 end
 
@@ -89,6 +89,10 @@ function Chocobo.Events.ADDON_LOADED(self, ...)
 		self:Msg(L["RavenLordNotSet"])
 		self.Global["RAVENLORD"] = false
 	end
+	if self.Global["SOUNDCONTROL"] == nil then
+		self:Msg(L["SoundControlNotSet"])
+		self.Global["SOUNDCONTROL"] = false
+	end
 	if self.Global["MUSIC"] == nil then --If the song list is empty
 		--Populate the table with default songs
 		self:Msg(L["NoMusic"])
@@ -110,14 +114,15 @@ end
 
 function Chocobo.Events.UNIT_AURA(self, ...)
 	local unitName = (select(1, ...)):lower()
-	if not unitName == "player" then return end -- Return if the player's buffs were not affected
-	if not self.Global["ENABLED"] then return end -- Return if AddOn is not enabled
+	if unitName ~= "player" or not self.Global["ENABLED"] then return end -- Return if addon is disabled or player was unaffected
 	self:DebugMsg((L["Event_UNIT_AURA"]):format(unitName))
 	if self.Loaded == false then
 		--This should NOT happen
 		self:ErrorMsg(L["NotLoaded"])
 		return
 	end
+	if self.Running then return end -- Return if the OnUpdate script is already running.
+	self.Running = true
 	t = 0
 	self.Frame:SetScript("OnUpdate", function (_, elapsed) Chocobo:OnUpdate(_, elapsed) end)
 end
@@ -133,6 +138,7 @@ function Chocobo:OnUpdate(_, elapsed)
 	if t >= 1 then
 		--Unregister the OnUpdate script
 		self.Frame:SetScript("OnUpdate", nil)
+		self.Running = false
 		--Is the player mounted?
 		local Mounted = self:HasMount()
 		if IsMounted() or Mounted then --More efficient way to make it also detect flight form here?
@@ -141,6 +147,7 @@ function Chocobo:OnUpdate(_, elapsed)
 			if Mounted or self.Global["ALLMOUNTS"] then
 				self:DebugMsg(L["PlayerOnHawkstrider"])
 				if self.Mounted == false then --Check so that the player is not already mounted
+					self:SoundCheck() -- Enable sound if disabled and the option is enabled
 					self:DebugMsg(L["PlayingMusic"])
 					self.Mounted = true
 					local songID = math.random(1, #self.Global["MUSIC"]) --"#Chocobo.Global["MUSIC"]" = number of fields in Chocobo.Global["MUSIC"]
@@ -154,6 +161,7 @@ function Chocobo:OnUpdate(_, elapsed)
 			end
 		else -- When the player has dismounted
 			if self.Mounted then
+				self:SoundCheck() -- Disable sound if enabled and the option is enabled
 				self:DebugMsg(L["NotMounted"])
 				self.Mounted = false
 				StopMusic() -- Note that StopMusic() will also stop any other custom music playing (such as from EpicMusicPlayer)
@@ -208,6 +216,39 @@ function Chocobo:HasMount()
 		end
 	end
 	return self:HasBuff(mountColl)
+end
+
+function Chocobo:ToggleSoundControl()
+	self.Global["SOUNDCONTROL"] = not self.Global["SOUNDCONTROL"]
+	if self.Global["SOUNDCONTROL"] then
+		self:Msg(L["SoundControlEnabled"])
+		self:SoundCheck()
+	else
+		self:Msg(L["SoundControlDisabled"])
+		self:RestoreSound()
+	end
+end
+
+function Chocobo:RestoreSound()
+	SetCVar("Sound_EnableAllSound", 1)
+	SetCVar("Sound_EnableSFX", 1)
+	SetCVar("Sound_EnableMusic", 1)
+	SetCVar("Sound_EnableAmbience", 1)
+end
+
+function Chocobo:SoundCheck()
+	if not self.Global["SOUNDCONTROL"] then return end
+	if self.Mounted then -- We want to disable sounds again
+		SetCVar("Sound_EnableAllSound", 0)
+	else
+		SetCVar("Sound_EnableSFX", 0)
+		SetCVar("Sound_EnableAmbience", 0)
+		SetCVar("Sound_EnableMusic", 0)
+		SetCVar("Sound_EnableMusic", 1)
+		if tonumber(GetCVar("Sound_MusicVolume")) <= 0 then
+			SetCVar("Sound_MusicVolume", 1.0)
+		end
+	end
 end
 
 function Chocobo:AddMusic(songName) --Add a song the the list
@@ -391,6 +432,8 @@ function SlashCmdList.CHOCOBO(msg, editBox)
 		Chocobo:FilterMount(true)
 	elseif command == "toggle" then
 		Chocobo:Toggle()
+	elseif command == "soundcontrol" or command == "sc" or command == "sndctrl" then
+		Chocobo:ToggleSoundControl()
 	elseif command == "add" then
 		if arg ~= "" then
 			Chocobo:AddMusic(arg)
@@ -440,6 +483,7 @@ function SlashCmdList.CHOCOBO(msg, editBox)
 		Chocobo:Msg(L["HelpMessage13"])
 		Chocobo:Msg(L["HelpMessage14"])
 		Chocobo:Msg(L["HelpMessage15"])
+		Chocobo:Msg(L["HelpMessage16"])
 		Chocobo:Msg(L["HelpMessage11"])
 	end
 end
