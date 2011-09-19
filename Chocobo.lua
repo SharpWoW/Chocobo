@@ -241,6 +241,7 @@ function Chocobo:SoundCheck()
 	if self.Mounted then -- We want to disable sounds again
 		SetCVar("Sound_EnableAllSound", 0)
 	else
+		SetCVar("Sound_EnableAllSound", 1)
 		SetCVar("Sound_EnableSFX", 0)
 		SetCVar("Sound_EnableAmbience", 0)
 		SetCVar("Sound_EnableMusic", 0)
