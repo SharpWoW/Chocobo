@@ -14,5 +14,6 @@ externals:
 ignore:
     - Chocobo.bak
     - libs
+    - COPYING
 
 license-output: COPYING

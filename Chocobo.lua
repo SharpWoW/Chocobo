@@ -1,18 +1,25 @@
 --[[
+    Copyright (c) 2010-2011 by Adam Hellberg
+    
+    This file is part of Chocobo.
+    
+    Chocobo is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    Chocobo is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with Chocobo. If not, see <http://www.gnu.org/licenses/>.
+
+	------
+	
 	Chocobo AddOn
-	Made by F16Gaming
-	Dedicated to Shishu on Azuremyst-EU
-	
-	Feel free to modify the code but leave credits!
-	
-	Information:
-		This AddOn plays the chocobo song when mounting on a hawkstrider mount.
-		Type /chocobo for options
-		Some useful commands:
-		/chocobo allmounts   -- Will play chocobo song regardless of mount
-		/chocobo hawkstrider -- Only play when on a hawkstrider
-	
-	CHOCOBO!!!
+	Dedicated to Shishu (Flurdy) on Azuremyst-EU
 --]]
 
 Chocobo = {
