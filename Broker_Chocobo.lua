@@ -21,15 +21,24 @@ function data.OnTooltipShow(tip)
 	bmhTip = CreateFrame("GameTooltip", "Broker_Chocobo_Tip") 
 	tip:AddLine((L["Broker_Version"]):format(version))
 	tip:AddLine(L["Broker_Click"])
+	tip:AddLine(L["Broker_RightClick"])
 end
 
 function data.OnClick(self, button)
 	if not IsAddOnLoaded(appname) then
 		LoadAddOn(appname)
 	end
-	if ChocoboOptionsFrame:IsVisible() then
-		ChocoboOptionsFrame:Hide()
+	if button == "RightButton" then
+		if ChocoboSoundControlFrame:IsVisible() then
+			ChocoboSoundControlFrame:Hide()
+		else
+			ChocoboSoundControlFrame:Show()
+		end
 	else
-		ChocoboOptionsFrame:Show()
+		if ChocoboOptionsFrame:IsVisible() then
+			ChocoboOptionsFrame:Hide()
+		else
+			ChocoboOptionsFrame:Show()
+		end
 	end
 end

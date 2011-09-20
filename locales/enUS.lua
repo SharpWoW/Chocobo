@@ -123,8 +123,9 @@ L["SoundControl_ReturnButton"]	= "Return to main options"
 L["SoundControl_State"]	= "Sound control is %s!"
 
 --[[Broker Plugin Strings]]--
-L["Broker_Text"]	= "Open Chocobo options"
-L["Broker_Version"]	= "Broker Chocobo v%s"
-L["Broker_Click"]	= "Click - Open Chocobo Options"
+L["Broker_Text"]		= "Open Chocobo options"
+L["Broker_Version"]		= "Broker Chocobo v%s"
+L["Broker_Click"]		= "Click - Open Chocobo Options"
+L["Broker_RightClick"]	= "Right Click - Open Chocobo Sound Control"
 
 setmetatable(L, {__index=ChocoboLocale_Default})
