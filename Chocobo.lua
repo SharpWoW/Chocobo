@@ -145,7 +145,6 @@ function Chocobo:OnUpdate(_, elapsed)
 	if t >= 1 then
 		--Unregister the OnUpdate script
 		self.Frame:SetScript("OnUpdate", nil)
-		self.Running = false
 		--Is the player mounted?
 		local Mounted = self:HasMount()
 		if IsMounted() or Mounted then --More efficient way to make it also detect flight form here?
@@ -174,6 +173,7 @@ function Chocobo:OnUpdate(_, elapsed)
 				StopMusic() -- Note that StopMusic() will also stop any other custom music playing (such as from EpicMusicPlayer)
 			end
 		end
+		self.Running = false
 	end
 end
 
@@ -245,7 +245,8 @@ end
 
 function Chocobo:SoundCheck()
 	if not self.Global["SOUNDCONTROL"] then return end
-	if self.Mounted then -- We want to disable sounds again
+	if (self.Mounted and self.Running) or (not self.Mounted and not self.Running) then -- We want to disable sounds again
+		SetCVar("Sound_EnableMusic", 0)
 		SetCVar("Sound_EnableAllSound", 0)
 	else
 		SetCVar("Sound_EnableAllSound", 1)
