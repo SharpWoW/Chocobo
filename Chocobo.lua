@@ -24,14 +24,14 @@
 
 Chocobo = {
 	Name = "Chocobo",
-	Version	= GetAddOnMetadata("Chocobo", "Version"),
-	Loaded	= false,
-	Mounted	= false,
+	Version = GetAddOnMetadata("Chocobo", "Version"),
+	Loaded = false,
+	Mounted = false,
 	Running = false, -- True if the OnUpdate handler is running.
 	MusicDir = "Interface\\AddOns\\Chocobo\\music\\",
-	Global	= {},
+	Global = {},
 	Events = {},
-	Songs	= { -- Default songs loaded on first run
+	Songs = { -- Default songs loaded on first run
 		-- Please note that you can't add custom songs here, this is only used when restoring default settings or on initial startup
 		"chocobo.mp3",
 		"chocobo_ffiv.mp3",
@@ -64,8 +64,10 @@ if Chocobo.Version == "@".."project-version".."@" then Chocobo.Version = "Develo
 
 local t = 0
 
+local CLib = ChocoboLib
 local L = _G["ChocoboLocale"]
 
+assert(CLib, "Chocobo Lib not loaded")
 assert(L, "Chocobo Locales not loaded")
 
 function Chocobo:OnEvent(frame, event, ...)
@@ -75,11 +77,7 @@ end
 function Chocobo.Events.ADDON_LOADED(self, ...)
 	-- Currently, this seems a bit bugged when having multiple addons. The "loaded" message will disappear sometimes.
 	local addonName = (select(1, ...)):lower()
-	if addonName == "chocobo" then
-		self:Msg((L["AddOnLoaded"]):format(self.Version))
-		self:Msg(L["Enjoy"])
-		self.Loaded = true
-	end
+	if addonName ~= "chocobo" or self.Loaded then return end
 	if type(_G["CHOCOBO"]) ~= "table" then _G["CHOCOBO"] = {} end
 	self.Global = _G["CHOCOBO"]
 	if self.Global["DEBUG"] == nil then
@@ -117,6 +115,13 @@ function Chocobo.Events.ADDON_LOADED(self, ...)
 		self:Msg(L["EnabledNotSet"])
 		self.Global["ENABLED"] = true
 	end
+	-- [NEW] Check all songs and convert out-of-date ones to new format
+	-- (Removing the Interface\\AddOns\\Chocobo\\music\\ part)
+	self:MusicCheck()
+	
+	self:Msg((L["AddOnLoaded"]):format(self.Version))
+	self:Msg(L["Enjoy"])
+	self.Loaded = true
 end
 
 function Chocobo.Events.UNIT_AURA(self, ...)
@@ -136,6 +141,7 @@ end
 
 function Chocobo.Events.PLAYER_LOGOUT(self, ...)
 	-- Save local copy of globals
+	-- TODO: Is this redundant?
 	_G["CHOCOBO"] = self.Global
 end
 
@@ -145,20 +151,19 @@ function Chocobo:OnUpdate(_, elapsed)
 	if t >= 1 then
 		-- Unregister the OnUpdate script
 		self.Frame:SetScript("OnUpdate", nil)
-		-- Is the player mounted?
-		local Mounted = self:HasMount()
-		if IsMounted() or Mounted then -- More efficient way to make it also detect flight form here?
-			self:DebugMsg(L["PlayerIsMounted"])
-			-- Loop through all the "hawkstrider" names to see if the player is mounted on one or check if allmounts (override) is true
-			if Mounted or self.Global["ALLMOUNTS"] then
+		local mounted, mountName = self:HasMount() -- Get mounted status and name of mount (if mounted)
+		if IsMounted() or mounted then -- More efficient way to make it also detect flight form here?
+			self:DebugMsg((L["CurrentMount"]):format(mountName)) -- Print what mount the player is mounted on
+			self:DebugMsg(L["PlayerIsMounted"]) -- Print that the player is mounted
+			-- TODO: Redundant to have both the above messages? Remove the second?
+			-- Proceed if player is on one of the activated mounts or if allmounts (override) is true
+			if mounted or self.Global["ALLMOUNTS"] then
 				self:DebugMsg(L["PlayerOnHawkstrider"])
 				if self.Mounted == false then -- Check so that the player is not already mounted
 					self:SoundCheck() -- Enable sound if disabled and the option is enabled
 					self:DebugMsg(L["PlayingMusic"])
 					self.Mounted = true
-					local songID = math.random(1, #self.Global["MUSIC"]) -- "#Chocobo.Global["MUSIC"]" = number of fields in Chocobo.Global["MUSIC"]
-					self:DebugMsg((L["PlayingSong"]):format(songID, self.Global["MUSIC"][songID]))
-					PlayMusic(self.Global["MUSIC"][songID])
+					self:PlayRandomMusic(songID)
 				else -- If the player has already mounted
 					self:DebugMsg(L["AlreadyMounted"])
 				end
@@ -175,31 +180,6 @@ function Chocobo:OnUpdate(_, elapsed)
 		end
 		self.Running = false
 	end
-end
-
-function Chocobo:HasBuff(idColl)
-	local buffs = {}
-	for i=1,40 do -- Loop through all 40 possible buff indexes
-		local name,_,_,_,_,_,_,_,_,_,id = UnitAura("player", i) -- Get buff on index i
-		-- Insert it into the buffs table, break if buff is nil (that means no other buffs exist on the player)
-		if name and id then buffs[name] = id else break end
-	end
-	for name,id in pairs(buffs) do -- Loop through all buffs found
-		for _,v in pairs(idColl) do -- Loop through all supplied IDs
-			if type(v) == "number" then -- Check if the value is a number
-				if id == v then -- Check if ID equals current buff ID and return true if it does
-					self:DebugMsg((L["CurrentMount"]):format(name)) -- Print what mount the player is mounted on
-					return true
-				end
-			elseif type(v) == "string" then -- Check if the value is a string
-				if name:lower() == v:lower() then -- Check if name equals current buff name and return true if it does
-					self:DebugMsg((L["CurrentMount"]):format(name)) -- Print what mount the player is mounted on
-					return true
-				end
-			end
-		end
-	end
-	return false -- Else return false (Player does not have the buff)
 end
 
 function Chocobo:HasMount()
@@ -222,7 +202,7 @@ function Chocobo:HasMount()
 			table.insert(mountColl, v) -- Can be both a string and a number value
 		end
 	end
-	return self:HasBuff(mountColl)
+	return CLib:HasBuff(mountColl)
 end
 
 function Chocobo:ToggleSoundControl()
@@ -259,38 +239,82 @@ function Chocobo:SoundCheck()
 	end
 end
 
+function Chocobo:MusicCheck()
+	local matchString = "^" .. self.MusicDir
+	local length = self.MusicDir:len()
+	local update = {}
+	local updated = 0
+	for i,v in ipairs(self.Global["MUSIC"]) do
+		if v:match(matchString) then
+			local change = v:sub(length + 1, v:len())
+			self.Global["MUSIC"][i] = change
+			self:Msg((L["SongUpdated"]):format(i, change))
+			updated = updated + 1
+		end
+	end
+	if updated > 0 then
+		self:Msg((L["SongsUpdated"]):format(updated))
+	else
+		self:Msg(L["SongsUpToDate"])
+	end
+end
+
+function Chocobo:PlayMusic(id)
+	local song = self.Global["MUSIC"][id]
+	if not song then
+		self:ErrorMsg(L["SongNotFound"])
+		return false
+	end
+	song = self.MusicDir .. song
+	self:DebugMsg((L["PlayingSong"]):format(id, song))
+	PlayMusic(song)
+end
+
+function Chocobo:PlayRandomMusic()
+	self:PlayMusic(math.random(1, #self.Global["MUSIC"]))
+end
+
 function Chocobo:AddMusic(songName) -- Add a song the the list
-	songName = self:Trim(songName)
+	songName = CLib:Trim(songName)
 	if songName == "" or songName == nil then
 		self:ErrorMsg(L["NoFile"])
-		return
+		return false
 	end
-	songName = self.MusicDir .. songName
 	for _,v in pairs(self.Global["MUSIC"]) do -- Loop through all the songs currently in the list and...
 		if v == songName then -- ... make sure it isn't there already
 			self:ErrorMsg(L["AlreadyExists"])
-			return
+			return false
 		end
 	end
 	table.insert(self.Global["MUSIC"], songName) -- Insert the song into list
 	self:Msg((L["AddedSong"]):format(songName))
+	return true
 end
 
 function Chocobo:RemoveMusic(songName) -- Remove a song from the list
-	songName = self:Trim(songName)
+	if type(songName) == "number" then
+		if self.Global["MUSIC"][songName] then
+			local name = self.Global["MUSIC"][songName]
+			table.remove(self.Global["MUSIC"], songName)
+			self:Msg((L["RemovedSong"]):format(name))
+			return true
+		end
+		return false
+	end
+	songName = CLib:Trim(songName)
 	if songName == "" or songName == nil then
 		self:ErrorMsg(L["NoFile"])
-		return
+		return false
 	end
-	songName = self.MusicDir .. songName
 	for i,v in ipairs(self.Global["MUSIC"]) do -- Loop through all the songs in the list until...
 		if v == songName then -- ... the desired one is found and then...
 			table.remove(self.Global["MUSIC"], i) -- ... remove it from the list.
 			self:Msg((L["RemovedSong"]):format(songName))
-			return
+			return true
 		end
 	end
 	self:ErrorMsg(L["SongNotFound"])
+	return false
 end
 
 function Chocobo:PrintMusic() -- Print all the songs currently in list to chat
@@ -309,7 +333,7 @@ function Chocobo:ResetMusic() -- Resets the values in Chocobo.Global["MUSIC"] to
 end
 
 function Chocobo:AddMount(mount)
-	mount = self:Trim(mount)
+	mount = CLib:Trim(mount)
 	mount = tonumber(mount) or mount
 	if mount == "" or mount == nil then
 		self:ErrorMsg(L["NoMount"])
@@ -403,11 +427,6 @@ end
 
 function Chocobo:GetGlobal(var)
 	return self.Global[var]
-end
-
-function Chocobo:Trim(s)
-  -- from PiL2 20.4
-  return (s:gsub("^%s*(.-)%s*$", "%1"))
 end
 
 function Chocobo:Msg(msg) -- Send a normal message

@@ -11,6 +11,9 @@ libs\CallbackHandler-1.0\CallbackHandler-1.0.xml
 libs\LibDataBroker-1-1\LibDataBroker-1.1.lua
 #@end-no-lib-strip@
 
+#Built-in library, do not strip
+libs\ChocoboLib\ChocoboLib.xml
+
 locales\enUS.lua
 locales\deDE.lua
 locales\esES.lua
