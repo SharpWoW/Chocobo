@@ -14,15 +14,7 @@ libs\LibDataBroker-1-1\LibDataBroker-1.1.lua
 #Built-in library, do not strip
 libs\ChocoboLib\ChocoboLib.xml
 
-locales\enUS.lua
-locales\deDE.lua
-locales\esES.lua
-locales\esMX.lua
-locales\frFR.lua
-locales\koKR.lua
-locales\ruRU.lua
-locales\zhCN.lua
-locales\zhTW.lua
+locales\load.xml
 
 Chocobo.lua
 ChocoboOptions.lua
