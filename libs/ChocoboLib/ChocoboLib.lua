@@ -64,7 +64,7 @@ function ChocoboLib:HasBuff(idColl) -- idColl is either a number or a table with
 				end
 			elseif type(v) == "string" then -- Check if the value is a string
 				if name:lower() == v:lower() then -- Check if name equals current buff name and return true if it does
-					return true, name, id
+					return true, (name or "<No Name>"), id
 				end
 			end
 		end
