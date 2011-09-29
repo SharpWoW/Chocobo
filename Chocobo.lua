@@ -153,13 +153,13 @@ function Chocobo:OnUpdate(_, elapsed)
 		self.Frame:SetScript("OnUpdate", nil)
 		local mounted, mountName = self:HasMount() -- Get mounted status and name of mount (if mounted)
 		if IsMounted() or mounted then -- More efficient way to make it also detect flight form here?
-			self:DebugMsg((L["CurrentMount"]):format(mountName)) -- Print what mount the player is mounted on
+			if mountName then self:DebugMsg((L["CurrentMount"]):format(mountName)) end -- Print what mount the player is mounted on
 			self:DebugMsg(L["PlayerIsMounted"]) -- Print that the player is mounted
 			-- TODO: Redundant to have both the above messages? Remove the second?
 			-- Proceed if player is on one of the activated mounts or if allmounts (override) is true
 			if mounted or self.Global["ALLMOUNTS"] then
 				self:DebugMsg(L["PlayerOnHawkstrider"])
-				if self.Mounted == false then -- Check so that the player is not already mounted
+				if not self.Mounted then -- Check so that the player is not already mounted
 					self:SoundCheck() -- Enable sound if disabled and the option is enabled
 					self:DebugMsg(L["PlayingMusic"])
 					self.Mounted = true
