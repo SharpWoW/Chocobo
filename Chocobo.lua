@@ -240,21 +240,20 @@ function Chocobo:SoundCheck()
 end
 
 function Chocobo:MusicCheck()
-	local matchString = "^" .. self.MusicDir
-	local length = self.MusicDir:len()
-	local update = {}
-	local updated = 0
+	local matchString = "^" .. self.MusicDir -- Match the music dir path at the beginning of the string only.
+	local length = self.MusicDir:len() + 1 -- The substring has to start AFTER the matched string, adding one to the length.
+	local updated = 0 -- Keep track of how many songs that had to update
 	for i,v in ipairs(self.Global["MUSIC"]) do
 		if v:match(matchString) then
-			local change = v:sub(length + 1, v:len())
+			local change = v:sub(length, v:len()) -- A substring that includes only the filename (or subfolders, if any)
 			self.Global["MUSIC"][i] = change
 			self:Msg((L["SongUpdated"]):format(i, change))
 			updated = updated + 1
 		end
 	end
-	if updated > 0 then
+	if updated > 0 then -- Print how many songs that were updated
 		self:Msg((L["SongsUpdated"]):format(updated))
-	else
+	else -- All songs up to date, no action needed
 		self:Msg(L["SongsUpToDate"])
 	end
 end
