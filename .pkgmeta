@@ -13,7 +13,9 @@ externals:
 
 ignore:
     - Chocobo.bak
-    - libs
+    - libs/CallbackHandler-1.0
+    - libs/LibDataBroker-1-1
+    - libs/LibStub
     - COPYING
 
 license-output: COPYING
