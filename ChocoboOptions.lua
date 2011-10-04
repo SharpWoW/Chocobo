@@ -31,11 +31,6 @@ function ChocoboOptions_OnLoad()
 	ChocoboOptionsFrame_MountPanel_RemoveMount:SetText(L["Options_Remove"])
 	ChocoboOptionsFrame_MountPanel_ResetMounts:SetText(L["Options_Reset"])
 	ChocoboOptionsFrame_MountPanel_ListMounts:SetText(L["Options_List"])
-	ChocoboOptionsFrame_OnlyHawk:SetText(L["Options_HawkstriderButton"])
-	ChocoboOptionsFrame_AllMounts:SetText(L["Options_AllMountsButton"])
-	ChocoboOptionsFrame_DebugOn:SetText(L["Options_EnableDebugging"])
-	ChocoboOptionsFrame_DebugOff:SetText(L["Options_DisableDebugging"])
-	ChocoboOptionsFrame_ToggleButton:SetText(L["Options_ToggleButton"])
 	ChocoboOptionsFrame_OpenSoundControl:SetText(L["Options_OpenSoundControlButton"])
 	ChocoboOptionsFrame_RavenLordToggleText:SetText(L["Options_RavenLordToggle"])
 	ChocoboOptions_UpdateInfo()
@@ -44,12 +39,26 @@ end
 function ChocoboOptions_UpdateInfo()
 	local AddOnState, MountState, DebugState = ""
 	local RavenLordState = Chocobo:GetGlobal("RAVENLORD")
-	if Chocobo:GetGlobal("ENABLED") then AddOnState = L["Options_Enabled"] else AddOnState = L["Options_Disabled"] end
+	local asColor = "FFFF00"
+	local dColor = "FFFF00"
+	if Chocobo:GetGlobal("ENABLED") then
+		AddOnState = L["Options_Enabled"]
+		asColor = "00FF00"
+	else
+		AddOnState = L["Options_Disabled"]
+		asColor = "FF0000"
+	end
 	if Chocobo:GetGlobal("ALLMOUNTS") then MountState = L["Options_AllMounts"] else MountState = L["Options_Hawkstrider"] end
-	if Chocobo:GetGlobal("DEBUG") then DebugState = L["Options_Enabled"] else DebugState = L["Options_Disabled"] end
-	ChocoboOptionsFrame_StatusLabel:SetText((L["Options_AddOnState"]):format(AddOnState))
-	ChocoboOptionsFrame_MountLabel:SetText(MountState)
-	ChocoboOptionsFrame_DebugLabel:SetText((L["Options_DebugState"]):format(DebugState))
+	if Chocobo:GetGlobal("DEBUG") then
+		DebugState = L["Options_Enabled"]
+		dColor = "00FF00"
+	else
+		DebugState = L["Options_Disabled"]
+		dColor = "FF0000"
+	end
+	ChocoboOptionsFrame_ToggleButton:SetText((L["Options_AddOnState"]):format(asColor, AddOnState))
+	ChocoboOptionsFrame_ToggleMount:SetText(MountState)
+	ChocoboOptionsFrame_ToggleDebug:SetText((L["Options_DebugState"]):format(dColor, DebugState))
 	ChocoboOptionsFrame_DescriptionLabel:SetText((L["Options_Description"]):format(Chocobo:GetVersion()))
 	ChocoboOptionsFrame_RavenLordToggle:SetChecked(RavenLordState)
 end

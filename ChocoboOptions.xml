@@ -23,7 +23,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 
 <Frame name="ChocoboOptionsFrame" parent="UIParent" hidden="true" enableMouse="true" movable="true">
 	<Size>
-		<AbsDimension x="400" y="578" />
+		<AbsDimension x="400" y="500" />
 	</Size>
 	<Anchors>
 		<Anchor point="CENTER" />
@@ -386,64 +386,34 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 				</Button>
 			</Frames>
 		</Frame>
-		<Button name="$parent_OnlyHawk" text="" inherits="OptionsButtonTemplate">
+		<Button name="$parent_ToggleMount" text="%TOGGLE_MOUNT_STATUS%" inherits="OptionsButtonTemplate">
 			<Size>
-				<AbsDimension x="150" y="50" />
+				<AbsDimension x="240" y="38" />
 			</Size>
 			<Anchors>
 				<Anchor point="TOPLEFT">
 					<Offset>
-						<AbsDimension x="44" y="-263" />
+						<AbsDimension x="80" y="-262" />
 					</Offset>
 				</Anchor>
 			</Anchors>
 			<Scripts>
-				<OnClick>Chocobo:FilterMount(true); ChocoboOptions_UpdateInfo();</OnClick>
+				<OnClick>Chocobo:FilterMount(); ChocoboOptions_UpdateInfo();</OnClick>
 			</Scripts>
 		</Button>
-		<Button name="$parent_AllMounts" text="" inherits="OptionsButtonTemplate">
+		<Button name="$parent_ToggleDebug" text="%TOGGLE_MOUNT_STATUS%" inherits="OptionsButtonTemplate">
 			<Size>
-				<AbsDimension x="150" y="50" />
+				<AbsDimension x="240" y="38" />
 			</Size>
 			<Anchors>
 				<Anchor point="TOPLEFT">
 					<Offset>
-						<AbsDimension x="200" y="-263" />
+						<AbsDimension x="80" y="-305" />
 					</Offset>
 				</Anchor>
 			</Anchors>
 			<Scripts>
-				<OnClick>Chocobo:FilterMount(false); ChocoboOptions_UpdateInfo();</OnClick>
-			</Scripts>
-		</Button>
-		<Button name="$parent_DebugOn" text="" inherits="OptionsButtonTemplate">
-			<Size>
-				<AbsDimension x="150" y="50" />
-			</Size>
-			<Anchors>
-				<Anchor point="TOPLEFT">
-					<Offset>
-						<AbsDimension x="44" y="-319" />
-					</Offset>
-				</Anchor>
-			</Anchors>
-			<Scripts>
-				<OnClick>Chocobo:Debug("enable"); ChocoboOptions_UpdateInfo();</OnClick>
-			</Scripts>
-		</Button>
-		<Button name="$parent_DebugOff" text="" inherits="OptionsButtonTemplate">
-			<Size>
-				<AbsDimension x="150" y="50" />
-			</Size>
-			<Anchors>
-				<Anchor point="TOPLEFT">
-					<Offset>
-						<AbsDimension x="200" y="-319" />
-					</Offset>
-				</Anchor>
-			</Anchors>
-			<Scripts>
-				<OnClick>Chocobo:Debug("disable"); ChocoboOptions_UpdateInfo();</OnClick>
+				<OnClick>Chocobo:ToggleDebug(); ChocoboOptions_UpdateInfo();</OnClick>
 			</Scripts>
 		</Button>
 		<Button name="$parent_ToggleButton" text="" inherits="OptionsButtonTemplate">
@@ -453,7 +423,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 			<Anchors>
 				<Anchor point="TOPLEFT">
 					<Offset>
-						<AbsDimension x="80" y="-375" />
+						<AbsDimension x="80" y="-348" />
 					</Offset>
 				</Anchor>
 			</Anchors>
@@ -468,7 +438,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 			<Anchors>
 				<Anchor point="TOPLEFT">
 					<Offset>
-						<AbsDimension x="80" y="-415" />
+						<AbsDimension x="80" y="-391" />
 					</Offset>
 				</Anchor>
 			</Anchors>
@@ -483,7 +453,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 			<Anchors>
 				<Anchor point="TOPLEFT">
 					<Offset>
-						<AbsDimension x="15" y="-453" />
+						<AbsDimension x="25" y="-434" />
 					</Offset>
 				</Anchor>
 			</Anchors>
@@ -491,102 +461,6 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 				<OnClick>Chocobo:RavenLordToggle(); ChocoboOptions_UpdateInfo();</OnClick>
 			</Scripts>
 		</CheckButton>
-		<Frame name="$parent_Status">
-			<Size>
-				<AbsDimension x="370" y="18" />
-			</Size>
-			<Anchors>
-				<Anchor point="TOPLEFT">
-					<Offset>
-						<AbsDimension x="14" y="-495" />
-					</Offset>
-				</Anchor>
-			</Anchors>
-			<Layers>
-				<Layer>
-					<FontString name="$parentLabel" font="Fonts\FRIZQT__.TTF" text="AddOn is %STATE%">
-						<Anchors>
-							<Anchor point="TOPLEFT" />
-							<Anchor point="BOTTOMRIGHT" />
-						</Anchors>
-						<FontHeight>
-							<AbsValue val="12" />
-						</FontHeight>
-						<Color r="1" g="0.8196079" b="0" />
-						<Shadow>
-							<Color r="0" g="0" b="0" />
-							<Offset>
-								<AbsDimension x="1" y="-1" />
-							</Offset>
-						</Shadow>
-					</FontString>
-				</Layer>
-			</Layers>
-		</Frame>
-		<Frame name="$parent_Mount">
-			<Size>
-				<AbsDimension x="370" y="18" />
-			</Size>
-			<Anchors>
-				<Anchor point="TOPLEFT">
-					<Offset>
-						<AbsDimension x="14" y="-519" />
-					</Offset>
-				</Anchor>
-			</Anchors>
-			<Layers>
-				<Layer>
-					<FontString name="$parentLabel" font="Fonts\FRIZQT__.TTF" text="%MOUNTSTATUS%">
-						<Anchors>
-							<Anchor point="TOPLEFT" />
-							<Anchor point="BOTTOMRIGHT" />
-						</Anchors>
-						<FontHeight>
-							<AbsValue val="12" />
-						</FontHeight>
-						<Color r="1" g="0.8196079" b="0" />
-						<Shadow>
-							<Color r="0" g="0" b="0" />
-							<Offset>
-								<AbsDimension x="1" y="-1" />
-							</Offset>
-						</Shadow>
-					</FontString>
-				</Layer>
-			</Layers>
-		</Frame>
-		<Frame name="$parent_Debug">
-			<Size>
-				<AbsDimension x="370" y="18" />
-			</Size>
-			<Anchors>
-				<Anchor point="TOPLEFT">
-					<Offset>
-						<AbsDimension x="14" y="-543" />
-					</Offset>
-				</Anchor>
-			</Anchors>
-			<Layers>
-				<Layer>
-					<FontString name="$parentLabel" font="Fonts\FRIZQT__.TTF" text="Debugging is %DEBUGSTATE%">
-						<Anchors>
-							<Anchor point="TOPLEFT" />
-							<Anchor point="BOTTOMRIGHT" />
-						</Anchors>
-						<FontHeight>
-							<AbsValue val="12" />
-						</FontHeight>
-						<Color r="1" g="0.8196079" b="0" />
-						<Shadow>
-							<Color r="0" g="0" b="0" />
-							<Offset>
-								<AbsDimension x="1" y="-1" />
-							</Offset>
-						</Shadow>
-					</FontString>
-				</Layer>
-			</Layers>
-		</Frame>
 	</Frames>
 </Frame>
 </Ui>

@@ -71,7 +71,7 @@ assert(CLib, "Chocobo Lib not loaded")
 assert(L, "Chocobo Locales not loaded")
 
 function Chocobo:OnEvent(frame, event, ...)
-	if Chocobo.Events[event] then Chocobo.Events[event](self, ...) end
+	if self.Events[event] then self.Events[event](self, ...) end
 end
 
 function Chocobo.Events.ADDON_LOADED(self, ...)
@@ -378,12 +378,21 @@ function Chocobo:ResetMounts()
 end
 
 function Chocobo:FilterMount(filter)
-	if filter == true then
+	if type(filter) == "nil" then filter = Chocobo.Global["ALLMOUNTS"] end
+	if filter then
 		self:Msg(L["HawkstriderOnly"])
 		self.Global["ALLMOUNTS"] = false
 	else
 		self:Msg(L["AllMounts"])
 		self.Global["ALLMOUNTS"] = true
+	end
+end
+
+function Chocobo:ToggleDebug()
+	if self.Global["DEBUG"] then
+		self:Debug("disable")
+	else
+		self:Debug("enable")
 	end
 end
 
@@ -444,74 +453,6 @@ end
 
 function Chocobo:GetVersion()
 	return self.Version
-end
-
-SLASH_CHOCOBO1 = "/chocobo"
-function SlashCmdList.CHOCOBO(msg, editBox)
-	local command, arg = msg:match("^(%S*)%s*(.-)$")
-	command = command:lower()
-	if command == "options" then
-		ChocoboOptionsFrame:Show()
-	elseif command == "allmounts" then
-		Chocobo:FilterMount(false)
-	elseif command == "hawkstrider" then
-		Chocobo:FilterMount(true)
-	elseif command == "toggle" then
-		Chocobo:Toggle()
-	elseif command == "soundcontrol" or command == "sc" or command == "sndctrl" then
-		Chocobo:ToggleSoundControl()
-	elseif command == "add" then
-		if arg ~= "" then
-			Chocobo:AddMusic(arg)
-		else
-			Chocobo:Msg(L["AddSyntax"])
-		end
-	elseif command == "remove" or command == "del" then
-		if arg ~= "" then
-			Chocobo:RemoveMusic(arg)
-		else
-			Chocobo:Msg(L["RemoveSyntax"])
-		end
-	elseif command == "list" then
-		Chocobo:PrintMusic()
-	elseif command == "reset" then
-		Chocobo:ResetMusic()
-	elseif command == "addmount" then
-		if arg ~= "" then
-			Chocobo:AddMount(arg)
-		else
-			Chocobo:Msg(L["AddMountSyntax"])
-		end
-	elseif command == "removemount" or command == "delmount" then
-		if arg ~= "" then
-			Chocobo:RemoveMount(arg)
-		else
-			Chocobo:Msg(L["RemoveMountSyntax"])
-		end
-	elseif command == "listmounts" then
-		Chocobo:PrintMounts()
-	elseif command == "resetmounts" then
-		Chocobo:ResetMounts()
-	elseif command == "debug" then
-		Chocobo:Debug(arg:lower())
-	else
-		Chocobo:Msg(L["HelpMessage1"])
-		Chocobo:Msg(L["HelpMessage2"])
-		Chocobo:Msg(L["HelpMessage3"])
-		Chocobo:Msg(L["HelpMessage4"])
-		Chocobo:Msg(L["HelpMessage5"])
-		Chocobo:Msg(L["HelpMessage6"])
-		Chocobo:Msg(L["HelpMessage7"])
-		Chocobo:Msg(L["HelpMessage8"])
-		Chocobo:Msg(L["HelpMessage9"])
-		Chocobo:Msg(L["HelpMessage10"])
-		Chocobo:Msg(L["HelpMessage12"])
-		Chocobo:Msg(L["HelpMessage13"])
-		Chocobo:Msg(L["HelpMessage14"])
-		Chocobo:Msg(L["HelpMessage15"])
-		Chocobo:Msg(L["HelpMessage16"])
-		Chocobo:Msg(L["HelpMessage11"])
-	end
 end
 
 -- Create the frame, no need for an XML file!

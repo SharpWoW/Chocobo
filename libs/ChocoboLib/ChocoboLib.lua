@@ -60,11 +60,11 @@ function ChocoboLib:HasBuff(idColl) -- idColl is either a number or a table with
 		for _,v in pairs(idColl) do -- Loop through all supplied IDs
 			if type(v) == "number" then -- Check if the value is a number
 				if id == v then -- Check if ID equals current buff ID and return true if it does
-					return true, (name or "<No Name>"), id
+					return true, (name or "<No Name>"), (id or 0)
 				end
 			elseif type(v) == "string" then -- Check if the value is a string
 				if name:lower() == v:lower() then -- Check if name equals current buff name and return true if it does
-					return true, (name or "<No Name>"), id
+					return true, (name or "<No Name>"), (id or 0)
 				end
 			end
 		end

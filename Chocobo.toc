@@ -17,6 +17,7 @@ libs\ChocoboLib\ChocoboLib.xml
 locales\load.xml
 
 Chocobo.lua
+ChocoboCommand.lua
 ChocoboOptions.lua
 ChocoboOptions.xml
 ChocoboSoundControl.lua

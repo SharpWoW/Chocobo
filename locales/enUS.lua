@@ -106,6 +106,7 @@ L["HelpMessage13"]			= "removemount <name or ID of mount>: Remove a mount from t
 L["HelpMessage14"]			= "listmounts: List all user-added mounts"
 L["HelpMessage15"]			= "resetmounts: Reset user-added mounts to default (empty)"
 L["HelpMessage16"]			= "soundcontrol: Toggle the sound control on and off"
+L["InvalidCommand"]			= "%q is not a valid command, please consult the AddOn documentation for a list of available commands"
 
 --[[Chocobo Options]]--
 --The frame
@@ -116,22 +117,17 @@ L["Options_Add"]					= "Add"
 L["Options_Remove"]					= "Remove"
 L["Options_Reset"]					= "Reset"
 L["Options_List"]					= "List"
-L["Options_HawkstriderButton"]		= "Play music on|nhawkstrider only"
-L["Options_AllMountsButton"]		= "Play music|non all mounts"
-L["Options_EnableDebugging"]		= "Enable debugging"
-L["Options_DisableDebugging"]		= "Disable debugging"
-L["Options_ToggleButton"]			= "Toggle AddOn on and off"
 L["Options_OpenSoundControlButton"]	= "Open sound control panel"
 L["Options_RavenLordToggle"]		= "Play music when mounting Raven Lord (Anzu)"
 --The code
 L["Options_Enabled"]		= "enabled"
 L["Options_Disabled"]		= "disabled"
-L["Options_AllMounts"]		= "Playing music on all mounts."
-L["Options_Hawkstrider"]	= "Playing music on hawkstriders only."
+L["Options_AllMounts"]		= "Music on \124cffFFFFFFall mounts\124r"
+L["Options_Hawkstrider"]	= "Music on \124cffFFFFFFhawkstriders only\124r"
 L["Options_RavenLordTrue"]	= "Playing music on Raven Lord (Anzu)"
 L["Options_RavenLordFalse"]	= "Not playing music on Raven Lord (Anzu)"
-L["Options_AddOnState"]		= "AddOn is %s."
-L["Options_DebugState"]		= "Debugging is %s."
+L["Options_AddOnState"]		= "AddOn is \124cff%s%s\124r"
+L["Options_DebugState"]		= "Debugging is \124cff%s%s\124r"
 L["Options_Description"]	= "Configure the AddOn!|nv%s"
 
 --[[Sound Control Strings]]--
@@ -146,7 +142,7 @@ L["SoundControl_State"]	= "Sound control is %s!"
 
 --[[Broker Plugin Strings]]--
 L["Broker_Text"]		= "Open Chocobo options"
-L["Broker_Version"]		= "Broker Chocobo v%s"
+L["Broker_Version"]		= "|cffFFFFFFBroker Chocobo v%s|r"
 L["Broker_LeftClick"]	= "Left Click - Open Chocobo Options"
 L["Broker_MiddleClick"]	= "Middle Click - Toggle Sound Control"
 L["Broker_RightClick"]	= "Right Click - Open Chocobo Sound Control"
