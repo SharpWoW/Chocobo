@@ -317,8 +317,12 @@ function Chocobo:RemoveMusic(songName) -- Remove a song from the list
 end
 
 function Chocobo:PrintMusic() -- Print all the songs currently in list to chat
-	for i,v in ipairs(self.Global["MUSIC"]) do
-		self:Msg(("\124cff00CCFF%i: %s\124r"):format(i, v))
+	if #self.Global["MUSIC"] <= 0 then
+		self:Msg(L["MusicListEmpty"])
+	else
+		for i,v in ipairs(self.Global["MUSIC"]) do
+			self:Msg(("\124cff00CCFF%i: %s\124r"):format(i, v))
+		end
 	end
 end
 
@@ -366,8 +370,12 @@ function Chocobo:RemoveMount(mount)
 end
 
 function Chocobo:PrintMounts()
-	for i,v in ipairs(self.Global["MOUNTS"]) do
-		self:Msg(("\124cff00CCFF%i: %s\124r"):format(i, v))
+	if #self.Global["MOUNTS"] <= 0 then
+		self:Msg(L["MountListEmpty"])
+	else
+		for i,v in ipairs(self.Global["MOUNTS"]) do
+			self:Msg(("\124cff00CCFF%i: %s\124r"):format(i, v))
+		end
 	end
 end
 
