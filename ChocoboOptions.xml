@@ -40,8 +40,8 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 		</BackgroundInsets>
 	</Backdrop>
 	<Scripts>
-		<OnLoad>ChocoboOptions_OnLoad();</OnLoad>
-		<OnShow>ChocoboOptions_UpdateInfo();</OnShow>
+		<OnLoad>Chocobo.Options:OnLoad();</OnLoad>
+		<OnShow>Chocobo.Options:Update();</OnShow>
 		<OnMouseDown>self:StartMoving();</OnMouseDown>
 		<OnMouseUp>self:StopMovingOrSizing();</OnMouseUp>
 	</Scripts>
@@ -207,7 +207,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 						</Anchor>
 					</Anchors>
 					<Scripts>
-						<OnClick>ChocoboOptions_AddSong();</OnClick>
+						<OnClick>Chocobo:AddMusic(ChocoboOptionsFrame_SongsPanel_SongEditBox:GetText());</OnClick>
 					</Scripts>
 				</Button>
 				<Button name="$parent_RemoveSong" text="" inherits="OptionsButtonTemplate">
@@ -222,7 +222,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 						</Anchor>
 					</Anchors>
 					<Scripts>
-						<OnClick>ChocoboOptions_RemoveSong();</OnClick>
+						<OnClick>Chocobo:RemoveMusic(ChocoboOptionsFrame_SongsPanel_SongEditBox:GetText());</OnClick>
 					</Scripts>
 				</Button>
 				<Button name="$parent_ResetSongs" text="" inherits="OptionsButtonTemplate">
@@ -336,7 +336,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 						</Anchor>
 					</Anchors>
 					<Scripts>
-						<OnClick>ChocoboOptions_AddMount();</OnClick>
+						<OnClick>Chocobo:AddMount(ChocoboOptionsFrame_MountPanel_MountEditBox:GetText());</OnClick>
 					</Scripts>
 				</Button>
 				<Button name="$parent_RemoveMount" text="" inherits="OptionsButtonTemplate">
@@ -351,7 +351,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 						</Anchor>
 					</Anchors>
 					<Scripts>
-						<OnClick>ChocoboOptions_RemoveMount();</OnClick>
+						<OnClick>Chocobo:RemoveMount(ChocoboOptionsFrame_MountPanel_MountEditBox:GetText());</OnClick>
 					</Scripts>
 				</Button>
 				<Button name="$parent_ResetMounts" text="" inherits="OptionsButtonTemplate">
@@ -398,7 +398,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 				</Anchor>
 			</Anchors>
 			<Scripts>
-				<OnClick>Chocobo:FilterMount(); ChocoboOptions_UpdateInfo();</OnClick>
+				<OnClick>Chocobo:FilterMount(); Chocobo.Options:Update();</OnClick>
 			</Scripts>
 		</Button>
 		<Button name="$parent_ToggleDebug" text="%TOGGLE_MOUNT_STATUS%" inherits="OptionsButtonTemplate">
@@ -413,7 +413,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 				</Anchor>
 			</Anchors>
 			<Scripts>
-				<OnClick>Chocobo:ToggleDebug(); ChocoboOptions_UpdateInfo();</OnClick>
+				<OnClick>Chocobo:ToggleDebug(); Chocobo.Options:Update();</OnClick>
 			</Scripts>
 		</Button>
 		<Button name="$parent_ToggleButton" text="" inherits="OptionsButtonTemplate">
@@ -428,7 +428,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 				</Anchor>
 			</Anchors>
 			<Scripts>
-				<OnClick>Chocobo:Toggle(); ChocoboOptions_UpdateInfo();</OnClick>
+				<OnClick>Chocobo:Toggle(); Chocobo.Options:Update();</OnClick>
 			</Scripts>
 		</Button>
 		<Button name="$parent_OpenSoundControl" text="" inherits="OptionsButtonTemplate">
@@ -458,7 +458,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 				</Anchor>
 			</Anchors>
 			<Scripts>
-				<OnClick>Chocobo:RavenLordToggle(); ChocoboOptions_UpdateInfo();</OnClick>
+				<OnClick>Chocobo:RavenLordToggle(); Chocobo.Options:Update();</OnClick>
 			</Scripts>
 		</CheckButton>
 	</Frames>

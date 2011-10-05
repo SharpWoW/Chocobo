@@ -163,7 +163,7 @@ function Chocobo:OnUpdate(_, elapsed)
 					self:SoundCheck() -- Enable sound if disabled and the option is enabled
 					self:DebugMsg(L["PlayingMusic"])
 					self.Mounted = true
-					self:PlayRandomMusic(songID)
+					self:PlayRandomMusic()
 				else -- If the player has already mounted
 					self:DebugMsg(L["AlreadyMounted"])
 				end
@@ -464,7 +464,7 @@ function Chocobo:GetVersion()
 end
 
 -- Create the frame, no need for an XML file!
-Chocobo.Frame = CreateFrame("Frame", "ChocoboFrame")
+Chocobo.Frame = CreateFrame("Frame")
 Chocobo.Frame:SetScript("OnEvent", function (frame, event, ...) Chocobo:OnEvent(frame, event, ...) end)
 for k,_ in pairs(Chocobo.Events) do
 	Chocobo.Frame:RegisterEvent(k)

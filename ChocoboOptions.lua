@@ -19,7 +19,9 @@
 
 local L = _G["ChocoboLocale"]
 
-function ChocoboOptions_OnLoad()
+Chocobo.Options = {}
+
+function Chocobo.Options:OnLoad()
 	ChocoboOptionsFrame_TitleString:SetText(L["Options_Title"])
 	ChocoboOptionsFrame_SongsPanel_SongDesc:SetText(L["Options_SongPanelDesc"])
 	ChocoboOptionsFrame_SongsPanel_AddSong:SetText(L["Options_Add"])
@@ -33,10 +35,10 @@ function ChocoboOptions_OnLoad()
 	ChocoboOptionsFrame_MountPanel_ListMounts:SetText(L["Options_List"])
 	ChocoboOptionsFrame_OpenSoundControl:SetText(L["Options_OpenSoundControlButton"])
 	ChocoboOptionsFrame_RavenLordToggleText:SetText(L["Options_RavenLordToggle"])
-	ChocoboOptions_UpdateInfo()
+	self:Update()
 end
 
-function ChocoboOptions_UpdateInfo()
+function Chocobo.Options:Update()
 	local AddOnState, MountState, DebugState = ""
 	local RavenLordState = Chocobo:GetGlobal("RAVENLORD")
 	local asColor = "FFFF00"
@@ -61,24 +63,4 @@ function ChocoboOptions_UpdateInfo()
 	ChocoboOptionsFrame_ToggleDebug:SetText((L["Options_DebugState"]):format(dColor, DebugState))
 	ChocoboOptionsFrame_DescriptionLabel:SetText((L["Options_Description"]):format(Chocobo:GetVersion()))
 	ChocoboOptionsFrame_RavenLordToggle:SetChecked(RavenLordState)
-end
-
-function ChocoboOptions_AddSong()
-	local songName = ChocoboOptionsFrame_SongsPanel_SongEditBox:GetText()
-	Chocobo:AddMusic(songName)
-end
-
-function ChocoboOptions_RemoveSong()
-	local songName = ChocoboOptionsFrame_SongsPanel_SongEditBox:GetText()
-	Chocobo:RemoveMusic(songName)
-end
-
-function ChocoboOptions_AddMount()
-	local mount = ChocoboOptionsFrame_MountPanel_MountEditBox:GetText()
-	Chocobo:AddMount(mount)
-end
-
-function ChocoboOptions_RemoveMount()
-	local mount = ChocoboOptionsFrame_MountPanel_MountEditBox:GetText()
-	Chocobo:RemoveMount(mount)
 end
