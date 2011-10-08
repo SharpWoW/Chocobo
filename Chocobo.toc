@@ -21,6 +21,6 @@ ChocoboCommand.lua
 ChocoboOptions.lua
 ChocoboOptions.xml
 ChocoboSoundControl.lua
-ChocoboSoundControlFrame.lua
-ChocoboSoundControlFrame.xml
+ChocoboSoundControlPanel.lua
+ChocoboSoundControlPanel.xml
 Broker_Chocobo.lua
