@@ -349,29 +349,29 @@ function Chocobo:ResetMounts()
 	self.Global["MOUNTS"] = {}
 end
 
-function Chocobo:FilterMount(filter)
+function Chocobo:FilterMount(filter, silent)
 	if type(filter) == "nil" then filter = Chocobo.Global["ALLMOUNTS"] end
 	if filter then
-		self:Msg(L["HawkstriderOnly"])
+		if not silent then self:Msg(L["HawkstriderOnly"]) end
 		self.Global["ALLMOUNTS"] = false
 	else
-		self:Msg(L["AllMounts"])
+		if not silent then self:Msg(L["AllMounts"]) end
 		self.Global["ALLMOUNTS"] = true
 	end
 end
 
 function Chocobo:ToggleDebug()
-	self:Debug(not self.Global["DEBUG"])
+	self:Debug(not self.Global["DEBUG"], true)
 end
 
-function Chocobo:Debug(set)
+function Chocobo:Debug(set, silent)
 	if set == "enable" or set == "on" or set == true then
-		self:Msg(L["DebuggingEnabled"])
+		if not silent then self:Msg(L["DebuggingEnabled"]) end
 		self.Global["DEBUG"] = true
 	elseif set == "disable" or set == "off" or set == false then
-		self:Msg(L["DebuggingDisabled"])
+		if not silent then self:Msg(L["DebuggingDisabled"]) end
 		self.Global["DEBUG"] = false
-	else
+	elseif not silent then
 		if self.Global["DEBUG"] then
 			self:Msg(L["DebugIsEnabled"])
 		else
@@ -380,8 +380,9 @@ function Chocobo:Debug(set)
 	end
 end
 
-function Chocobo:RavenLordToggle()
+function Chocobo:RavenLordToggle(silent)
 	self.Global["RAVENLORD"] = not self.Global["RAVENLORD"]
+	if silent then return end
 	if self.Global["RAVENLORD"] then
 		self:Msg(L["RavenLordTrue"])
 	else
@@ -389,14 +390,14 @@ function Chocobo:RavenLordToggle()
 	end
 end
 
-function Chocobo:Toggle() -- Toggle the AddOn on and off
+function Chocobo:Toggle(silent) -- Toggle the AddOn on and off
 	if self.Global["ENABLED"] then -- If the addon is enabled
 		self.Global["ENABLED"] = false -- Disable it
 		StopMusic()
-		self:Msg(L["AddOnDisabled"]) -- Print status
+		if not silent then self:Msg(L["AddOnDisabled"]) end -- Print status
 	else -- If the addon is disabled
 		self.Global["ENABLED"] = true -- Enable it
-		self:Msg(L["AddOnEnabled"]) -- Print status
+		if not silent then self:Msg(L["AddOnEnabled"]) end -- Print status
 	end
 end
 

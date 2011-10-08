@@ -236,7 +236,6 @@ function SC:Check()
 				SetCVar("Sound_MusicVolume", 1.0)
 			end
 		else
-			print("Enablding via CUSTOM SoundControl settings")
 			if self.Settings["SOUND"]["ENABLED"] then
 				SetCVar("Sound_EnableSFX", BoolToNum(self.Settings["SOUND"]["MOUNTED"]))
 			end
