@@ -1,0 +1,554 @@
+<!--
+    Copyright (c) 2010-2011 by Adam Hellberg
+    
+    This file is part of Chocobo.
+    
+    Chocobo is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    Chocobo is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with Chocobo. If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+
+<Frame name="ChocoboSoundControl" hidden="true">
+	<Scripts>
+		<OnLoad>ChocoboSoundControl_OnLoad(self);</OnLoad>
+		<OnShow>ChocoboSoundControl_UpdateInfo();</OnShow>
+	</Scripts>
+	<Frames>
+		<Frame name="$parent_Caption">
+			<Size>
+				<AbsDimension x="600" y="25" />
+			</Size>
+			<Anchors>
+				<Anchor point="TOP">
+					<Offset>
+						<AbsDimension x="0" y="-5" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Layers>
+				<Layer>
+					<FontString name="$parentLabel" font="Fonts\FRIZQT__.TTF" text="%SOUNDCONTROL_DESCRIPTION%">
+						<Anchors>
+							<Anchor point="TOPLEFT" />
+							<Anchor point="BOTTOMRIGHT" />
+						</Anchors>
+						<FontHeight>
+							<AbsValue val="12" />
+						</FontHeight>
+						<Color r="1" g="0.8196079" b="0" />
+						<Shadow>
+							<Color r="0" g="0" b="0" />
+							<Offset>
+								<AbsDimension x="1" y="-1" />
+							</Offset>
+						</Shadow>
+					</FontString>
+				</Layer>
+			</Layers>
+		</Frame>
+		<Frame name="$parent_Description">
+			<Size>
+				<AbsDimension x="600" y="25" />
+			</Size>
+			<Anchors>
+				<Anchor point="TOP">
+					<Offset>
+						<AbsDimension x="0" y="-30" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Layers>
+				<Layer>
+					<FontString name="$parentLabel" font="Fonts\FRIZQT__.TTF" text="%SOUNDCONTROL_DESCRIPTION%">
+						<Anchors>
+							<Anchor point="TOPLEFT" />
+							<Anchor point="BOTTOMRIGHT" />
+						</Anchors>
+						<FontHeight>
+							<AbsValue val="12" />
+						</FontHeight>
+						<Color r="1" g="0.8196079" b="0" />
+						<Shadow>
+							<Color r="0" g="0" b="0" />
+							<Offset>
+								<AbsDimension x="1" y="-1" />
+							</Offset>
+						</Shadow>
+					</FontString>
+				</Layer>
+			</Layers>
+		</Frame>
+		<CheckButton name="$parent_Toggle" inherits="OptionsCheckButtonTemplate">
+			<Size>
+				<AbsDimension x="40" y="40" />
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT">
+					<Offset>
+						<AbsDimension x="10" y="-85" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Scripts>
+				<OnClick>Chocobo.SoundControl:Toggle(); ChocoboSoundControl_UpdateInfo();</OnClick>
+			</Scripts>
+		</CheckButton>
+		<CheckButton name="$parent_ToggleDefault" inherits="OptionsCheckButtonTemplate">
+			<Size>
+				<AbsDimension x="40" y="40" />
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT">
+					<Offset>
+						<AbsDimension x="10" y="-125" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Scripts>
+				<OnClick>Chocobo.SoundControl:ToggleDefault(); ChocoboSoundControl_UpdateInfo();</OnClick>
+			</Scripts>
+		</CheckButton>
+		<Frame name="$parent_DefaultHelp">
+			<Size>
+				<AbsDimension x="400" y="50" />
+			</Size>
+			<Anchors>
+				<Anchor point="TOPRIGHT">
+					<Offset>
+						<AbsDimension x="-10" y="-90" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Layers>
+				<Layer>
+					<FontString name="$parentLabel" font="Fonts\FRIZQT__.TTF" text="%SOUNDCONTROL_DEFAULT_HELP_TEXT%">
+						<Anchors>
+							<Anchor point="TOPLEFT" />
+							<Anchor point="BOTTOMRIGHT" />
+						</Anchors>
+						<FontHeight>
+							<AbsValue val="12" />
+						</FontHeight>
+						<Color r="1" g="0.8196079" b="0" />
+						<Shadow>
+							<Color r="0" g="0" b="0" />
+							<Offset>
+								<AbsDimension x="1" y="-1" />
+							</Offset>
+						</Shadow>
+					</FontString>
+				</Layer>
+			</Layers>
+		</Frame>
+		<Frame name="$parent_DefaultNote">
+			<Size>
+				<AbsDimension x="400" y="40" />
+			</Size>
+			<Anchors>
+				<Anchor point="TOPRIGHT">
+					<Offset>
+						<AbsDimension x="-10" y="-130" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Layers>
+				<Layer>
+					<FontString name="$parentLabel" font="Fonts\FRIZQT__.TTF" text="%SOUNDCONTROL_DEFAULT_NOTE_TEXT%">
+						<Anchors>
+							<Anchor point="TOPLEFT" />
+							<Anchor point="BOTTOMRIGHT" />
+						</Anchors>
+						<FontHeight>
+							<AbsValue val="12" />
+						</FontHeight>
+						<Color r="1" g="0.8196079" b="0" />
+						<Shadow>
+							<Color r="0" g="0" b="0" />
+							<Offset>
+								<AbsDimension x="1" y="-1" />
+							</Offset>
+						</Shadow>
+					</FontString>
+				</Layer>
+			</Layers>
+		</Frame>
+		<Frame name="$parent_PanelContainer">
+			<Size>
+				<AbsDimension x="500" y="150" />
+			</Size>
+			<Anchors>
+				<Anchor point="TOP">
+					<Offset>
+						<AbsDimension x="0" y="-200" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Backdrop bgFile="Interface\Tooltips\UI-Tooltip\UI-Tooltip-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+				<BackgroundInsets>
+					<AbsInset left="5" right="5" top="5" bottom="5" />
+				</BackgroundInsets>
+				<TileSize>
+					<AbsValue val="16" />
+				</TileSize>
+				<EdgeSize>
+					<AbsValue val="32" />
+				</EdgeSize>
+			</Backdrop>
+			<Frames>
+				<Button name="$parentTab1" inherits="CharacterFrameTabButtonTemplate" id="1" text="%TAB_INDEX_1%">
+					<Anchors>
+						<Anchor point="LEFT" relativePoint="BOTTOMLEFT">
+							<Offset>
+								<AbsDimension x="5" y="-12" />
+							</Offset>
+						</Anchor>
+					</Anchors>
+					<Scripts>
+						<OnClick>
+							PanelTemplates_SetTab(ChocoboSoundControl_PanelContainer, 1);
+							ChocoboSoundControl_PanelContainerPage1:Show();
+							ChocoboSoundControl_PanelContainerPage2:Hide();
+							ChocoboSoundControl_PanelContainerPage3:Hide();
+						</OnClick>
+					</Scripts>
+				</Button>
+				<Button name="$parentTab2" inherits="CharacterFrameTabButtonTemplate" id="2" text="%TAB_INDEX_2%">
+					<Anchors>
+						<Anchor point="LEFT" relativeTo="$parentTab1" relativePoint="RIGHT">
+							<Offset>
+								<AbsDimension x="-10" y="0" />
+							</Offset>
+						</Anchor>
+					</Anchors>
+					<Scripts>
+						<OnClick>
+							PanelTemplates_SetTab(ChocoboSoundControl_PanelContainer, 2);
+							ChocoboSoundControl_PanelContainerPage1:Hide();
+							ChocoboSoundControl_PanelContainerPage2:Show();
+							ChocoboSoundControl_PanelContainerPage3:Hide();
+						</OnClick>
+					</Scripts>
+				</Button>
+				<Button name="$parentTab3" inherits="CharacterFrameTabButtonTemplate" id="3" text="%TAB_INDEX_3%">
+					<Anchors>
+						<Anchor point="LEFT" relativeTo="$parentTab2" relativePoint="RIGHT">
+							<Offset>
+								<AbsDimension x="-10" y="0" />
+							</Offset>
+						</Anchor>
+					</Anchors>
+					<Scripts>
+						<OnClick>
+							PanelTemplates_SetTab(ChocoboSoundControl_PanelContainer, 3);
+							ChocoboSoundControl_PanelContainerPage1:Hide();
+							ChocoboSoundControl_PanelContainerPage2:Hide();
+							ChocoboSoundControl_PanelContainerPage3:Show();
+						</OnClick>
+					</Scripts>
+				</Button>
+				<Frame name="$parentPage1">
+					<Anchors>
+						<Anchor point="TOPLEFT" />
+						<Anchor point="BOTTOMRIGHT" />
+					</Anchors>
+					<Backdrop bgFile="Interface\Tooltips\UI-Tooltip\UI-Tooltip-Background" tile="true"> <!-- edgeFile="Interface\Tooltips\UI-Tooltip-Border" -->
+						<BackgroundInsets>
+							<AbsInset left="5" right="5" top="5" bottom="5" />
+						</BackgroundInsets>
+						<TileSize>
+							<AbsValue val="16" />
+						</TileSize>
+						<EdgeSize>
+							<AbsValue val="16" />
+						</EdgeSize>
+					</Backdrop>
+					<Frames>
+						<Frame name="$parent_Panel">
+							<Size>
+								<AbsDimension x="360" y="20" />
+							</Size>
+							<Anchors>
+								<Anchor point="TOP">
+									<Offset>
+										<AbsDimension x="0" y="-10" />
+									</Offset>
+								</Anchor>
+							</Anchors>
+							<Layers>
+								<Layer>
+									<FontString name="$parentDesc" font="Fonts\FRIZQT__.TTF" text="%SOUNDCONTROL_MUSICPANE_DESC%">
+										<Anchors>
+											<Anchor point="TOPLEFT" />
+											<Anchor point="BOTTOMRIGHT" />
+										</Anchors>
+										<FontHeight>
+											<AbsValue val="12" />
+										</FontHeight>
+										<Color r="1" g="0.8196079" b="0" />
+										<Shadow>
+											<Color r="0" g="0" b="0" />
+											<Offset>
+												<AbsDimension x="1" y="-1" />
+											</Offset>
+										</Shadow>
+									</FontString>
+								</Layer>
+							</Layers>
+						</Frame>
+						<CheckButton name="$parent_Enable" inherits="OptionsCheckButtonTemplate">
+							<Size>
+								<AbsDimension x="40" y="40" />
+							</Size>
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset>
+										<AbsDimension x="10" y="-25" />
+									</Offset>
+								</Anchor>
+							</Anchors>
+							<Scripts>
+								<OnClick>Chocobo.SoundControl:ToggleMusic(); ChocoboSoundControl_UpdateInfo();</OnClick>
+							</Scripts>
+						</CheckButton>
+						<CheckButton name="$parent_EnableMount" inherits="OptionsCheckButtonTemplate">
+							<Size>
+								<AbsDimension x="40" y="40" />
+							</Size>
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset>
+										<AbsDimension x="10" y="-65" />
+									</Offset>
+								</Anchor>
+							</Anchors>
+							<Scripts>
+								<OnClick>Chocobo.SoundControl:ToggleMusicMount(); ChocoboSoundControl_UpdateInfo();</OnClick>
+							</Scripts>
+						</CheckButton>
+						<CheckButton name="$parent_EnableNoMount" inherits="OptionsCheckButtonTemplate">
+							<Size>
+								<AbsDimension x="40" y="40" />
+							</Size>
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset>
+										<AbsDimension x="10" y="-105" />
+									</Offset>
+								</Anchor>
+							</Anchors>
+							<Scripts>
+								<OnClick>Chocobo.SoundControl:ToggleMusicNoMount(); ChocoboSoundControl_UpdateInfo();</OnClick>
+							</Scripts>
+						</CheckButton>
+					</Frames>
+				</Frame>
+				<Frame name="$parentPage2" hidden="true">
+					<Anchors>
+						<Anchor point="TOPLEFT" />
+						<Anchor point="BOTTOMRIGHT" />
+					</Anchors>
+					<Backdrop bgFile="Interface\Tooltips\UI-Tooltip\UI-Tooltip-Background" tile="true"> <!-- edgeFile="Interface\Tooltips\UI-Tooltip-Border" -->
+						<BackgroundInsets>
+							<AbsInset left="5" right="5" top="5" bottom="5" />
+						</BackgroundInsets>
+						<TileSize>
+							<AbsValue val="16" />
+						</TileSize>
+						<EdgeSize>
+							<AbsValue val="16" />
+						</EdgeSize>
+					</Backdrop>
+					<Frames>
+						<Frame name="$parent_Panel">
+							<Size>
+								<AbsDimension x="360" y="20" />
+							</Size>
+							<Anchors>
+								<Anchor point="TOP">
+									<Offset>
+										<AbsDimension x="0" y="-10" />
+									</Offset>
+								</Anchor>
+							</Anchors>
+							<Layers>
+								<Layer>
+									<FontString name="$parentDesc" font="Fonts\FRIZQT__.TTF" text="%SOUNDCONTROL_SOUNDPANE_DESC%">
+										<Anchors>
+											<Anchor point="TOPLEFT" />
+											<Anchor point="BOTTOMRIGHT" />
+										</Anchors>
+										<FontHeight>
+											<AbsValue val="12" />
+										</FontHeight>
+										<Color r="1" g="0.8196079" b="0" />
+										<Shadow>
+											<Color r="0" g="0" b="0" />
+											<Offset>
+												<AbsDimension x="1" y="-1" />
+											</Offset>
+										</Shadow>
+									</FontString>
+								</Layer>
+							</Layers>
+						</Frame>
+						<CheckButton name="$parent_Enable" inherits="OptionsCheckButtonTemplate">
+							<Size>
+								<AbsDimension x="40" y="40" />
+							</Size>
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset>
+										<AbsDimension x="10" y="-25" />
+									</Offset>
+								</Anchor>
+							</Anchors>
+							<Scripts>
+								<OnClick>Chocobo.SoundControl:ToggleSound(); ChocoboSoundControl_UpdateInfo();</OnClick>
+							</Scripts>
+						</CheckButton>
+						<CheckButton name="$parent_EnableMount" inherits="OptionsCheckButtonTemplate">
+							<Size>
+								<AbsDimension x="40" y="40" />
+							</Size>
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset>
+										<AbsDimension x="10" y="-65" />
+									</Offset>
+								</Anchor>
+							</Anchors>
+							<Scripts>
+								<OnClick>Chocobo.SoundControl:ToggleSoundMount(); ChocoboSoundControl_UpdateInfo();</OnClick>
+							</Scripts>
+						</CheckButton>
+						<CheckButton name="$parent_EnableNoMount" inherits="OptionsCheckButtonTemplate">
+							<Size>
+								<AbsDimension x="40" y="40" />
+							</Size>
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset>
+										<AbsDimension x="10" y="-105" />
+									</Offset>
+								</Anchor>
+							</Anchors>
+							<Scripts>
+								<OnClick>Chocobo.SoundControl:ToggleSoundNoMount(); ChocoboSoundControl_UpdateInfo();</OnClick>
+							</Scripts>
+						</CheckButton>
+					</Frames>
+				</Frame>
+				<Frame name="$parentPage3" hidden="true">
+					<Anchors>
+						<Anchor point="TOPLEFT" />
+						<Anchor point="BOTTOMRIGHT" />
+					</Anchors>
+					<Backdrop bgFile="Interface\Tooltips\UI-Tooltip\UI-Tooltip-Background" tile="true"> <!-- edgeFile="Interface\Tooltips\UI-Tooltip-Border" -->
+						<BackgroundInsets>
+							<AbsInset left="5" right="5" top="5" bottom="5" />
+						</BackgroundInsets>
+						<TileSize>
+							<AbsValue val="16" />
+						</TileSize>
+						<EdgeSize>
+							<AbsValue val="16" />
+						</EdgeSize>
+					</Backdrop>
+					<Frames>
+						<Frame name="$parent_Panel">
+							<Size>
+								<AbsDimension x="360" y="20" />
+							</Size>
+							<Anchors>
+								<Anchor point="TOP">
+									<Offset>
+										<AbsDimension x="0" y="-10" />
+									</Offset>
+								</Anchor>
+							</Anchors>
+							<Layers>
+								<Layer>
+									<FontString name="$parentDesc" font="Fonts\FRIZQT__.TTF" text="%SOUNDCONTROL_AMBIENCEPANE_DESC%">
+										<Anchors>
+											<Anchor point="TOPLEFT" />
+											<Anchor point="BOTTOMRIGHT" />
+										</Anchors>
+										<FontHeight>
+											<AbsValue val="12" />
+										</FontHeight>
+										<Color r="1" g="0.8196079" b="0" />
+										<Shadow>
+											<Color r="0" g="0" b="0" />
+											<Offset>
+												<AbsDimension x="1" y="-1" />
+											</Offset>
+										</Shadow>
+									</FontString>
+								</Layer>
+							</Layers>
+						</Frame>
+						<CheckButton name="$parent_Enable" inherits="OptionsCheckButtonTemplate">
+							<Size>
+								<AbsDimension x="40" y="40" />
+							</Size>
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset>
+										<AbsDimension x="10" y="-25" />
+									</Offset>
+								</Anchor>
+							</Anchors>
+							<Scripts>
+								<OnClick>Chocobo.SoundControl:ToggleAmbience(); ChocoboSoundControl_UpdateInfo();</OnClick>
+							</Scripts>
+						</CheckButton>
+						<CheckButton name="$parent_EnableMount" inherits="OptionsCheckButtonTemplate">
+							<Size>
+								<AbsDimension x="40" y="40" />
+							</Size>
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset>
+										<AbsDimension x="10" y="-65" />
+									</Offset>
+								</Anchor>
+							</Anchors>
+							<Scripts>
+								<OnClick>Chocobo.SoundControl:ToggleAmbienceMount(); ChocoboSoundControl_UpdateInfo();</OnClick>
+							</Scripts>
+						</CheckButton>
+						<CheckButton name="$parent_EnableNoMount" inherits="OptionsCheckButtonTemplate">
+							<Size>
+								<AbsDimension x="40" y="40" />
+							</Size>
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset>
+										<AbsDimension x="10" y="-105" />
+									</Offset>
+								</Anchor>
+							</Anchors>
+							<Scripts>
+								<OnClick>Chocobo.SoundControl:ToggleAmbienceNoMount(); ChocoboSoundControl_UpdateInfo();</OnClick>
+							</Scripts>
+						</CheckButton>
+					</Frames>
+				</Frame>
+			</Frames>
+		</Frame>
+	</Frames>
+</Frame>
+</Ui>
