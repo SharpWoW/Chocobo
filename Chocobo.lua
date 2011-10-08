@@ -94,10 +94,6 @@ function Chocobo.Events.ADDON_LOADED(self, ...)
 		self:Msg(L["RavenLordNotSet"])
 		self.Global["RAVENLORD"] = false
 	end
-	if self.Global["SOUNDCONTROL"] == nil then
-		self:Msg(L["SoundControlNotSet"])
-		self.Global["SOUNDCONTROL"] = false
-	end
 	if self.Global["MUSIC"] == nil then -- If the song list is empty
 		-- Populate the table with default songs
 		self:Msg(L["NoMusic"])
@@ -115,6 +111,10 @@ function Chocobo.Events.ADDON_LOADED(self, ...)
 		self:Msg(L["EnabledNotSet"])
 		self.Global["ENABLED"] = true
 	end
+	
+	self.SoundControl:Init()
+	self.SoundControl:Check()
+	
 	-- [NEW] Check all songs and convert out-of-date ones to new format
 	-- (Removing the Interface\\AddOns\\Chocobo\\music\\ part)
 	self:MusicCheck()
@@ -160,7 +160,7 @@ function Chocobo:OnUpdate(_, elapsed)
 			if mounted or self.Global["ALLMOUNTS"] then
 				self:DebugMsg(L["PlayerOnHawkstrider"])
 				if not self.Mounted then -- Check so that the player is not already mounted
-					self:SoundCheck() -- Enable sound if disabled and the option is enabled
+					self.SoundControl:Check() -- Enable sound if disabled and the option is enabled
 					self:DebugMsg(L["PlayingMusic"])
 					self.Mounted = true
 					self:PlayRandomMusic()
@@ -170,13 +170,11 @@ function Chocobo:OnUpdate(_, elapsed)
 			else -- Player is not on a hawkstrider
 				self:DebugMsg(L["NoHawkstrider"])
 			end
-		else -- When the player has dismounted
-			if self.Mounted then
-				self:SoundCheck() -- Disable sound if enabled and the option is enabled
-				self:DebugMsg(L["NotMounted"])
-				self.Mounted = false
-				StopMusic() -- Note that StopMusic() will also stop any other custom music playing (such as from EpicMusicPlayer)
-			end
+		elseif self.Mounted then -- When the player has dismounted
+			self.SoundControl:Check() -- Disable sound if enabled and the option is enabled
+			self:DebugMsg(L["NotMounted"])
+			self.Mounted = false
+			StopMusic() -- Note that StopMusic() will also stop any other custom music playing (such as from EpicMusicPlayer)
 		end
 		self.Running = false
 	end
@@ -203,40 +201,6 @@ function Chocobo:HasMount()
 		end
 	end
 	return CLib:HasBuff(mountColl)
-end
-
-function Chocobo:ToggleSoundControl()
-	self.Global["SOUNDCONTROL"] = not self.Global["SOUNDCONTROL"]
-	if self.Global["SOUNDCONTROL"] then
-		self:Msg(L["SoundControlEnabled"])
-		self:SoundCheck()
-	else
-		self:Msg(L["SoundControlDisabled"])
-		self:RestoreSound()
-	end
-end
-
-function Chocobo:RestoreSound()
-	SetCVar("Sound_EnableAllSound", 1)
-	SetCVar("Sound_EnableSFX", 1)
-	SetCVar("Sound_EnableMusic", 1)
-	SetCVar("Sound_EnableAmbience", 1)
-end
-
-function Chocobo:SoundCheck()
-	if not self.Global["SOUNDCONTROL"] then return end
-	if (self.Mounted and self.Running) or (not self.Mounted and not self.Running) then -- We want to disable sounds again
-		SetCVar("Sound_EnableMusic", 0)
-		SetCVar("Sound_EnableAllSound", 0)
-	else
-		SetCVar("Sound_EnableAllSound", 1)
-		SetCVar("Sound_EnableSFX", 0)
-		SetCVar("Sound_EnableAmbience", 0)
-		SetCVar("Sound_EnableMusic", 1)
-		if tonumber(GetCVar("Sound_MusicVolume")) <= 0 then
-			SetCVar("Sound_MusicVolume", 1.0)
-		end
-	end
 end
 
 function Chocobo:MusicCheck()
@@ -397,18 +361,14 @@ function Chocobo:FilterMount(filter)
 end
 
 function Chocobo:ToggleDebug()
-	if self.Global["DEBUG"] then
-		self:Debug("disable")
-	else
-		self:Debug("enable")
-	end
+	self:Debug(not self.Global["DEBUG"])
 end
 
 function Chocobo:Debug(set)
-	if set == "enable" or set == "on" then
+	if set == "enable" or set == "on" or set == true then
 		self:Msg(L["DebuggingEnabled"])
 		self.Global["DEBUG"] = true
-	elseif set == "disable" or set == "off" then
+	elseif set == "disable" or set == "off" or set == false then
 		self:Msg(L["DebuggingDisabled"])
 		self.Global["DEBUG"] = false
 	else
@@ -434,7 +394,6 @@ function Chocobo:Toggle() -- Toggle the AddOn on and off
 		self.Global["ENABLED"] = false -- Disable it
 		StopMusic()
 		self:Msg(L["AddOnDisabled"]) -- Print status
-		self:DebugMsg("Music stopped")
 	else -- If the addon is disabled
 		self.Global["ENABLED"] = true -- Enable it
 		self:Msg(L["AddOnEnabled"]) -- Print status

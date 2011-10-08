@@ -21,21 +21,21 @@ local L = _G["ChocoboLocale"]
 
 Chocobo.Options = {}
 
-function Chocobo.Options:OnLoad()
-	ChocoboOptionsFrame_TitleString:SetText(L["Options_Title"])
-	ChocoboOptionsFrame_SongsPanel_SongDesc:SetText(L["Options_SongPanelDesc"])
-	ChocoboOptionsFrame_SongsPanel_AddSong:SetText(L["Options_Add"])
-	ChocoboOptionsFrame_SongsPanel_RemoveSong:SetText(L["Options_Remove"])
-	ChocoboOptionsFrame_SongsPanel_ResetSongs:SetText(L["Options_Reset"])
-	ChocoboOptionsFrame_SongsPanel_ListSongs:SetText(L["Options_List"])
-	ChocoboOptionsFrame_MountPanel_MountDesc:SetText(L["Options_MountPanelDesc"])
-	ChocoboOptionsFrame_MountPanel_AddMount:SetText(L["Options_Add"])
-	ChocoboOptionsFrame_MountPanel_RemoveMount:SetText(L["Options_Remove"])
-	ChocoboOptionsFrame_MountPanel_ResetMounts:SetText(L["Options_Reset"])
-	ChocoboOptionsFrame_MountPanel_ListMounts:SetText(L["Options_List"])
-	ChocoboOptionsFrame_OpenSoundControl:SetText(L["Options_OpenSoundControlButton"])
-	ChocoboOptionsFrame_RavenLordToggleText:SetText(L["Options_RavenLordToggle"])
-	self:Update()
+function Chocobo.Options:OnLoad(panel)
+	panel.name = "Chocobo"
+	panel.refresh = function() Chocobo.Options:Update() end
+	InterfaceOptions_AddCategory(panel)
+	ChocoboOptions_SongsPanel_SongDesc:SetText(L["Options_SongPanelDesc"])
+	ChocoboOptions_SongsPanel_AddSong:SetText(L["Options_Add"])
+	ChocoboOptions_SongsPanel_RemoveSong:SetText(L["Options_Remove"])
+	ChocoboOptions_SongsPanel_ResetSongs:SetText(L["Options_Reset"])
+	ChocoboOptions_SongsPanel_ListSongs:SetText(L["Options_List"])
+	ChocoboOptions_MountPanel_MountDesc:SetText(L["Options_MountPanelDesc"])
+	ChocoboOptions_MountPanel_AddMount:SetText(L["Options_Add"])
+	ChocoboOptions_MountPanel_RemoveMount:SetText(L["Options_Remove"])
+	ChocoboOptions_MountPanel_ResetMounts:SetText(L["Options_Reset"])
+	ChocoboOptions_MountPanel_ListMounts:SetText(L["Options_List"])
+	ChocoboOptions_RavenLordToggleText:SetText(L["Options_RavenLordToggle"])
 end
 
 function Chocobo.Options:Update()
@@ -58,9 +58,9 @@ function Chocobo.Options:Update()
 		DebugState = L["Options_Disabled"]
 		dColor = "FF0000"
 	end
-	ChocoboOptionsFrame_ToggleButton:SetText((L["Options_AddOnState"]):format(asColor, AddOnState))
-	ChocoboOptionsFrame_ToggleMount:SetText(MountState)
-	ChocoboOptionsFrame_ToggleDebug:SetText((L["Options_DebugState"]):format(dColor, DebugState))
-	ChocoboOptionsFrame_DescriptionLabel:SetText((L["Options_Description"]):format(Chocobo:GetVersion()))
-	ChocoboOptionsFrame_RavenLordToggle:SetChecked(RavenLordState)
+	ChocoboOptions_ToggleButton:SetText((L["Options_AddOnState"]):format(asColor, AddOnState))
+	ChocoboOptions_ToggleMount:SetText(MountState)
+	ChocoboOptions_ToggleDebug:SetText((L["Options_DebugState"]):format(dColor, DebugState))
+	ChocoboOptions_DescriptionLabel:SetText((L["Options_Description"]):format(Chocobo:GetVersion()))
+	ChocoboOptions_RavenLordToggle:SetChecked(RavenLordState)
 end

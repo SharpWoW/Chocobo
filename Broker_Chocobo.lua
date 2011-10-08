@@ -42,18 +42,10 @@ end
 
 function data.OnClick(self, button)
 	if button == "LeftButton" then
-		if ChocoboOptionsFrame:IsVisible() then
-			ChocoboOptionsFrame:Hide()
-		else
-			ChocoboOptionsFrame:Show()
-		end
+		InterfaceOptionsFrame_OpenToCategory(ChocoboOptions)
 	elseif button == "MiddleButton" then
-		Chocobo:ToggleSoundControl()
+		Chocobo.SoundControl:Toggle()
 	elseif button == "RightButton" then
-		if ChocoboSoundControlFrame:IsVisible() then
-			ChocoboSoundControlFrame:Hide()
-		else
-			ChocoboSoundControlFrame:Show()
-		end
+		InterfaceOptionsFrame_OpenToCategory(ChocoboSoundControl)
 	end
 end

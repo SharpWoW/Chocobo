@@ -32,6 +32,14 @@ function ChocoboLib:Trim(s)
 	return (s:gsub("^%s*(.-)%s*$", "%1"))
 end
 
+function ChocoboLib:Split(s)
+	local r = {}
+	for token in string.gmatch(s, "[^%s]+") do
+		table.insert(r, token)
+	end
+	return r
+end
+
 --[[ChocoboLib Specific Functions]]--
 -- Buff/Aura functions
 
