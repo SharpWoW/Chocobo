@@ -103,7 +103,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 				</Anchor>
 			</Anchors>
 			<Scripts>
-				<OnClick>Chocobo.SoundControl:Toggle(); ChocoboSoundControl_UpdateInfo();</OnClick>
+				<OnClick>Chocobo.SoundControl:Toggle(true); ChocoboSoundControl_UpdateInfo();</OnClick>
 			</Scripts>
 		</CheckButton>
 		<CheckButton name="$parent_ToggleDefault" inherits="OptionsCheckButtonTemplate">
@@ -118,7 +118,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 				</Anchor>
 			</Anchors>
 			<Scripts>
-				<OnClick>Chocobo.SoundControl:ToggleDefault(); ChocoboSoundControl_UpdateInfo();</OnClick>
+				<OnClick>Chocobo.SoundControl:ToggleDefault(true); ChocoboSoundControl_UpdateInfo();</OnClick>
 			</Scripts>
 		</CheckButton>
 		<Frame name="$parent_DefaultHelp">
@@ -320,7 +320,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 								</Anchor>
 							</Anchors>
 							<Scripts>
-								<OnClick>Chocobo.SoundControl:ToggleMusic(); ChocoboSoundControl_UpdateInfo();</OnClick>
+								<OnClick>Chocobo.SoundControl:ToggleMusic(true); ChocoboSoundControl_UpdateInfo();</OnClick>
 							</Scripts>
 						</CheckButton>
 						<CheckButton name="$parent_EnableMount" inherits="OptionsCheckButtonTemplate">
@@ -335,7 +335,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 								</Anchor>
 							</Anchors>
 							<Scripts>
-								<OnClick>Chocobo.SoundControl:ToggleMusicMount(); ChocoboSoundControl_UpdateInfo();</OnClick>
+								<OnClick>Chocobo.SoundControl:ToggleMusicMount(true); ChocoboSoundControl_UpdateInfo();</OnClick>
 							</Scripts>
 						</CheckButton>
 						<CheckButton name="$parent_EnableNoMount" inherits="OptionsCheckButtonTemplate">
@@ -350,7 +350,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 								</Anchor>
 							</Anchors>
 							<Scripts>
-								<OnClick>Chocobo.SoundControl:ToggleMusicNoMount(); ChocoboSoundControl_UpdateInfo();</OnClick>
+								<OnClick>Chocobo.SoundControl:ToggleMusicNoMount(true); ChocoboSoundControl_UpdateInfo();</OnClick>
 							</Scripts>
 						</CheckButton>
 					</Frames>
@@ -416,7 +416,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 								</Anchor>
 							</Anchors>
 							<Scripts>
-								<OnClick>Chocobo.SoundControl:ToggleSound(); ChocoboSoundControl_UpdateInfo();</OnClick>
+								<OnClick>Chocobo.SoundControl:ToggleSound(true); ChocoboSoundControl_UpdateInfo();</OnClick>
 							</Scripts>
 						</CheckButton>
 						<CheckButton name="$parent_EnableMount" inherits="OptionsCheckButtonTemplate">
@@ -431,7 +431,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 								</Anchor>
 							</Anchors>
 							<Scripts>
-								<OnClick>Chocobo.SoundControl:ToggleSoundMount(); ChocoboSoundControl_UpdateInfo();</OnClick>
+								<OnClick>Chocobo.SoundControl:ToggleSoundMount(true); ChocoboSoundControl_UpdateInfo();</OnClick>
 							</Scripts>
 						</CheckButton>
 						<CheckButton name="$parent_EnableNoMount" inherits="OptionsCheckButtonTemplate">
@@ -446,7 +446,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 								</Anchor>
 							</Anchors>
 							<Scripts>
-								<OnClick>Chocobo.SoundControl:ToggleSoundNoMount(); ChocoboSoundControl_UpdateInfo();</OnClick>
+								<OnClick>Chocobo.SoundControl:ToggleSoundNoMount(true); ChocoboSoundControl_UpdateInfo();</OnClick>
 							</Scripts>
 						</CheckButton>
 					</Frames>
@@ -512,7 +512,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 								</Anchor>
 							</Anchors>
 							<Scripts>
-								<OnClick>Chocobo.SoundControl:ToggleAmbience(); ChocoboSoundControl_UpdateInfo();</OnClick>
+								<OnClick>Chocobo.SoundControl:ToggleAmbience(true); ChocoboSoundControl_UpdateInfo();</OnClick>
 							</Scripts>
 						</CheckButton>
 						<CheckButton name="$parent_EnableMount" inherits="OptionsCheckButtonTemplate">
@@ -527,7 +527,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 								</Anchor>
 							</Anchors>
 							<Scripts>
-								<OnClick>Chocobo.SoundControl:ToggleAmbienceMount(); ChocoboSoundControl_UpdateInfo();</OnClick>
+								<OnClick>Chocobo.SoundControl:ToggleAmbienceMount(true); ChocoboSoundControl_UpdateInfo();</OnClick>
 							</Scripts>
 						</CheckButton>
 						<CheckButton name="$parent_EnableNoMount" inherits="OptionsCheckButtonTemplate">
@@ -542,7 +542,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 								</Anchor>
 							</Anchors>
 							<Scripts>
-								<OnClick>Chocobo.SoundControl:ToggleAmbienceNoMount(); ChocoboSoundControl_UpdateInfo();</OnClick>
+								<OnClick>Chocobo.SoundControl:ToggleAmbienceNoMount(true); ChocoboSoundControl_UpdateInfo();</OnClick>
 							</Scripts>
 						</CheckButton>
 					</Frames>
