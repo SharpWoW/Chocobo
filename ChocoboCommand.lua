@@ -83,7 +83,7 @@ Chocobo.Command:Register({"soundcontrol", "sc", "sndctrl", "sound"}, function(ar
 	local handled = false
 	if #args > 0 then
 		if args[1] == "gui" or args[1] == "options" then
-			ChocoboSoundControlFrame:Show()
+			InterfaceOptionsFrame_OpenToCategory(ChocoboSoundControl)
 			handled = true
 		elseif args[1] == "toggle" or args[1] == "t" then
 			Chocobo.SoundControl:Toggle()
