@@ -317,7 +317,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 				</Button>
 			</Frames>
 		</Frame>
-		<Button name="$parent_ToggleMount" text="" inherits="OptionsButtonTemplate">
+		<Button name="$parent_ToggleMount" text="" inherits="UIPanelButtonTemplate2">
 			<Size>
 				<AbsDimension x="240" y="38" />
 			</Size>
@@ -332,7 +332,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 				<OnClick>Chocobo:FilterMount(nil, true); Chocobo.Options:Update();</OnClick>
 			</Scripts>
 		</Button>
-		<Button name="$parent_ToggleDebug" text="" inherits="OptionsButtonTemplate">
+		<Button name="$parent_ToggleDebug" text="" inherits="UIPanelButtonTemplate2">
 			<Size>
 				<AbsDimension x="240" y="38" />
 			</Size>
@@ -347,7 +347,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 				<OnClick>Chocobo:ToggleDebug(true); Chocobo.Options:Update();</OnClick>
 			</Scripts>
 		</Button>
-		<Button name="$parent_ToggleButton" text="" inherits="OptionsButtonTemplate">
+		<Button name="$parent_ToggleButton" text="" inherits="UIPanelButtonTemplate2">
 			<Size>
 				<AbsDimension x="240" y="38" />
 			</Size>

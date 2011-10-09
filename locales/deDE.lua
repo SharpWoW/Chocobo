@@ -17,10 +17,10 @@
     along with Chocobo. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-if (GetLocale() == "deDE") then
+if GetLocale() == "deDE" then
 	local L = _G["ChocoboLocale"]
 	
 	--@localization(locale="deDE", format="lua_additive_table", handle-unlocalized="english")@
-	
+
 	setmetatable(L, {__index=ChocoboLocale_Default})
 end

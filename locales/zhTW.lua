@@ -17,7 +17,7 @@
     along with Chocobo. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-if (GetLocale() == "zhTW") then
+if GetLocale() == "zhTW" then
 	local L = _G["ChocoboLocale"]
 	
 	--@localization(locale="zhTW", format="lua_additive_table", handle-unlocalized="english")@

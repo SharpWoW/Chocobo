@@ -17,7 +17,7 @@
     along with Chocobo. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-if (GetLocale() == "koKR") then
+if GetLocale() == "koKR" then
 	local L = _G["ChocoboLocale"]
 	
 	--@localization(locale="koKR", format="lua_additive_table", handle-unlocalized="english")@

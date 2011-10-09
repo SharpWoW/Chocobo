@@ -17,7 +17,7 @@
     along with Chocobo. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-if (GetLocale() == "esES") then
+if GetLocale() == "esES" then
 	local L = _G["ChocoboLocale"]
 	
 	--@localization(locale="esES", format="lua_additive_table", handle-unlocalized="english")@

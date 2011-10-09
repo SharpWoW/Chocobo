@@ -17,7 +17,7 @@
     along with Chocobo. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-if (GetLocale() == "esMX") then
+if GetLocale() == "esMX" then
 	local L = _G["ChocoboLocale"]
 	
 	--@localization(locale="esMX", format="lua_additive_table", handle-unlocalized="english")@

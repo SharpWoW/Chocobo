@@ -17,7 +17,7 @@
     along with Chocobo. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-if (GetLocale() == "ruRU") then
+if GetLocale() == "ruRU" then
 	local L = _G["ChocoboLocale"]
 	
 	--@localization(locale="ruRU", format="lua_additive_table", handle-unlocalized="english")@

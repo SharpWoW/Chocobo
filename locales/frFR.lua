@@ -17,7 +17,7 @@
     along with Chocobo. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-if (GetLocale() == "frFR") then
+if GetLocale() == "frFR" then
 	local L = _G["ChocoboLocale"]
 	
 	--@localization(locale="frFR", format="lua_additive_table", handle-unlocalized="english")@
