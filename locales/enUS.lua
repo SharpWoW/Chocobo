@@ -27,7 +27,7 @@ end
 
 local L = _G["ChocoboLocale"]
 
-L["AddOnLoaded"]			= "Chocobo version %s has been loaded successfully! Use /chocobo for options"
+L["AddOnLoaded"]			= "Chocobo %s has been loaded successfully! Use /chocobo for options"
 L["Enjoy"]					= "Enjoy your chocobo!"
 
 L["DebugNotSet"]			= "Debug variable not set, setting debug variable to FALSE"
@@ -152,7 +152,7 @@ L["Options_RavenLordTrue"]	= "Playing music on Raven Lord (Anzu)"
 L["Options_RavenLordFalse"]	= "Not playing music on Raven Lord (Anzu)"
 L["Options_AddOnState"]		= "AddOn is \124cff%s%s\124r"
 L["Options_DebugState"]		= "Debugging is \124cff%s%s\124r"
-L["Options_Description"]	= "Configuration page for Chocobo|nv%s"
+L["Options_Description"]	= "Configuration page for Chocobo|n%s"
 
 --[[Sound Control Strings]]--
 --The frame
@@ -180,7 +180,7 @@ L["SoundControl_AmbienceNoMount"]	= "Ambience enabled when not mounted"
 
 --[[Broker Plugin Strings]]--
 L["Broker_Text"]		= "Open Chocobo options"
-L["Broker_Version"]		= "|cffFFFFFFBroker Chocobo v%s|r"
+L["Broker_Version"]		= "|cffFFFFFFBroker Chocobo %s|r"
 L["Broker_LeftClick"]	= "Left Click - Open Chocobo Options"
 L["Broker_MiddleClick"]	= "Middle Click - Toggle Sound Control"
 L["Broker_RightClick"]	= "Right Click - Open Chocobo Sound Control"
