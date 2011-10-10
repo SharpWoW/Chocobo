@@ -33,9 +33,13 @@ function Chocobo.SoundControl.Options:OnLoad(panel)
 	InterfaceOptions_AddCategory(panel)
 	ChocoboSoundControl_CaptionLabel:SetText(L["SoundControl_Caption"])
 	ChocoboSoundControl_DescriptionLabel:SetText(L["SoundControl_Description"])
+	ChocoboSoundControl_DescriptionLabel:SetTextColor(1, 1, 1)
 	ChocoboSoundControl_ToggleText:SetText(L["SoundControl_Toggle"])
+	ChocoboSoundControl_ToggleText:SetTextColor(1, 1, 1)
 	ChocoboSoundControl_ToggleDefaultText:SetText(L["SoundControl_ToggleDefault"])
+	ChocoboSoundControl_ToggleDefaultText:SetTextColor(1, 1, 1)
 	ChocoboSoundControl_DefaultHelpLabel:SetText(L["SoundControl_DefaultHelp"])
+	ChocoboSoundControl_DefaultHelpLabel:SetTextColor(1, 1, 1)
 	ChocoboSoundControl_DefaultNoteLabel:SetText(L["SoundControl_DefaultNote"])
 	ChocoboSoundControl_PanelContainerTab1:SetText(L["SoundControl_Music"])
 	ChocoboSoundControl_PanelContainerTab2:SetText(L["SoundControl_SFX"])
@@ -153,13 +157,15 @@ function Chocobo.SoundControl.Options:CheckboxesEnabled(enabled)
 			frame:Disable()
 		end
 	end
+	local dr, dg, db = 0.5, 0.5, 0.5
 	local r, g, b = 0.5, 0.5, 0.5
 	if enabled then
-		r, g, b = 1, 0.82, 0
+		dr, dg, db = 1, 0.82, 0
+		r, g, b = 1, 1, 1
 	end
-	ChocoboSoundControl_PanelContainerPage1_PanelDesc:SetTextColor(r, g, b)
-	ChocoboSoundControl_PanelContainerPage2_PanelDesc:SetTextColor(r, g, b)
-	ChocoboSoundControl_PanelContainerPage3_PanelDesc:SetTextColor(r, g, b)
+	ChocoboSoundControl_PanelContainerPage1_PanelDesc:SetTextColor(dr, dg, db)
+	ChocoboSoundControl_PanelContainerPage2_PanelDesc:SetTextColor(dr, dg, db)
+	ChocoboSoundControl_PanelContainerPage3_PanelDesc:SetTextColor(dr, dg, db)
 	setEnabled(ChocoboSoundControl_PanelContainerPage1_Enable,			enabled)
 	setEnabled(ChocoboSoundControl_PanelContainerPage1_EnableMount,		enabled)
 	setEnabled(ChocoboSoundControl_PanelContainerPage1_EnableNoMount,	enabled)
@@ -187,4 +193,5 @@ function Chocobo.SoundControl.Options:CheckboxesEnabled(enabled)
 	ChocoboSoundControl_PanelContainerPage3_EnableMountText:SetTextColor(r, g, b)
 	ChocoboSoundControl_PanelContainerPage3_EnableNoMountText:SetTextColor(r, g, b)
 	ChocoboSoundControl_PanelContainerPage3_EnableVolumeText:SetTextColor(r, g, b)
+	PanelTemplates_SetTab(ChocoboSoundControl_PanelContainer, 1)
 end
