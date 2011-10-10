@@ -23,8 +23,8 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 
 <Frame name="ChocoboSoundControl" hidden="true">
 	<Scripts>
-		<OnLoad>ChocoboSoundControl_OnLoad(self);</OnLoad>
-		<OnShow>ChocoboSoundControl_UpdateInfo();</OnShow>
+		<OnLoad>Chocobo.SoundControl.Options:OnLoad(self);</OnLoad>
+		<OnShow>Chocobo.SoundControl.Options:Update();</OnShow>
 	</Scripts>
 	<Frames>
 		<Frame name="$parent_Caption">
@@ -103,7 +103,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 				</Anchor>
 			</Anchors>
 			<Scripts>
-				<OnClick>Chocobo.SoundControl:Toggle(true); ChocoboSoundControl_UpdateInfo();</OnClick>
+				<OnClick>Chocobo.SoundControl:Toggle(true); Chocobo.SoundControl.Options:Update();</OnClick>
 			</Scripts>
 		</CheckButton>
 		<CheckButton name="$parent_ToggleDefault" inherits="OptionsCheckButtonTemplate">
@@ -118,7 +118,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 				</Anchor>
 			</Anchors>
 			<Scripts>
-				<OnClick>Chocobo.SoundControl:ToggleDefault(true); ChocoboSoundControl_UpdateInfo();</OnClick>
+				<OnClick>Chocobo.SoundControl:ToggleDefault(true); Chocobo.SoundControl.Options:Update();</OnClick>
 			</Scripts>
 		</CheckButton>
 		<Frame name="$parent_DefaultHelp">
@@ -187,7 +187,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 		</Frame>
 		<Frame name="$parent_PanelContainer">
 			<Size>
-				<AbsDimension x="500" y="150" />
+				<AbsDimension x="500" y="240" />
 			</Size>
 			<Anchors>
 				<Anchor point="TOP">
@@ -196,7 +196,9 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 					</Offset>
 				</Anchor>
 			</Anchors>
-			<Backdrop bgFile="Interface\Tooltips\UI-Tooltip\UI-Tooltip-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+			<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+				<Color r="0.2" g="0.2" b="0.2" a="0.9" />
+				<BorderColor r="0.3" g="0.3" b="0.3" a="1" />
 				<BackgroundInsets>
 					<AbsInset left="5" right="5" top="5" bottom="5" />
 				</BackgroundInsets>
@@ -204,7 +206,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 					<AbsValue val="16" />
 				</TileSize>
 				<EdgeSize>
-					<AbsValue val="32" />
+					<AbsValue val="16" />
 				</EdgeSize>
 			</Backdrop>
 			<Frames>
@@ -264,17 +266,6 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 						<Anchor point="TOPLEFT" />
 						<Anchor point="BOTTOMRIGHT" />
 					</Anchors>
-					<Backdrop bgFile="Interface\Tooltips\UI-Tooltip\UI-Tooltip-Background" tile="true"> <!-- edgeFile="Interface\Tooltips\UI-Tooltip-Border" -->
-						<BackgroundInsets>
-							<AbsInset left="5" right="5" top="5" bottom="5" />
-						</BackgroundInsets>
-						<TileSize>
-							<AbsValue val="16" />
-						</TileSize>
-						<EdgeSize>
-							<AbsValue val="16" />
-						</EdgeSize>
-					</Backdrop>
 					<Frames>
 						<Frame name="$parent_Panel">
 							<Size>
@@ -320,7 +311,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 								</Anchor>
 							</Anchors>
 							<Scripts>
-								<OnClick>Chocobo.SoundControl:ToggleMusic(true); ChocoboSoundControl_UpdateInfo();</OnClick>
+								<OnClick>Chocobo.SoundControl:ToggleMusic(true); Chocobo.SoundControl.Options:Update();</OnClick>
 							</Scripts>
 						</CheckButton>
 						<CheckButton name="$parent_EnableMount" inherits="OptionsCheckButtonTemplate">
@@ -335,7 +326,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 								</Anchor>
 							</Anchors>
 							<Scripts>
-								<OnClick>Chocobo.SoundControl:ToggleMusicMount(true); ChocoboSoundControl_UpdateInfo();</OnClick>
+								<OnClick>Chocobo.SoundControl:ToggleMusicMount(true); Chocobo.SoundControl.Options:Update();</OnClick>
 							</Scripts>
 						</CheckButton>
 						<CheckButton name="$parent_EnableNoMount" inherits="OptionsCheckButtonTemplate">
@@ -350,9 +341,62 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 								</Anchor>
 							</Anchors>
 							<Scripts>
-								<OnClick>Chocobo.SoundControl:ToggleMusicNoMount(true); ChocoboSoundControl_UpdateInfo();</OnClick>
+								<OnClick>Chocobo.SoundControl:ToggleMusicNoMount(true); Chocobo.SoundControl.Options:Update();</OnClick>
 							</Scripts>
 						</CheckButton>
+						<CheckButton name="$parent_EnableVolume" inherits="OptionsCheckButtonTemplate">
+							<Size>
+								<AbsDimension x="40" y="40" />
+							</Size>
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset>
+										<AbsDimension x="10" y="-145" />
+									</Offset>
+								</Anchor>
+							</Anchors>
+							<Scripts>
+								<OnClick>Chocobo.SoundControl:ToggleMusicVolume(true); Chocobo.SoundControl.Options:Update();</OnClick>
+							</Scripts>
+						</CheckButton>
+						<Slider name="$parent_VolumeSlider" inherits="OptionsSliderTemplate">
+							<Size>
+								<AbsDimension x="450" y="16" />
+							</Size>
+							<Anchors>
+								<Anchor point="TOP">
+									<Offset>
+										<AbsDimension x="0" y="-195" />
+									</Offset>
+								</Anchor>
+							</Anchors>
+							<Layers>
+								<Layer>
+									<FontString name="$parent_Current" font="Fonts\FRIZQT__.TTF" text="%CURRENT%">
+										<Anchors>
+											<Anchor point="TOP">
+												<Offset>
+													<AbsDimension x="0" y="-16" />
+												</Offset>
+											</Anchor>
+										</Anchors>
+										<FontHeight>
+											<AbsValue val="10" />
+										</FontHeight>
+										<Color r="1" g="1" b="1" />
+										<Shadow>
+											<Color r="0" g="0" b="0" />
+											<Offset>
+												<AbsDimension x="1" y="-1" />
+											</Offset>
+										</Shadow>
+									</FontString>
+								</Layer>
+							</Layers>
+							<Scripts>
+								<OnValueChanged>Chocobo.SoundControl:SetMusicVolume(self:GetValue(), true); Chocobo.SoundControl.Options:Update();</OnValueChanged>
+							</Scripts>
+						</Slider>
 					</Frames>
 				</Frame>
 				<Frame name="$parentPage2" hidden="true">
@@ -360,17 +404,6 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 						<Anchor point="TOPLEFT" />
 						<Anchor point="BOTTOMRIGHT" />
 					</Anchors>
-					<Backdrop bgFile="Interface\Tooltips\UI-Tooltip\UI-Tooltip-Background" tile="true"> <!-- edgeFile="Interface\Tooltips\UI-Tooltip-Border" -->
-						<BackgroundInsets>
-							<AbsInset left="5" right="5" top="5" bottom="5" />
-						</BackgroundInsets>
-						<TileSize>
-							<AbsValue val="16" />
-						</TileSize>
-						<EdgeSize>
-							<AbsValue val="16" />
-						</EdgeSize>
-					</Backdrop>
 					<Frames>
 						<Frame name="$parent_Panel">
 							<Size>
@@ -416,7 +449,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 								</Anchor>
 							</Anchors>
 							<Scripts>
-								<OnClick>Chocobo.SoundControl:ToggleSound(true); ChocoboSoundControl_UpdateInfo();</OnClick>
+								<OnClick>Chocobo.SoundControl:ToggleSFX(true); Chocobo.SoundControl.Options:Update();</OnClick>
 							</Scripts>
 						</CheckButton>
 						<CheckButton name="$parent_EnableMount" inherits="OptionsCheckButtonTemplate">
@@ -431,7 +464,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 								</Anchor>
 							</Anchors>
 							<Scripts>
-								<OnClick>Chocobo.SoundControl:ToggleSoundMount(true); ChocoboSoundControl_UpdateInfo();</OnClick>
+								<OnClick>Chocobo.SoundControl:ToggleSFXMount(true); Chocobo.SoundControl.Options:Update();</OnClick>
 							</Scripts>
 						</CheckButton>
 						<CheckButton name="$parent_EnableNoMount" inherits="OptionsCheckButtonTemplate">
@@ -446,9 +479,62 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 								</Anchor>
 							</Anchors>
 							<Scripts>
-								<OnClick>Chocobo.SoundControl:ToggleSoundNoMount(true); ChocoboSoundControl_UpdateInfo();</OnClick>
+								<OnClick>Chocobo.SoundControl:ToggleSFXNoMount(true); Chocobo.SoundControl.Options:Update();</OnClick>
 							</Scripts>
 						</CheckButton>
+						<CheckButton name="$parent_EnableVolume" inherits="OptionsCheckButtonTemplate">
+							<Size>
+								<AbsDimension x="40" y="40" />
+							</Size>
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset>
+										<AbsDimension x="10" y="-145" />
+									</Offset>
+								</Anchor>
+							</Anchors>
+							<Scripts>
+								<OnClick>Chocobo.SoundControl:ToggleSFXVolume(true); Chocobo.SoundControl.Options:Update();</OnClick>
+							</Scripts>
+						</CheckButton>
+						<Slider name="$parent_VolumeSlider" inherits="OptionsSliderTemplate">
+							<Size>
+								<AbsDimension x="450" y="16" />
+							</Size>
+							<Anchors>
+								<Anchor point="TOP">
+									<Offset>
+										<AbsDimension x="0" y="-195" />
+									</Offset>
+								</Anchor>
+							</Anchors>
+							<Layers>
+								<Layer>
+									<FontString name="$parent_Current" font="Fonts\FRIZQT__.TTF" text="%CURRENT%">
+										<Anchors>
+											<Anchor point="TOP">
+												<Offset>
+													<AbsDimension x="0" y="-16" />
+												</Offset>
+											</Anchor>
+										</Anchors>
+										<FontHeight>
+											<AbsValue val="10" />
+										</FontHeight>
+										<Color r="1" g="1" b="1" />
+										<Shadow>
+											<Color r="0" g="0" b="0" />
+											<Offset>
+												<AbsDimension x="1" y="-1" />
+											</Offset>
+										</Shadow>
+									</FontString>
+								</Layer>
+							</Layers>
+							<Scripts>
+								<OnValueChanged>Chocobo.SoundControl:SetSFXVolume(self:GetValue(), true); Chocobo.SoundControl.Options:Update();</OnValueChanged>
+							</Scripts>
+						</Slider>
 					</Frames>
 				</Frame>
 				<Frame name="$parentPage3" hidden="true">
@@ -456,17 +542,6 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 						<Anchor point="TOPLEFT" />
 						<Anchor point="BOTTOMRIGHT" />
 					</Anchors>
-					<Backdrop bgFile="Interface\Tooltips\UI-Tooltip\UI-Tooltip-Background" tile="true"> <!-- edgeFile="Interface\Tooltips\UI-Tooltip-Border" -->
-						<BackgroundInsets>
-							<AbsInset left="5" right="5" top="5" bottom="5" />
-						</BackgroundInsets>
-						<TileSize>
-							<AbsValue val="16" />
-						</TileSize>
-						<EdgeSize>
-							<AbsValue val="16" />
-						</EdgeSize>
-					</Backdrop>
 					<Frames>
 						<Frame name="$parent_Panel">
 							<Size>
@@ -512,7 +587,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 								</Anchor>
 							</Anchors>
 							<Scripts>
-								<OnClick>Chocobo.SoundControl:ToggleAmbience(true); ChocoboSoundControl_UpdateInfo();</OnClick>
+								<OnClick>Chocobo.SoundControl:ToggleAmbience(true); Chocobo.SoundControl.Options:Update();</OnClick>
 							</Scripts>
 						</CheckButton>
 						<CheckButton name="$parent_EnableMount" inherits="OptionsCheckButtonTemplate">
@@ -527,7 +602,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 								</Anchor>
 							</Anchors>
 							<Scripts>
-								<OnClick>Chocobo.SoundControl:ToggleAmbienceMount(true); ChocoboSoundControl_UpdateInfo();</OnClick>
+								<OnClick>Chocobo.SoundControl:ToggleAmbienceMount(true); Chocobo.SoundControl.Options:Update();</OnClick>
 							</Scripts>
 						</CheckButton>
 						<CheckButton name="$parent_EnableNoMount" inherits="OptionsCheckButtonTemplate">
@@ -542,9 +617,62 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 								</Anchor>
 							</Anchors>
 							<Scripts>
-								<OnClick>Chocobo.SoundControl:ToggleAmbienceNoMount(true); ChocoboSoundControl_UpdateInfo();</OnClick>
+								<OnClick>Chocobo.SoundControl:ToggleAmbienceNoMount(true); Chocobo.SoundControl.Options:Update();</OnClick>
 							</Scripts>
 						</CheckButton>
+						<CheckButton name="$parent_EnableVolume" inherits="OptionsCheckButtonTemplate">
+							<Size>
+								<AbsDimension x="40" y="40" />
+							</Size>
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset>
+										<AbsDimension x="10" y="-145" />
+									</Offset>
+								</Anchor>
+							</Anchors>
+							<Scripts>
+								<OnClick>Chocobo.SoundControl:ToggleAmbienceVolume(true); Chocobo.SoundControl.Options:Update();</OnClick>
+							</Scripts>
+						</CheckButton>
+						<Slider name="$parent_VolumeSlider" inherits="OptionsSliderTemplate">
+							<Size>
+								<AbsDimension x="450" y="16" />
+							</Size>
+							<Anchors>
+								<Anchor point="TOP">
+									<Offset>
+										<AbsDimension x="0" y="-195" />
+									</Offset>
+								</Anchor>
+							</Anchors>
+							<Layers>
+								<Layer>
+									<FontString name="$parent_Current" font="Fonts\FRIZQT__.TTF" text="%CURRENT%">
+										<Anchors>
+											<Anchor point="TOP">
+												<Offset>
+													<AbsDimension x="0" y="-16" />
+												</Offset>
+											</Anchor>
+										</Anchors>
+										<FontHeight>
+											<AbsValue val="10" />
+										</FontHeight>
+										<Color r="1" g="1" b="1" />
+										<Shadow>
+											<Color r="0" g="0" b="0" />
+											<Offset>
+												<AbsDimension x="1" y="-1" />
+											</Offset>
+										</Shadow>
+									</FontString>
+								</Layer>
+							</Layers>
+							<Scripts>
+								<OnValueChanged>Chocobo.SoundControl:SetAmbienceVolume(self:GetValue(), true); Chocobo.SoundControl.Options:Update();</OnValueChanged>
+							</Scripts>
+						</Slider>
 					</Frames>
 				</Frame>
 			</Frames>

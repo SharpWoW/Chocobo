@@ -20,6 +20,7 @@
 local C = Chocobo
 
 C.SoundControl = {
+	Version = 1,
 	Settings = {}
 }
 
@@ -30,36 +31,74 @@ local L = _G["ChocoboLocale"]
 function SC:Init()
 	if type(C.Global["SOUNDCONTROL"]) ~= "table" then
 		C:Msg(L["SoundControlNotSet"])
-		C.Global["SOUNDCONTROL"] = {
-			["ENABLED"] = false, -- Enable sound control at all?
-			["DEFAULT"] = true, -- Use the old style sound control?
-			["SOUND"] = {
-				["ENABLED"] = true, -- Should AddOn control SFX playback?
-				["MOUNTED"] = false, -- SFX when mounted?
-				["NOTMOUNTED"] = false, -- SFX when not mounted?
-				["DEFAULT_VOLUME"] = 1.0, -- Volume to modify to if volume <= 0
-				["MOD_VOLUME"] = false -- Whether or not to modify volume
-			},
-			["MUSIC"] = {
-				["ENABLED"] = true, -- Should AddOn control music playback?
-				["MOUNTED"] = true, -- Music when mounted?
-				["NOTMOUNTED"] = false, -- Music when not mounted?
-				["DEFAULT_VOLUME"] = 1.0, -- Volume to modify to if volume <= 0
-				["MOD_VOLUME"] = true -- Whether or not to modify volume
-			},
-			["AMBIENCE"] = {
-				["ENABLED"] = true, -- Should AddOn control ambience playback?
-				["MOUNTED"] = false, -- Ambience when mounted?
-				["NOTMOUNTED"] = false, -- Ambience when not mounted?
-				["DEFAULT_VOLUME"] = 1.0, -- Volume to modify to if volume <= 0
-				["MOD_VOLUME"] = false -- Whether or not to modify volume
-			}
-		}
+		self:SetupVars()
 	end
 	
 	self.Settings = C.Global["SOUNDCONTROL"]
 	
+	if (self.Settings["VERSION"] or 0) < self.Version then
+		C:ErrorMsg(L["SCVarsOutOfDate"])
+		self:SetupVars(true) -- Reset vars, preserving any user-made settings
+	end
+	
 	self:Check()
+end
+
+function SC:SetupVars(reset)
+	local e,d,se,sm,sn,sv,smv,me,mm,mn,mv,mmv,ae,am,an,av,amv=false,true,true,false,false,1.0,false,true,true,false,1.0,true,true,false,false,1.0,false
+	if reset then
+		e = self.Settings["ENABLED"] or false
+		d = self.Settings["DEFAULT"] or true
+		local sfx = "SFX"
+		local vol = "VOLUME"
+		if type(self.Settings["VERSION"]) == "nil" then
+			sfx = "SOUND"
+			vol = "DEFAULT_VOLUME"
+		end
+		se = self.Settings[sfx]["ENABLED"] or true
+		sm = self.Settings[sfx]["MOUNTED"] or false
+		sn = self.Settings[sfx]["NOTMOUNTED"] or false
+		sv = self.Settings[sfx][vol] or 1.0
+		smv = self.Settings[sfx]["MOD_VOLUME"] or false
+		me = self.Settings["MUSIC"]["ENABLED"] or true
+		mm = self.Settings["MUSIC"]["MOUNTED"] or true
+		mn = self.Settings["MUSIC"]["NOTMOUNTED"] or false
+		mv = self.Settings["MUSIC"][vol] or 1.0
+		mmv = self.Settings["MUSIC"]["MOD_VOLUME"] or true
+		ae = self.Settings["AMBIENCE"]["ENABLED"] or true
+		am = self.Settings["AMBIENCE"]["MOUNTED"] or false
+		an = self.Settings["AMBIENCE"]["NOTMOUNTED"] or false
+		av = self.Settings["AMBIENCE"][vol] or 1.0
+		amv = self.Settings["AMBIENCE"]["MOD_VOLUME"] or false
+	end
+	C.Global["SOUNDCONTROL"] = {
+		["VERSION"] = self.Version,
+		["ENABLED"] = e, -- Enable sound control at all?
+		["DEFAULT"] = d, -- Use the old style sound control?
+		["SFX"] = {
+			["ENABLED"] = se, -- Should AddOn control SFX playback?
+			["MOUNTED"] = sm, -- SFX when mounted?
+			["NOTMOUNTED"] = sn, -- SFX when not mounted?
+			["VOLUME"] = sv, -- Volume to modify to if volume <= 0
+			["MOD_VOLUME"] = smv -- Whether or not to modify volume
+		},
+		["MUSIC"] = {
+			["ENABLED"] = me, -- Should AddOn control music playback?
+			["MOUNTED"] = mm, -- Music when mounted?
+			["NOTMOUNTED"] = mn, -- Music when not mounted?
+			["VOLUME"] = mv, -- Volume to modify to if volume <= 0
+			["MOD_VOLUME"] = mmv -- Whether or not to modify volume
+		},
+		["AMBIENCE"] = {
+			["ENABLED"] = ae, -- Should AddOn control ambience playback?
+			["MOUNTED"] = am, -- Ambience when mounted?
+			["NOTMOUNTED"] = an, -- Ambience when not mounted?
+			["VOLUME"] = av, -- Volume to modify to if volume <= 0
+			["MOD_VOLUME"] = amv -- Whether or not to modify volume
+		}
+	}
+	self.Settings = C.Global["SOUNDCONTROL"]
+	if reset then C:Msg(L["SoundControlReset"]) end
 end
 
 local function BoolToNum(bool)
@@ -121,36 +160,58 @@ function SC:ToggleMusicNoMount(silent)
 	end
 end
 
-function SC:ToggleSound(silent)
-	self.Settings["SOUND"]["ENABLED"] = not self.Settings["SOUND"]["ENABLED"]
+function SC:ToggleMusicVolume(silent)
+	self.Settings["MUSIC"]["MOD_VOLUME"] = not self.Settings["MUSIC"]["MOD_VOLUME"]
+	self:VolumeCheck()
+	if silent then return end
+	if self.Settings["MUSIC"]["MOD_VOLUME"] then
+		C:Msg(L["SCMusicVolumeEnabled"])
+	else
+		C:Msg(L["SCMusicVolumeDisabled"])
+	end
+end
+
+function SC:ToggleSFX(silent)
+	self.Settings["SFX"]["ENABLED"] = not self.Settings["SFX"]["ENABLED"]
 	self:Check()
 	if silent then return end
-	if self.Settings["SOUND"]["ENABLED"] then
+	if self.Settings["SFX"]["ENABLED"] then
 		C:Msg(L["SCSFXEnabled"])
 	else
 		C:Msg(L["SCSFXDisabled"])
 	end
 end
 
-function SC:ToggleSoundMount(silent)
-	self.Settings["SOUND"]["MOUNTED"] = not self.Settings["SOUND"]["MOUNTED"]
+function SC:ToggleSFXMount(silent)
+	self.Settings["SFX"]["MOUNTED"] = not self.Settings["SFX"]["MOUNTED"]
 	self:Check()
 	if silent then return end
-	if self.Settings["SOUND"]["MOUNTED"] then
+	if self.Settings["SFX"]["MOUNTED"] then
 		C:Msg(L["SCSFXMountEnabled"])
 	else
 		C:Msg(L["SCSFXMountDisabled"])
 	end
 end
 
-function SC:ToggleSoundNoMount(silent)
-	self.Settings["SOUND"]["NOTMOUNTED"] = not self.Settings["SOUND"]["NOTMOUNTED"]
+function SC:ToggleSFXNoMount(silent)
+	self.Settings["SFX"]["NOTMOUNTED"] = not self.Settings["SFX"]["NOTMOUNTED"]
 	self:Check()
 	if silent then return end
-	if self.Settings["SOUND"]["NOTMOUNTED"] then
+	if self.Settings["SFX"]["NOTMOUNTED"] then
 		C:Msg(L["SCSFXNoMountEnabled"])
 	else
 		C:Msg(L["SCSFXNoMountDisabled"])
+	end
+end
+
+function SC:ToggleSFXVolume(silent)
+	self.Settings["SFX"]["MOD_VOLUME"] = not self.Settings["SFX"]["MOD_VOLUME"]
+	self:VolumeCheck()
+	if silent then return end
+	if self.Settings["SFX"]["MOD_VOLUME"] then
+		C:Msg(L["SCSFXVolumeEnabled"])
+	else
+		C:Msg(L["SCSFXVolumeDisabled"])
 	end
 end
 
@@ -187,6 +248,76 @@ function SC:ToggleAmbienceNoMount(silent)
 	end
 end
 
+function SC:ToggleAmbienceVolume(silent)
+	self.Settings["AMBIENCE"]["MOD_VOLUME"] = not self.Settings["AMBIENCE"]["MOD_VOLUME"]
+	self:VolumeCheck()
+	if silent then return end
+	if self.Settings["AMBIENCE"]["MOD_VOLUME"] then
+		C:Msg(L["SCAmbVolumeEnabled"])
+	else
+		C:Msg(L["SCAmbVolumeDisabled"])
+	end
+end
+
+function SC:ValidateVolume(volume)
+	if volume < 0 or volume > 100 then
+		C:ErrorMsg(L["SCVolumeOutOfRange"])
+		return false
+	end
+	return true
+end
+
+function SC:SetMusicVolume(volume, silent)
+	if self.Settings["DEFAULT"] then
+		if not silent then C:ErrorMsg(L["SCVolumeNotAllowed"]) end
+		return
+	end
+	if self:ValidateVolume(volume) then
+		local vol = volume / 100
+		self.Settings["MUSIC"]["VOLUME"] = vol
+		self:VolumeCheck()
+		if not silent then C:Msg((L["SCNewMusicVolume"]):format(volume)) end
+	end
+end
+
+function SC:SetSFXVolume(volume, silent)
+	if self.Settings["DEFAULT"] then
+		if not silent then C:ErrorMsg(L["SCVolumeNotAllowed"]) end
+		return
+	end
+	if self:ValidateVolume(volume) then
+		local vol = volume / 100
+		self.Settings["SFX"]["VOLUME"] = vol
+		self:VolumeCheck()
+		if not silent then C:Msg((L["SCNewSFXVolume"]):format(volume)) end
+	end
+end
+
+function SC:SetAmbienceVolume(volume, silent)
+	if self.Settings["DEFAULT"] then
+		if not silent then C:ErrorMsg(L["SCVolumeNotAllowed"]) end
+		return
+	end
+	if self:ValidateVolume(volume) then
+		local vol = volume / 100
+		self.Settings["AMBIENCE"]["VOLUME"] = vol
+		self:VolumeCheck()
+		if not silent then C:Msg((L["SCNewAmbVolume"]):format(Volume)) end
+	end
+end
+
+function SC:PrintMusicVolume()
+	C:Msg((L["SCMusicVolume"]):format(self.Settings["MUSIC"]["VOLUME"] * 100))
+end
+
+function SC:PrintSFXVolume()
+	C:Msg((L["SCSFXVolume"]):format(self.Settings["SFX"]["VOLUME"] * 100))
+end
+
+function SC:PrintAmbienceVolume()
+	C:Msg((L["SCAmbienceVolume"]):format(self.Settings["AMBIENCE"]["VOLUME"] * 100))
+end
+
 function SC:Restore()
 	SetCVar("Sound_EnableAllSound", 1)
 	SetCVar("Sound_EnableSFX", 1)
@@ -195,14 +326,15 @@ function SC:Restore()
 end
 
 function SC:VolumeCheck()
-	if tonumber(GetCVar("Sound_MusicVolume")) <= 0 and self.Settings["MUSIC"]["MOD_VOLUME"] then
-		SetCVar("Sound_MusicVolume", self.Settings["MUSIC"]["DEFAULT_VOLUME"])
+	if self.Settings["DEFAULT"] then return end
+	if self.Settings["MUSIC"]["MOD_VOLUME"] then
+		SetCVar("Sound_MusicVolume", self.Settings["MUSIC"]["VOLUME"])
 	end
-	if tonumber(GetCVar("Sound_SFXVolume")) <= 0 and self.Settings["SOUND"]["MOD_VOLUME"] then
-		SetCVar("Sound_SFXVolume", self.Settings["SOUND"]["DEFAULT_VOLUME"])
+	if self.Settings["SFX"]["MOD_VOLUME"] then
+		SetCVar("Sound_SFXVolume", self.Settings["SFX"]["VOLUME"])
 	end
-	if tonumber(GetCVar("Sound_AmbienceVolume")) <= 0 and self.Settings["AMBIENCE"]["MOD_VOLUME"] then
-		SetCVar("Sound_AmbienceVolume", self.Settings["AMBIENCE"]["DEFAULT_VOLUME"])
+	if self.Settings["AMBIENCE"]["MOD_VOLUME"] then
+		SetCVar("Sound_AmbienceVolume", self.Settings["AMBIENCE"]["VOLUME"])
 	end
 end
 
@@ -220,8 +352,8 @@ function SC:Check()
 			if self.Settings["MUSIC"]["ENABLED"] then
 				SetCVar("Sound_EnableMusic", BoolToNum(self.Settings["MUSIC"]["NOTMOUNTED"]))
 			end
-			if self.Settings["SOUND"]["ENABLED"] then
-				SetCVar("Sound_EnableSFX", BoolToNum(self.Settings["SOUND"]["NOTMOUNTED"]))
+			if self.Settings["SFX"]["ENABLED"] then
+				SetCVar("Sound_EnableSFX", BoolToNum(self.Settings["SFX"]["NOTMOUNTED"]))
 			end
 			if self.Settings["AMBIENCE"]["ENABLED"] then
 				SetCVar("Sound_EnableAmbience", BoolToNum(self.Settings["AMBIENCE"]["NOTMOUNTED"]))
@@ -236,14 +368,14 @@ function SC:Check()
 				SetCVar("Sound_MusicVolume", 1.0)
 			end
 		else
-			if self.Settings["SOUND"]["ENABLED"] then
-				SetCVar("Sound_EnableSFX", BoolToNum(self.Settings["SOUND"]["MOUNTED"]))
+			if self.Settings["MUSIC"]["ENABLED"] then
+				SetCVar("Sound_EnableMusic", BoolToNum(self.Settings["MUSIC"]["MOUNTED"]))
+			end
+			if self.Settings["SFX"]["ENABLED"] then
+				SetCVar("Sound_EnableSFX", BoolToNum(self.Settings["SFX"]["MOUNTED"]))
 			end
 			if self.Settings["AMBIENCE"]["ENABLED"] then
 				SetCVar("Sound_EnableAmbience", BoolToNum(self.Settings["AMBIENCE"]["MOUNTED"]))
-			end
-			if self.Settings["MUSIC"]["ENABLED"] then
-				SetCVar("Sound_EnableMusic", BoolToNum(self.Settings["MUSIC"]["MOUNTED"]))
 			end
 		end
 	end

@@ -32,7 +32,7 @@ Chocobo = {
 	Global = {},
 	Events = {},
 	Songs = { -- Default songs loaded on first run
-		-- Please note that you can't add custom songs here, this is only used when restoring default settings or on initial startup
+		-- Please note that you can't add custom songs here, this is only used when restoring default settings or on initial setup
 		"chocobo.mp3",
 		"chocobo_ffiv.mp3",
 		"chocobo_ffxii.mp3",

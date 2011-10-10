@@ -73,7 +73,10 @@ Chocobo.Command:Register("__DEFAULT__", function(args)
 	Chocobo:Msg(L["HelpMessage11"])
 end)
 
-Chocobo.Command:Register({"options", "o", "config", "gui"}, function(args) ChocoboOptionsFrame:Show() end)
+Chocobo.Command:Register({"options", "o", "config", "gui"}, function(args)
+	InterfaceOptionsFrame_OpenToCategory(ChocoboSoundControl)
+	InterfaceOptionsFrame_OpenToCategory(ChocoboOptions)
+end)
 Chocobo.Command:Register({"allmounts", "am", "all"}, function(args) Chocobo:FilterMount(false) end)
 Chocobo.Command:Register({"hawkstrider", "hs", "hawk"}, function(args) Chocobo:FilterMount(true) end)
 Chocobo.Command:Register({"modetoggle", "mounttoggle", "mt"}, function(args) Chocobo:FilterMount() end)
@@ -82,6 +85,7 @@ Chocobo.Command:Register({"toggle", "t"}, function(args) Chocobo:Toggle() end)
 Chocobo.Command:Register({"soundcontrol", "sc", "sndctrl", "sound"}, function(args)
 	local handled = false
 	if #args > 0 then
+		local vol = tonumber(args[3])
 		if args[1] == "gui" or args[1] == "options" then
 			InterfaceOptionsFrame_OpenToCategory(ChocoboSoundControl)
 			handled = true
@@ -102,19 +106,41 @@ Chocobo.Command:Register({"soundcontrol", "sc", "sndctrl", "sound"}, function(ar
 				elseif args[2]:match("^not?mount") or args[2] == "nm" then
 					Chocobo.SoundControl:ToggleMusicNoMount()
 					handled = true
+				elseif args[2] == "volume" or args[2] == "vol" or args[2] == "v" then
+					if type(vol) == "number" then
+						Chocobo.SoundControl:SetMusicVolume(vol)
+						handled = true
+					elseif args[3] == "toggle" or args[3] == "t" then
+						Chocobo.SoundControl:ToggleMusicVolume()
+						handled = true
+					else
+						Chocobo.SoundControl:PrintMusicVolume()
+						handled = true
+					end
 				end
 			end
 		elseif args[1] == "sfx" or args[1] == "sound" or args[1] == "s" then
 			if #args > 1 then
 				if args[2] == "toggle" or args[2] == "t" then
-					Chocobo.SoundControl:ToggleSound()
+					Chocobo.SoundControl:ToggleSFX()
 					handled = true
 				elseif args[2]:match("^mount") or args[2] == "m" then
-					Chocobo.SoundControl:ToggleSoundMount()
+					Chocobo.SoundControl:ToggleSFXMount()
 					handled = true
 				elseif args[2]:match("^not?mount") or args[2] == "nm" then
-					Chocobo.SoundControl:ToggleSoundNoMount()
+					Chocobo.SoundControl:ToggleSFXNoMount()
 					handled = true
+				elseif args[2] == "volume" or args[2] == "vol" or args[2] == "v" then
+					if type(vol) == "number" then
+						Chocobo.SoundControl:SetSFXVolume(vol)
+						handled = true
+					elseif args[3] == "toggle" or args[3] == "t" then
+						Chocobo.SoundControl:ToggleSFXVolume()
+						handled = true
+					else
+						Chocobo.SoundControl:PrintSFXVolume()
+						handled = true
+					end
 				end
 			end
 		elseif args[1] == "ambience" or args[1] == "amb" or args[1] == "a" then
@@ -128,6 +154,17 @@ Chocobo.Command:Register({"soundcontrol", "sc", "sndctrl", "sound"}, function(ar
 				elseif args[2]:match("^not?mount") or args[2] == "nm" then
 					Chocobo.SoundControl:ToggleAmbienceNoMount()
 					handled = true
+				elseif args[2] == "volume" or args[2] == "vol" or args[2] == "v" then
+					if type(vol) == "number" then
+						Chocobo.SoundControl:SetAmbienceVolume(vol)
+						handled = true
+					elseif args[3] == "toggle" or args[3] == "t" then
+						Chocobo.SoundControl:ToggleAmbienceVolume()
+						handled = true
+					else
+						Chocobo.SoundControl:PrintAmbienceVolume()
+						handled = true
+					end
 				end
 			end
 		end

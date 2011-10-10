@@ -22,8 +22,6 @@
 --# Thanks to Lothaer on Curse for the idea and initial version of this.  #--
 --#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#-#--
 
-assert(_G["ChocoboLocale"], "Locales not loaded")
-
 local L = _G["ChocoboLocale"]
 
 data = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject("Broker_Chocobo", {
@@ -42,6 +40,8 @@ end
 
 function data.OnClick(self, button)
 	if button == "LeftButton" then
+		-- Open sound control first to expand group
+		InterfaceOptionsFrame_OpenToCategory(ChocoboSoundControl)
 		InterfaceOptionsFrame_OpenToCategory(ChocoboOptions)
 	elseif button == "MiddleButton" then
 		Chocobo.SoundControl:Toggle()
