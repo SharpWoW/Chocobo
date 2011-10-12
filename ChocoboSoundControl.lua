@@ -326,6 +326,7 @@ function SC:Restore()
 end
 
 function SC:VolumeCheck()
+	if not self.Settings["ENABLED"] then return end
 	if self.Settings["DEFAULT"] then return end
 	if self.Settings["MUSIC"]["MOD_VOLUME"] then
 		SetCVar("Sound_MusicVolume", self.Settings["MUSIC"]["VOLUME"])
