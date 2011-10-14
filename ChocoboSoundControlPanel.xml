@@ -26,6 +26,22 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 		<OnLoad>Chocobo.SoundControl.Options:OnLoad(self);</OnLoad>
 		<OnShow>Chocobo.SoundControl.Options:Update();</OnShow>
 	</Scripts>
+	<Layers>
+		<Layer level="ARTWORK">
+			<Texture name="$parent_Logo" file="Interface\AddOns\Chocobo\images\chocobo_small.tga" alphaMode="BLEND" hidden="false">
+				<Size>
+					<AbsDimension x="128" y="128" />
+				</Size>
+				<Anchors>
+					<Anchor point="BOTTOMRIGHT">
+						<Offset>
+							<AbsDimension x="-100" y="5" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+			</Texture>
+		</Layer>
+	</Layers>
 	<Frames>
 		<Frame name="$parent_Caption">
 			<Size>
@@ -395,6 +411,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 							</Layers>
 							<Scripts>
 								<OnValueChanged>Chocobo.SoundControl:SetMusicVolume(self:GetValue(), true); Chocobo.SoundControl.Options:Update();</OnValueChanged>
+								<OnMouseWheel>Chocobo.SoundControl.Options:VolumeScroll(self, delta, 1);</OnMouseWheel>
 							</Scripts>
 						</Slider>
 					</Frames>
@@ -533,6 +550,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 							</Layers>
 							<Scripts>
 								<OnValueChanged>Chocobo.SoundControl:SetSFXVolume(self:GetValue(), true); Chocobo.SoundControl.Options:Update();</OnValueChanged>
+								<OnMouseWheel>Chocobo.SoundControl.Options:VolumeScroll(self, delta, 2);</OnMouseWheel>
 							</Scripts>
 						</Slider>
 					</Frames>
@@ -671,6 +689,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 							</Layers>
 							<Scripts>
 								<OnValueChanged>Chocobo.SoundControl:SetAmbienceVolume(self:GetValue(), true); Chocobo.SoundControl.Options:Update();</OnValueChanged>
+								<OnMouseWheel>Chocobo.SoundControl.Options:VolumeScroll(self, delta, 3);</OnMouseWheel>
 							</Scripts>
 						</Slider>
 					</Frames>

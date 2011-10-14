@@ -302,7 +302,7 @@ function SC:SetAmbienceVolume(volume, silent)
 		local vol = volume / 100
 		self.Settings["AMBIENCE"]["VOLUME"] = vol
 		self:VolumeCheck()
-		if not silent then C:Msg((L["SCNewAmbVolume"]):format(Volume)) end
+		if not silent then C:Msg((L["SCNewAmbVolume"]):format(volume)) end
 	end
 end
 

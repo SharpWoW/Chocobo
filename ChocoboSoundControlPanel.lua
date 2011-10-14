@@ -76,31 +76,32 @@ function Chocobo.SoundControl.Options:OnLoad(panel)
 end
 
 function Chocobo.SoundControl.Options:Update()
-	ChocoboSoundControl_Toggle:SetChecked(Chocobo.SoundControl.Settings["ENABLED"])
-	ChocoboSoundControl_ToggleDefault:SetChecked(Chocobo.SoundControl.Settings["DEFAULT"])
-	ChocoboSoundControl_PanelContainerPage1_Enable:SetChecked(Chocobo.SoundControl.Settings["MUSIC"]["ENABLED"])
-	ChocoboSoundControl_PanelContainerPage1_EnableMount:SetChecked(Chocobo.SoundControl.Settings["MUSIC"]["MOUNTED"])
-	ChocoboSoundControl_PanelContainerPage1_EnableNoMount:SetChecked(Chocobo.SoundControl.Settings["MUSIC"]["NOTMOUNTED"])
-	ChocoboSoundControl_PanelContainerPage1_EnableVolume:SetChecked(Chocobo.SoundControl.Settings["MUSIC"]["MOD_VOLUME"])
-	ChocoboSoundControl_PanelContainerPage1_VolumeSlider:SetValue(Chocobo.SoundControl.Settings["MUSIC"]["VOLUME"] * 100)
-	ChocoboSoundControl_PanelContainerPage1_VolumeSlider_Current:SetText(tostring(Chocobo.SoundControl.Settings["MUSIC"]["VOLUME"] * 100))
-	ChocoboSoundControl_PanelContainerPage2_Enable:SetChecked(Chocobo.SoundControl.Settings["SFX"]["ENABLED"])
-	ChocoboSoundControl_PanelContainerPage2_EnableMount:SetChecked(Chocobo.SoundControl.Settings["SFX"]["MOUNTED"])
-	ChocoboSoundControl_PanelContainerPage2_EnableNoMount:SetChecked(Chocobo.SoundControl.Settings["SFX"]["NOTMOUNTED"])
-	ChocoboSoundControl_PanelContainerPage2_EnableVolume:SetChecked(Chocobo.SoundControl.Settings["SFX"]["MOD_VOLUME"])
-	ChocoboSoundControl_PanelContainerPage2_VolumeSlider:SetValue(Chocobo.SoundControl.Settings["SFX"]["VOLUME"] * 100)
-	ChocoboSoundControl_PanelContainerPage2_VolumeSlider_Current:SetText(tostring(Chocobo.SoundControl.Settings["SFX"]["VOLUME"] * 100))
-	ChocoboSoundControl_PanelContainerPage3_Enable:SetChecked(Chocobo.SoundControl.Settings["AMBIENCE"]["ENABLED"])
-	ChocoboSoundControl_PanelContainerPage3_EnableMount:SetChecked(Chocobo.SoundControl.Settings["AMBIENCE"]["MOUNTED"])
-	ChocoboSoundControl_PanelContainerPage3_EnableNoMount:SetChecked(Chocobo.SoundControl.Settings["AMBIENCE"]["NOTMOUNTED"])
-	ChocoboSoundControl_PanelContainerPage3_EnableVolume:SetChecked(Chocobo.SoundControl.Settings["AMBIENCE"]["MOD_VOLUME"])
-	ChocoboSoundControl_PanelContainerPage3_VolumeSlider:SetValue(Chocobo.SoundControl.Settings["AMBIENCE"]["VOLUME"] * 100)
-	ChocoboSoundControl_PanelContainerPage3_VolumeSlider_Current:SetText(tostring(Chocobo.SoundControl.Settings["AMBIENCE"]["VOLUME"] * 100))
+	local settings = Chocobo.SoundControl.Settings
+	ChocoboSoundControl_Toggle:SetChecked(settings["ENABLED"])
+	ChocoboSoundControl_ToggleDefault:SetChecked(settings["DEFAULT"])
+	ChocoboSoundControl_PanelContainerPage1_Enable:SetChecked(settings["MUSIC"]["ENABLED"])
+	ChocoboSoundControl_PanelContainerPage1_EnableMount:SetChecked(settings["MUSIC"]["MOUNTED"])
+	ChocoboSoundControl_PanelContainerPage1_EnableNoMount:SetChecked(settings["MUSIC"]["NOTMOUNTED"])
+	ChocoboSoundControl_PanelContainerPage1_EnableVolume:SetChecked(settings["MUSIC"]["MOD_VOLUME"])
+	ChocoboSoundControl_PanelContainerPage1_VolumeSlider:SetValue(settings["MUSIC"]["VOLUME"] * 100)
+	ChocoboSoundControl_PanelContainerPage1_VolumeSlider_Current:SetText(tostring(settings["MUSIC"]["VOLUME"] * 100))
+	ChocoboSoundControl_PanelContainerPage2_Enable:SetChecked(settings["SFX"]["ENABLED"])
+	ChocoboSoundControl_PanelContainerPage2_EnableMount:SetChecked(settings["SFX"]["MOUNTED"])
+	ChocoboSoundControl_PanelContainerPage2_EnableNoMount:SetChecked(settings["SFX"]["NOTMOUNTED"])
+	ChocoboSoundControl_PanelContainerPage2_EnableVolume:SetChecked(settings["SFX"]["MOD_VOLUME"])
+	ChocoboSoundControl_PanelContainerPage2_VolumeSlider:SetValue(settings["SFX"]["VOLUME"] * 100)
+	ChocoboSoundControl_PanelContainerPage2_VolumeSlider_Current:SetText(tostring(settings["SFX"]["VOLUME"] * 100))
+	ChocoboSoundControl_PanelContainerPage3_Enable:SetChecked(settings["AMBIENCE"]["ENABLED"])
+	ChocoboSoundControl_PanelContainerPage3_EnableMount:SetChecked(settings["AMBIENCE"]["MOUNTED"])
+	ChocoboSoundControl_PanelContainerPage3_EnableNoMount:SetChecked(settings["AMBIENCE"]["NOTMOUNTED"])
+	ChocoboSoundControl_PanelContainerPage3_EnableVolume:SetChecked(settings["AMBIENCE"]["MOD_VOLUME"])
+	ChocoboSoundControl_PanelContainerPage3_VolumeSlider:SetValue(settings["AMBIENCE"]["VOLUME"] * 100)
+	ChocoboSoundControl_PanelContainerPage3_VolumeSlider_Current:SetText(tostring(settings["AMBIENCE"]["VOLUME"] * 100))
 	
-	local enabled = Chocobo.SoundControl.Settings["ENABLED"]
-	local defaultMode = Chocobo.SoundControl.Settings["DEFAULT"]
+	local enabled = settings["ENABLED"]
+	local default = settings["DEFAULT"]
 	
-	if Chocobo.SoundControl.Settings["MUSIC"]["MOD_VOLUME"] and enabled and not defaultMode then
+	if settings["MUSIC"]["MOD_VOLUME"] and enabled and not default then
 		ChocoboSoundControl_PanelContainerPage1_VolumeSlider:Enable()
 		ChocoboSoundControl_PanelContainerPage1_VolumeSliderText:SetTextColor(1, 1, 1)
 		ChocoboSoundControl_PanelContainerPage1_VolumeSliderHigh:SetTextColor(1, 1, 1)
@@ -114,7 +115,7 @@ function Chocobo.SoundControl.Options:Update()
 		ChocoboSoundControl_PanelContainerPage1_VolumeSlider_Current:SetTextColor(0.5, 0.5, 0.5)
 	end
 	
-	if Chocobo.SoundControl.Settings["SFX"]["MOD_VOLUME"] and enabled and not defaultMode then
+	if settings["SFX"]["MOD_VOLUME"] and enabled and not default then
 		ChocoboSoundControl_PanelContainerPage2_VolumeSlider:Enable()
 		ChocoboSoundControl_PanelContainerPage2_VolumeSliderText:SetTextColor(1, 1, 1)
 		ChocoboSoundControl_PanelContainerPage2_VolumeSliderHigh:SetTextColor(1, 1, 1)
@@ -128,7 +129,7 @@ function Chocobo.SoundControl.Options:Update()
 		ChocoboSoundControl_PanelContainerPage2_VolumeSlider_Current:SetTextColor(0.5, 0.5, 0.5)
 	end
 	
-	if Chocobo.SoundControl.Settings["AMBIENCE"]["MOD_VOLUME"] and enabled and not defaultMode then
+	if settings["AMBIENCE"]["MOD_VOLUME"] and enabled and not default then
 		ChocoboSoundControl_PanelContainerPage3_VolumeSlider:Enable()
 		ChocoboSoundControl_PanelContainerPage3_VolumeSliderText:SetTextColor(1, 1, 1)
 		ChocoboSoundControl_PanelContainerPage3_VolumeSliderHigh:SetTextColor(1, 1, 1)
@@ -142,13 +143,13 @@ function Chocobo.SoundControl.Options:Update()
 		ChocoboSoundControl_PanelContainerPage3_VolumeSlider_Current:SetTextColor(0.5, 0.5, 0.5)
 	end
 	
-	if not Chocobo.SoundControl.Settings["ENABLED"] or Chocobo.SoundControl.Settings["DEFAULT"] then
+	if not enabled or default then
 		self:CheckboxesEnabled(false)
 	else
 		self:CheckboxesEnabled(true)
 	end
 	
-	if Chocobo.SoundControl.Settings["ENABLED"] then
+	if enabled then
 		ChocoboSoundControl_ToggleDefault:Enable()
 		ChocoboSoundControl_ToggleDefaultText:SetTextColor(1, 1, 1)
 	else
@@ -171,25 +172,32 @@ function Chocobo.SoundControl.Options:CheckboxesEnabled(enabled)
 		dr, dg, db = 1, 0.82, 0
 		r, g, b = 1, 1, 1
 	end
-	PanelTemplates_SetTab(ChocoboSoundControl_PanelContainer, 1)
+	if enabled then
+		setEnabled(ChocoboSoundControl_PanelContainerTab1, true)
+		setEnabled(ChocoboSoundControl_PanelContainerTab2, true)
+		setEnabled(ChocoboSoundControl_PanelContainerTab3, true)
+	end
+	self:SetToCurrentTab()
 	ChocoboSoundControl_PanelContainerPage1_PanelDesc:SetTextColor(dr, dg, db)
 	ChocoboSoundControl_PanelContainerPage2_PanelDesc:SetTextColor(dr, dg, db)
 	ChocoboSoundControl_PanelContainerPage3_PanelDesc:SetTextColor(dr, dg, db)
-	setEnabled(ChocoboSoundControl_PanelContainerPage1_Enable,			enabled)
-	setEnabled(ChocoboSoundControl_PanelContainerPage1_EnableMount,		enabled)
-	setEnabled(ChocoboSoundControl_PanelContainerPage1_EnableNoMount,	enabled)
-	setEnabled(ChocoboSoundControl_PanelContainerPage1_EnableVolume,	enabled)
-	setEnabled(ChocoboSoundControl_PanelContainerPage2_Enable,			enabled)
-	setEnabled(ChocoboSoundControl_PanelContainerPage2_EnableMount,		enabled)
-	setEnabled(ChocoboSoundControl_PanelContainerPage2_EnableNoMount,	enabled)
-	setEnabled(ChocoboSoundControl_PanelContainerPage2_EnableVolume,	enabled)
-	setEnabled(ChocoboSoundControl_PanelContainerPage3_Enable,			enabled)
-	setEnabled(ChocoboSoundControl_PanelContainerPage3_EnableMount,		enabled)
-	setEnabled(ChocoboSoundControl_PanelContainerPage3_EnableNoMount,	enabled)
-	setEnabled(ChocoboSoundControl_PanelContainerPage3_EnableVolume,	enabled)
-	setEnabled(ChocoboSoundControl_PanelContainerTab1,					enabled)
-	setEnabled(ChocoboSoundControl_PanelContainerTab2,					enabled)
-	setEnabled(ChocoboSoundControl_PanelContainerTab3,					enabled)
+	setEnabled(ChocoboSoundControl_PanelContainerPage1_Enable, enabled)
+	setEnabled(ChocoboSoundControl_PanelContainerPage1_EnableMount, enabled)
+	setEnabled(ChocoboSoundControl_PanelContainerPage1_EnableNoMount, enabled)
+	setEnabled(ChocoboSoundControl_PanelContainerPage1_EnableVolume, enabled)
+	setEnabled(ChocoboSoundControl_PanelContainerPage2_Enable, enabled)
+	setEnabled(ChocoboSoundControl_PanelContainerPage2_EnableMount, enabled)
+	setEnabled(ChocoboSoundControl_PanelContainerPage2_EnableNoMount, enabled)
+	setEnabled(ChocoboSoundControl_PanelContainerPage2_EnableVolume, enabled)
+	setEnabled(ChocoboSoundControl_PanelContainerPage3_Enable, enabled)
+	setEnabled(ChocoboSoundControl_PanelContainerPage3_EnableMount, enabled)
+	setEnabled(ChocoboSoundControl_PanelContainerPage3_EnableNoMount, enabled)
+	setEnabled(ChocoboSoundControl_PanelContainerPage3_EnableVolume, enabled)
+	if not enabled then
+		setEnabled(ChocoboSoundControl_PanelContainerTab1, false)
+		setEnabled(ChocoboSoundControl_PanelContainerTab2, false)
+		setEnabled(ChocoboSoundControl_PanelContainerTab3, false)
+	end
 	ChocoboSoundControl_PanelContainerPage1_EnableText:SetTextColor(r, g, b)
 	ChocoboSoundControl_PanelContainerPage1_EnableMountText:SetTextColor(r, g, b)
 	ChocoboSoundControl_PanelContainerPage1_EnableNoMountText:SetTextColor(r, g, b)
@@ -202,4 +210,21 @@ function Chocobo.SoundControl.Options:CheckboxesEnabled(enabled)
 	ChocoboSoundControl_PanelContainerPage3_EnableMountText:SetTextColor(r, g, b)
 	ChocoboSoundControl_PanelContainerPage3_EnableNoMountText:SetTextColor(r, g, b)
 	ChocoboSoundControl_PanelContainerPage3_EnableVolumeText:SetTextColor(r, g, b)
+end
+
+function Chocobo.SoundControl.Options:SetToCurrentTab()
+	PanelTemplates_SetTab(ChocoboSoundControl_PanelContainer, PanelTemplates_GetSelectedTab(ChocoboSoundControl_PanelContainer))
+end
+
+function Chocobo.SoundControl.Options:VolumeScroll(slider, delta, num)
+	local new = slider:GetValue() + delta
+	if new < 0 or new > 100 then return end
+	if num == 1 then
+		Chocobo.SoundControl:SetMusicVolume(new, true)
+	elseif num == 2 then
+		Chocobo.SoundControl:SetSFXVolume(new, true)
+	elseif num == 3 then
+		Chocobo.SoundControl:SetAmbienceVolume(new, true)
+	end
+	self:Update()
 end

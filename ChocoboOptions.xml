@@ -26,6 +26,22 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 		<OnLoad>Chocobo.Options:OnLoad(self);</OnLoad>
 		<OnShow>Chocobo.Options:Update();</OnShow>
 	</Scripts>
+	<Layers>
+		<Layer level="ARTWORK">
+			<Texture name="$parent_Logo" file="Interface\AddOns\Chocobo\images\chocobo.tga" alphaMode="BLEND" hidden="false">
+				<Size>
+					<AbsDimension x="256" y="512" />
+				</Size>
+				<Anchors>
+					<Anchor point="BOTTOMRIGHT">
+						<Offset>
+							<AbsDimension x="0" y="-75" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+			</Texture>
+		</Layer>
+	</Layers>
 	<Frames>
 		<Frame name="$parent_Description">
 			<Size>
