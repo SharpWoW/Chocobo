@@ -77,10 +77,13 @@ Chocobo.Command:Register({"options", "o", "config", "gui"}, function(args)
 	InterfaceOptionsFrame_OpenToCategory(ChocoboSoundControl)
 	InterfaceOptionsFrame_OpenToCategory(ChocoboOptions)
 end)
+
 Chocobo.Command:Register({"allmounts", "am", "all"}, function(args) Chocobo:FilterMount(false) end)
 Chocobo.Command:Register({"hawkstrider", "hs", "hawk"}, function(args) Chocobo:FilterMount(true) end)
 Chocobo.Command:Register({"modetoggle", "mounttoggle", "mt"}, function(args) Chocobo:FilterMount() end)
 Chocobo.Command:Register({"toggle", "t"}, function(args) Chocobo:Toggle() end)
+Chocobo.Command:Register({"ravenlordtoggle", "ravenlord", "rl"}, function(args) Chocobo:RavenLordToggle() end)
+Chocobo.Command:Register({"amazinghorsetoggle", "amazinghorse", "horsetoggle", "horse", "amazing"}, function(args) Chocobo:HorseToggle() end)
 
 Chocobo.Command:Register({"soundcontrol", "sc", "sndctrl", "sound"}, function(args)
 	local handled = false

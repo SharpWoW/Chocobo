@@ -40,6 +40,14 @@ function ChocoboLib:Split(s)
 	return r
 end
 
+-- Table functions
+function ChocoboLib:InTable(tbl, val)
+	for _,v in pairs(tbl) do
+		if v == val then return true end
+	end
+	return false
+end
+
 --[[ChocoboLib Specific Functions]]--
 -- Buff/Aura functions
 

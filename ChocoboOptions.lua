@@ -36,22 +36,22 @@ function Chocobo.Options:OnLoad(panel)
 	ChocoboOptions_MountPanel_ResetMounts:SetText(L["Options_Reset"])
 	ChocoboOptions_MountPanel_ListMounts:SetText(L["Options_List"])
 	ChocoboOptions_RavenLordToggleText:SetText(L["Options_RavenLordToggle"])
+	ChocoboOptions_HorseToggleText:SetText(L["Options_HorseToggle"])
 end
 
 function Chocobo.Options:Update()
 	local AddOnState, MountState, DebugState = ""
-	local RavenLordState = Chocobo:GetGlobal("RAVENLORD")
 	local asColor = "FFFF00"
 	local dColor = "FFFF00"
-	if Chocobo:GetGlobal("ENABLED") then
+	if Chocobo.Global["ENABLED"] then
 		AddOnState = L["Options_Enabled"]
 		asColor = "00FF00"
 	else
 		AddOnState = L["Options_Disabled"]
 		asColor = "FF0000"
 	end
-	if Chocobo:GetGlobal("ALLMOUNTS") then MountState = L["Options_AllMounts"] else MountState = L["Options_Hawkstrider"] end
-	if Chocobo:GetGlobal("DEBUG") then
+	if Chocobo.Global["ALLMOUNTS"] then MountState = L["Options_AllMounts"] else MountState = L["Options_Hawkstrider"] end
+	if Chocobo.Global["DEBUG"] then
 		DebugState = L["Options_Enabled"]
 		dColor = "00FF00"
 	else
@@ -62,5 +62,12 @@ function Chocobo.Options:Update()
 	ChocoboOptions_ToggleMount:SetText(MountState)
 	ChocoboOptions_ToggleDebug:SetText((L["Options_DebugState"]):format(dColor, DebugState))
 	ChocoboOptions_DescriptionLabel:SetText((L["Options_Description"]):format(Chocobo:GetVersion()))
-	ChocoboOptions_RavenLordToggle:SetChecked(RavenLordState)
+	ChocoboOptions_RavenLordToggle:SetChecked(Chocobo.Global["RAVENLORD"])
+	ChocoboOptions_HorseToggle:SetChecked(Chocobo.Global["HORSE"])
+end
+
+function Chocobo.Options:HorseHelp(frame)
+	GameTooltip:SetOwner(frame, "ANCHOR_BOTTOMRIGHT")
+	GameTooltip:SetText(L["Options_HorseHelp"])
+	GameTooltip:Show()
 end
