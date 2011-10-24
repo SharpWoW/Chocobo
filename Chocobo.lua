@@ -57,43 +57,45 @@ Chocobo = {
 		RavenLord = {41252}, -- Raven Lord (If enabled in options)
 		DruidForms = {33943, 40120}, -- When AllMounts is enabled
 		Horses = { -- When Amazing Horse is enabled
-			458,   -- Brown Horse
-			470,   -- Black Stallion
-			472,   -- Pinto
-			6648,  -- Chestnut Mare
-			13819, -- Warhorse (Human/Dwarf Paladin)
-			17462, -- Red Skeletal Horse
-			17463, -- Blue Skeletal Horse
-			17464, -- Brown Skeletal Horse
-			17465, -- Green Skeletal Warhorse
-			17481, -- Rivendare's Deathcharger
-			22717, -- Black War Steed
-			22722, -- Red Skeletal Warhorse
-			23214, -- Charger (Human/Dwarf Paladin)
-			23227, -- Swift Palomino
-			23228, -- Swift White Steed
-			23229, -- Swift Brown Steed
-			23246, -- Purple Skeletal Warhorse
-			34767, -- Charger (Blood Elf Paladin)
-			34769, -- Warhorse (Blood Elf Paladin)
-			36702, -- Fiery Warhorse
-			48025, -- Headless Horseman's Mount
-			49322, -- Swift Zhevra
-			63232, -- Stormwind Steed
-			63643, -- Forsaken Warhorse
-			64977, -- Black Skeletal Horse
-			65645, -- White Skeletal Warhorse
-			66090, -- Quel'dorei Steed
-			66846, -- Ochre Skeletal Warhorse
-			66906, -- Argent Charger
-			67466, -- Argent Warhorse
-			68768, -- Little White Stallion
-			69820, -- Summon Sunwalker Kodo (Tauren Paladin)
-			69826, -- Summon Great Sunwalker Kodo (Tauren Paladin)
-			72286, -- Invincible
-			73313, -- Crimson Deathcharger
-			73629, -- Summon Exarch's Elekk (Draenei Paladin)
-			73630  -- Summon Great Exarch's Elekk (Draenei Paladin)
+			458,    -- Brown Horse
+			470,    -- Black Stallion
+			472,    -- Pinto
+			6648,   -- Chestnut Mare
+			13819,  -- Warhorse (Human/Dwarf Paladin)
+			17462,  -- Red Skeletal Horse
+			17463,  -- Blue Skeletal Horse
+			17464,  -- Brown Skeletal Horse
+			17465,  -- Green Skeletal Warhorse
+			17481,  -- Rivendare's Deathcharger
+			22717,  -- Black War Steed
+			22722,  -- Red Skeletal Warhorse
+			23214,  -- Charger (Human/Dwarf Paladin)
+			23227,  -- Swift Palomino
+			23228,  -- Swift White Steed
+			23229,  -- Swift Brown Steed
+			23246,  -- Purple Skeletal Warhorse
+			34767,  -- Charger (Blood Elf Paladin)
+			34769,  -- Warhorse (Blood Elf Paladin)
+			36702,  -- Fiery Warhorse
+			48025,  -- Headless Horseman's Mount
+			49322,  -- Swift Zhevra
+			63232,  -- Stormwind Steed
+			63643,  -- Forsaken Warhorse
+			64977,  -- Black Skeletal Horse
+			65645,  -- White Skeletal Warhorse
+			66090,  -- Quel'dorei Steed
+			66846,  -- Ochre Skeletal Warhorse
+			66906,  -- Argent Charger
+			67466,  -- Argent Warhorse
+			68768,  -- Little White Stallion
+			69820,  -- Summon Sunwalker Kodo (Tauren Paladin)
+			69826,  -- Summon Great Sunwalker Kodo (Tauren Paladin)
+			72286,  -- Invincible
+			73313,  -- Crimson Deathcharger
+			73629,  -- Summon Exarch's Elekk (Draenei Paladin)
+			73630,  -- Summon Great Exarch's Elekk (Draenei Paladin)
+			103195, -- Mountain Horse
+			103196  -- Swift Mountain Horse
 		}
 	}
 }

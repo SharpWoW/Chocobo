@@ -17,12 +17,12 @@
     along with Chocobo. If not, see <http://www.gnu.org/licenses/>.
 --]]
 
-if (type(_G["ChocoboLocale"]) ~= "table") then
+if type(_G["ChocoboLocale"]) ~= "table" then
 	_G["ChocoboLocale"] = {}
 end
 
 function ChocoboLocale_Default(L, key)
-	return key
+	return ("%%%s%%"):format(key)
 end
 
 local L = _G["ChocoboLocale"]
