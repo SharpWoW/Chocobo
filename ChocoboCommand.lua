@@ -254,7 +254,7 @@ end
 SlashCmdList[Chocobo.Name:upper()] = function(msg, editBox)
 	msg = CLib:Trim(msg)
 	local args = CLib:Split(msg)
-	cmd = args[1]
+	local cmd = args[1]
 	local t = {}
 	if #args > 1 then
 		for i=2,#args do
