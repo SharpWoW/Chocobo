@@ -8,8 +8,10 @@
 #@no-lib-strip@
 libs\LibStub\LibStub.lua
 libs\CallbackHandler-1.0\CallbackHandler-1.0.xml
-libs\LibDataBroker-1-1\LibDataBroker-1.1.lua
 #@end-no-lib-strip@
+
+#LibDataBroker can't be installed stand-alone
+libs\LibDataBroker-1-1\LibDataBroker-1.1.lua
 
 #Built-in library, do not strip
 libs\ChocoboLib\ChocoboLib.xml
@@ -18,6 +20,7 @@ locales\load.xml
 
 Chocobo.lua
 ChocoboCommand.lua
+ChocoboChat.lua
 ChocoboOptions.lua
 ChocoboOptions.xml
 ChocoboSoundControl.lua
