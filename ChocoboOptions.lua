@@ -36,7 +36,6 @@ function Chocobo.Options:OnLoad(panel)
 	ChocoboOptions_MountPanel_ResetMounts:SetText(L["Options_Reset"])
 	ChocoboOptions_MountPanel_ListMounts:SetText(L["Options_List"])
 	ChocoboOptions_RavenLordToggleText:SetText(L["Options_RavenLordToggle"])
-	ChocoboOptions_HorseToggleText:SetText(L["Options_HorseToggle"])
 end
 
 function Chocobo.Options:Update()
@@ -63,7 +62,6 @@ function Chocobo.Options:Update()
 	ChocoboOptions_ToggleDebug:SetText((L["Options_DebugState"]):format(dColor, DebugState))
 	ChocoboOptions_DescriptionLabel:SetText((L["Options_Description"]):format(Chocobo:GetVersion()))
 	ChocoboOptions_RavenLordToggle:SetChecked(Chocobo.Global["RAVENLORD"])
-	ChocoboOptions_HorseToggle:SetChecked(Chocobo.Global["HORSE"])
 end
 
 function Chocobo.Options:HorseHelp(frame)

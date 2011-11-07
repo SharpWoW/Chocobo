@@ -382,22 +382,6 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 				<OnClick>Chocobo:Toggle(true); Chocobo.Options:Update();</OnClick>
 			</Scripts>
 		</Button>
-		<CheckButton name="$parent_HorseToggle" inherits="OptionsCheckButtonTemplate">
-			<Size>
-				<AbsDimension x="40" y="40" />
-			</Size>
-			<Anchors>
-				<Anchor point="BOTTOMLEFT">
-					<Offset>
-						<AbsDimension x="20" y="60" />
-					</Offset>
-				</Anchor>
-			</Anchors>
-			<Scripts>
-				<OnClick>Chocobo:HorseToggle(true); Chocobo.Options:Update();</OnClick>
-				<OnEnter>Chocobo.Options:HorseHelp(self);</OnEnter>
-			</Scripts>
-		</CheckButton>
 		<CheckButton name="$parent_RavenLordToggle" inherits="OptionsCheckButtonTemplate">
 			<Size>
 				<AbsDimension x="40" y="40" />

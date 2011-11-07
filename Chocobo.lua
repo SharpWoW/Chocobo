@@ -38,7 +38,6 @@ Chocobo = {
 		"chocobo_ffxii.mp3",
 		"chocobo_ffxiii.mp3"
 	},
-	HorseSong = "Interface\\AddOns\\Chocobo\\music\\horse.mp3",
 	IDs	= {
 		Hawkstriders = {
 			35022, -- Black Hawkstrider
@@ -55,48 +54,7 @@ Chocobo = {
 			46628  -- Swift White Hawkstrider
 		},
 		RavenLord = {41252}, -- Raven Lord (If enabled in options)
-		DruidForms = {33943, 40120}, -- When AllMounts is enabled
-		Horses = { -- When Amazing Horse is enabled
-			458,    -- Brown Horse
-			470,    -- Black Stallion
-			472,    -- Pinto
-			6648,   -- Chestnut Mare
-			13819,  -- Warhorse (Human/Dwarf Paladin)
-			17462,  -- Red Skeletal Horse
-			17463,  -- Blue Skeletal Horse
-			17464,  -- Brown Skeletal Horse
-			17465,  -- Green Skeletal Warhorse
-			17481,  -- Rivendare's Deathcharger
-			22717,  -- Black War Steed
-			22722,  -- Red Skeletal Warhorse
-			23214,  -- Charger (Human/Dwarf Paladin)
-			23227,  -- Swift Palomino
-			23228,  -- Swift White Steed
-			23229,  -- Swift Brown Steed
-			23246,  -- Purple Skeletal Warhorse
-			34767,  -- Charger (Blood Elf Paladin)
-			34769,  -- Warhorse (Blood Elf Paladin)
-			36702,  -- Fiery Warhorse
-			48025,  -- Headless Horseman's Mount
-			49322,  -- Swift Zhevra
-			63232,  -- Stormwind Steed
-			63643,  -- Forsaken Warhorse
-			64977,  -- Black Skeletal Horse
-			65645,  -- White Skeletal Warhorse
-			66090,  -- Quel'dorei Steed
-			66846,  -- Ochre Skeletal Warhorse
-			66906,  -- Argent Charger
-			67466,  -- Argent Warhorse
-			68768,  -- Little White Stallion
-			69820,  -- Summon Sunwalker Kodo (Tauren Paladin)
-			69826,  -- Summon Great Sunwalker Kodo (Tauren Paladin)
-			72286,  -- Invincible
-			73313,  -- Crimson Deathcharger
-			73629,  -- Summon Exarch's Elekk (Draenei Paladin)
-			73630,  -- Summon Great Exarch's Elekk (Draenei Paladin)
-			103195, -- Mountain Horse
-			103196  -- Swift Mountain Horse
-		}
+		DruidForms = {33943, 40120} -- When AllMounts is enabled
 	}
 }
 
@@ -135,10 +93,6 @@ function Chocobo.Events.ADDON_LOADED(self, ...)
 	if self.Global["RAVENLORD"] == nil then
 		self:Msg(L["RavenLordNotSet"])
 		self.Global["RAVENLORD"] = false
-	end
-	if self.Global["HORSE"] == nil then
-		self:Msg(L["HorseNotSet"])
-		self.Global["HORSE"] = false
 	end
 	if self.Global["MUSIC"] == nil then -- If the song list is empty
 		-- Populate the table with default songs
@@ -209,11 +163,7 @@ function Chocobo:OnUpdate(_, elapsed)
 					self.SoundControl:Check() -- Enable sound if disabled and the option is enabled
 					self:DebugMsg(L["PlayingMusic"])
 					self.Mounted = true
-					if self.Global["HORSE"] and CLib:InTable(self.IDs.Horses, mountID) then
-						self:PlayHorseMusic()
-					else
-						self:PlayRandomMusic()
-					end
+					self:PlayRandomMusic()
 				else -- If the player has already mounted
 					self:DebugMsg(L["AlreadyMounted"])
 				end
@@ -237,11 +187,6 @@ function Chocobo:HasMount()
 	end
 	if self.Global["RAVENLORD"] then
 		for _,v in pairs(self.IDs.RavenLord) do
-			table.insert(mountColl, v)
-		end
-	end
-	if self.Global["HORSE"] then -- Add horses for Amazing Horse
-		for _,v in pairs(self.IDs.Horses) do
 			table.insert(mountColl, v)
 		end
 	end
@@ -291,10 +236,6 @@ function Chocobo:PlayMusic(song)
 		self:DebugMsg((L["PlayingSong"]):format(song, songFile))
 	end
 	PlayMusic(songFile)
-end
-
-function Chocobo:PlayHorseMusic()
-	self:PlayMusic(self.HorseSong)
 end
 
 function Chocobo:PlayRandomMusic()
@@ -451,16 +392,6 @@ function Chocobo:RavenLordToggle(silent)
 		self:Msg(L["RavenLordTrue"])
 	else
 		self:Msg(L["RavenLordFalse"])
-	end
-end
-
-function Chocobo:HorseToggle(silent)
-	self.Global["HORSE"] = not self.Global["HORSE"]
-	if silent then return end
-	if self.Global["HORSE"] then
-		self:Msg(L["HorseTrue"])
-	else
-		self:Msg(L["HorseFalse"])
 	end
 end
 

@@ -83,7 +83,6 @@ Chocobo.Command:Register({"hawkstrider", "hs", "hawk"}, function(args) Chocobo:F
 Chocobo.Command:Register({"modetoggle", "mounttoggle", "mt"}, function(args) Chocobo:FilterMount() end)
 Chocobo.Command:Register({"toggle", "t"}, function(args) Chocobo:Toggle() end)
 Chocobo.Command:Register({"ravenlordtoggle", "ravenlord", "rl"}, function(args) Chocobo:RavenLordToggle() end)
-Chocobo.Command:Register({"amazinghorsetoggle", "amazinghorse", "horsetoggle", "horse", "amazing"}, function(args) Chocobo:HorseToggle() end)
 
 Chocobo.Command:Register({"soundcontrol", "sc", "sndctrl", "sound"}, function(args)
 	local handled = false
