@@ -20,7 +20,6 @@ locales\load.xml
 
 Chocobo.lua
 ChocoboCommand.lua
-ChocoboChat.lua
 ChocoboOptions.lua
 ChocoboOptions.xml
 ChocoboSoundControl.lua
