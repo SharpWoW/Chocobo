@@ -37,6 +37,7 @@ function Chocobo.Options:OnLoad(panel)
 	ChocoboOptions_MountPanel_ListMounts:SetText(L["Options_List"])
 	ChocoboOptions_PlainstriderToggleText:SetText(L["Options_PlainstriderToggle"])
 	ChocoboOptions_RavenLordToggleText:SetText(L["Options_RavenLordToggle"])
+	ChocoboOptions_FlametalonToggleText:SetText(L["Options_FlametalonToggle"])
 end
 
 function Chocobo.Options:Update()
@@ -64,4 +65,5 @@ function Chocobo.Options:Update()
 	ChocoboOptions_DescriptionLabel:SetText((L["Options_Description"]):format(Chocobo:GetVersion()))
 	ChocoboOptions_PlainstriderToggle:SetChecked(Chocobo.Global["PLAINSTRIDER"])
 	ChocoboOptions_RavenLordToggle:SetChecked(Chocobo.Global["RAVENLORD"])
+	ChocoboOptions_FlametalonToggle:SetChecked(Chocobo.Global["FLAMETALON"])
 end

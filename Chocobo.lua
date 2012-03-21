@@ -60,6 +60,7 @@ Chocobo = {
 			102349  -- Swift Springtrider
 		},
 		RavenLord = {41252}, -- Raven Lord (If enabled in options)
+		Flametalon = {101542}, -- Flametalon of Alysrazor (Fire version of Raven Lord)
 		DruidForms = {33943, 40120} -- When AllMounts is enabled
 	}
 }
@@ -105,6 +106,10 @@ function C.Events.ADDON_LOADED(self, ...)
 	if not self.Global["RAVENLORD"] then
 		self:Msg(L["RavenLordNotSet"])
 		self.Global["RAVENLORD"] = false
+	end
+	if not self.Global["FLAMETALON"] then
+		self:Msg(L["FlametalonNotSet"])
+		self.Global["FLAMETALON"] = false
 	end
 	if not self.Global["MUSIC"] then -- If the song list is empty
 		-- Populate the table with default songs
@@ -204,6 +209,11 @@ function C:HasMount()
 	end
 	if self.Global["RAVENLORD"] then
 		for _,v in pairs(self.IDs.RavenLord) do
+			table.insert(mountColl, v)
+		end
+	end
+	if self.Global["FLAMETALON"] then
+		for _,v in pairs(self.IDs.Flametalon) do
 			table.insert(mountColl, v)
 		end
 	end
@@ -419,6 +429,16 @@ function C:RavenLordToggle(silent)
 		self:Msg(L["RavenLordTrue"])
 	else
 		self:Msg(L["RavenLordFalse"])
+	end
+end
+
+function C:FlametalonToggle(silent)
+	self.Global["FLAMETALON"] = not self.Global["FLAMETALON"]
+	if silent then return end
+	if self.Global["FLAMETALON"] then
+		self:Msg(L["FlametalonTrue"])
+	else
+		self:Msg(L["FlametalonFalse"])
 	end
 end
 

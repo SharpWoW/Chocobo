@@ -385,31 +385,46 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 		<CheckButton name="$parent_PlainstriderToggle" inherits="OptionsCheckButtonTemplate">
 			<Size>
 				<AbsDimension x="40" y="40" />
-			</size>
+			</Size>
 			<Anchors>
 				<Anchor point="BOTTOMLEFT">
 					<Offset>
-						<AbsDimension x="20" y="70" />
+						<AbsDimension x="20" y="90" />
 					</Offset>
 				</Anchor>
 			</Anchors>
 			<Scripts>
 				<OnClick>Chocobo:PlainstriderToggle(true); Chocobo.Options:Update();</OnClick>
 			</Scripts>
-		</CheckButon>
+		</CheckButton>
 		<CheckButton name="$parent_RavenLordToggle" inherits="OptionsCheckButtonTemplate">
 			<Size>
 				<AbsDimension x="40" y="40" />
 			</Size>
 			<Anchors>
-				<Anchor point="BOTTOMLEFT">
+				<Anchor point="BOTTOMLEFT" relativeTo="$parent_PlainstriderToggle">
 					<Offset>
-						<AbsDimension x="20" y="20" />
+						<AbsDimension x="0" y="-40" />
 					</Offset>
 				</Anchor>
 			</Anchors>
 			<Scripts>
 				<OnClick>Chocobo:RavenLordToggle(true); Chocobo.Options:Update();</OnClick>
+			</Scripts>
+		</CheckButton>
+		<CheckButton name="$parent_FlametalonToggle" inherits="OptionsCheckButtonTemplate">
+			<Size>
+				<AbsDimension x="40" y="40" />
+			</Size>
+			<Anchors>
+				<Anchor point="BOTTOMLEFT" relativeTo="$parent_RavenLordToggle">
+					<Offset>
+						<AbsDimension x="0" y="-40" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Scripts>
+				<OnClick>Chocobo:FlametalonToggle(true); Chocobo.Options:Update();</OnClick>
 			</Scripts>
 		</CheckButton>
 	</Frames>
