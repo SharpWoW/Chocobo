@@ -24,11 +24,13 @@ Chocobo.Command = {
 	Commands = {}
 }
 
+local C = Chocobo
+local CC = C.Command
 local CLib = ChocoboLib
 local L = _G["ChocoboLocale"]
 
 -- Argument #1 (command) can be either string or a table.
-function Chocobo.Command:Register(command, func)
+function CC:Register(command, func)
 	if type(command) == "string" then
 		command = {command}
 	end
@@ -40,51 +42,54 @@ function Chocobo.Command:Register(command, func)
 	end
 end
 
-function Chocobo.Command:HasCommand(command)
+function CC:HasCommand(command)
 	return self.Commands[command]
 end
 
-function Chocobo.Command:HandleCommand(command, args)
+function CC:HandleCommand(command, args)
 	if self:HasCommand(command) then
 		self.Commands[command](args)
 	elseif self:HasCommand("__DEFAULT__") then
 		self.Commands["__DEFAULT__"](args)
 	else
-		Chocobo:ErrorMsg((L["InvalidCommand"]):format(command))
+		C:ErrorMsg((L["InvalidCommand"]):format(command))
 	end
 end
 
-Chocobo.Command:Register("__DEFAULT__", function(args)
-	Chocobo:Msg(L["HelpMessage1"])
-	Chocobo:Msg(L["HelpMessage2"])
-	Chocobo:Msg(L["HelpMessage3"])
-	Chocobo:Msg(L["HelpMessage4"])
-	Chocobo:Msg(L["HelpMessage5"])
-	Chocobo:Msg(L["HelpMessage6"])
-	Chocobo:Msg(L["HelpMessage7"])
-	Chocobo:Msg(L["HelpMessage8"])
-	Chocobo:Msg(L["HelpMessage9"])
-	Chocobo:Msg(L["HelpMessage10"])
-	Chocobo:Msg(L["HelpMessage12"])
-	Chocobo:Msg(L["HelpMessage13"])
-	Chocobo:Msg(L["HelpMessage14"])
-	Chocobo:Msg(L["HelpMessage15"])
-	Chocobo:Msg(L["HelpMessage16"])
-	Chocobo:Msg(L["HelpMessage11"])
+CC:Register("__DEFAULT__", function(args)
+	C:Msg(L["HelpMessage1"])
+	C:Msg(L["HelpMessage2"])
+	C:Msg(L["HelpMessage3"])
+	C:Msg(L["HelpMessage4"])
+	C:Msg(L["HelpMessage17"])
+	C:Msg(L["HelpMessage18"])
+	C:Msg(L["HelpMessage5"])
+	C:Msg(L["HelpMessage6"])
+	C:Msg(L["HelpMessage7"])
+	C:Msg(L["HelpMessage8"])
+	C:Msg(L["HelpMessage9"])
+	C:Msg(L["HelpMessage10"])
+	C:Msg(L["HelpMessage12"])
+	C:Msg(L["HelpMessage13"])
+	C:Msg(L["HelpMessage14"])
+	C:Msg(L["HelpMessage15"])
+	C:Msg(L["HelpMessage16"])
+	C:Msg(L["HelpMessage11"])
 end)
 
-Chocobo.Command:Register({"options", "o", "config", "gui"}, function(args)
+CC:Register({"options", "o", "config", "gui"}, function(args)
 	InterfaceOptionsFrame_OpenToCategory(ChocoboSoundControl)
 	InterfaceOptionsFrame_OpenToCategory(ChocoboOptions)
 end)
 
-Chocobo.Command:Register({"allmounts", "am", "all"}, function(args) Chocobo:FilterMount(false) end)
-Chocobo.Command:Register({"hawkstrider", "hs", "hawk"}, function(args) Chocobo:FilterMount(true) end)
-Chocobo.Command:Register({"modetoggle", "mounttoggle", "mt"}, function(args) Chocobo:FilterMount() end)
-Chocobo.Command:Register({"toggle", "t"}, function(args) Chocobo:Toggle() end)
-Chocobo.Command:Register({"ravenlordtoggle", "ravenlord", "rl"}, function(args) Chocobo:RavenLordToggle() end)
+CC:Register({"allmounts", "am", "all"}, function(args) C:FilterMount(false) end)
+CC:Register({"hawkstrider", "hs", "hawk"}, function(args) C:FilterMount(true) end)
+CC:Register({"modetoggle", "mounttoggle", "mt"}, function(args) C:FilterMount() end)
+CC:Register({"toggle", "t"}, function(args) C:Toggle() end)
+CC:Register({"plainstridertoggle", "plainstrider", "plainstriders", "ps"}, function(args) C:PlainstriderToggle() end)
+CC:Register({"ravenlordtoggle", "ravenlord", "rl"}, function(args) C:RavenLordToggle() end)
 
-Chocobo.Command:Register({"soundcontrol", "sc", "sndctrl", "sound"}, function(args)
+CC:Register({"soundcontrol", "sc", "sndctrl", "sound"}, function(args)
 	local handled = false
 	if #args > 0 then
 		local vol = tonumber(args[3])
@@ -92,31 +97,31 @@ Chocobo.Command:Register({"soundcontrol", "sc", "sndctrl", "sound"}, function(ar
 			InterfaceOptionsFrame_OpenToCategory(ChocoboSoundControl)
 			handled = true
 		elseif args[1] == "toggle" or args[1] == "t" then
-			Chocobo.SoundControl:Toggle()
+			C.SoundControl:Toggle()
 			handled = true
 		elseif args[1] == "default" or args[1] == "d" then
-			Chocobo.SoundControl:ToggleDefault()
+			C.SoundControl:ToggleDefault()
 			handled = true
 		elseif args[1] == "music" or args[1] == "m" then
 			if #args > 1 then
 				if args[2] == "toggle" or args[2] == "t" then
-					Chocobo.SoundControl:ToggleMusic()
+					C.SoundControl:ToggleMusic()
 					handled = true
 				elseif args[2]:match("^mount") or args[2] == "m" then
-					Chocobo.SoundControl:ToggleMusicMount()
+					C.SoundControl:ToggleMusicMount()
 					handled = true
 				elseif args[2]:match("^not?mount") or args[2] == "nm" then
-					Chocobo.SoundControl:ToggleMusicNoMount()
+					C.SoundControl:ToggleMusicNoMount()
 					handled = true
 				elseif args[2] == "volume" or args[2] == "vol" or args[2] == "v" then
 					if type(vol) == "number" then
-						Chocobo.SoundControl:SetMusicVolume(vol)
+						C.SoundControl:SetMusicVolume(vol)
 						handled = true
 					elseif args[3] == "toggle" or args[3] == "t" then
-						Chocobo.SoundControl:ToggleMusicVolume()
+						C.SoundControl:ToggleMusicVolume()
 						handled = true
 					else
-						Chocobo.SoundControl:PrintMusicVolume()
+						C.SoundControl:PrintMusicVolume()
 						handled = true
 					end
 				end
@@ -124,23 +129,23 @@ Chocobo.Command:Register({"soundcontrol", "sc", "sndctrl", "sound"}, function(ar
 		elseif args[1] == "sfx" or args[1] == "sound" or args[1] == "s" then
 			if #args > 1 then
 				if args[2] == "toggle" or args[2] == "t" then
-					Chocobo.SoundControl:ToggleSFX()
+					C.SoundControl:ToggleSFX()
 					handled = true
 				elseif args[2]:match("^mount") or args[2] == "m" then
-					Chocobo.SoundControl:ToggleSFXMount()
+					C.SoundControl:ToggleSFXMount()
 					handled = true
 				elseif args[2]:match("^not?mount") or args[2] == "nm" then
-					Chocobo.SoundControl:ToggleSFXNoMount()
+					C.SoundControl:ToggleSFXNoMount()
 					handled = true
 				elseif args[2] == "volume" or args[2] == "vol" or args[2] == "v" then
 					if type(vol) == "number" then
-						Chocobo.SoundControl:SetSFXVolume(vol)
+						C.SoundControl:SetSFXVolume(vol)
 						handled = true
 					elseif args[3] == "toggle" or args[3] == "t" then
-						Chocobo.SoundControl:ToggleSFXVolume()
+						C.SoundControl:ToggleSFXVolume()
 						handled = true
 					else
-						Chocobo.SoundControl:PrintSFXVolume()
+						C.SoundControl:PrintSFXVolume()
 						handled = true
 					end
 				end
@@ -148,23 +153,23 @@ Chocobo.Command:Register({"soundcontrol", "sc", "sndctrl", "sound"}, function(ar
 		elseif args[1] == "ambience" or args[1] == "amb" or args[1] == "a" then
 			if #args > 1 then
 				if args[2] == "toggle" or args[2] == "t" then
-					Chocobo.SoundControl:ToggleAmbience()
+					C.SoundControl:ToggleAmbience()
 					handled = true
 				elseif args[2]:match("^mount") or args[2] == "m" then
-					Chocobo.SoundControl:ToggleAmbienceMount()
+					C.SoundControl:ToggleAmbienceMount()
 					handled = true
 				elseif args[2]:match("^not?mount") or args[2] == "nm" then
-					Chocobo.SoundControl:ToggleAmbienceNoMount()
+					C.SoundControl:ToggleAmbienceNoMount()
 					handled = true
 				elseif args[2] == "volume" or args[2] == "vol" or args[2] == "v" then
 					if type(vol) == "number" then
-						Chocobo.SoundControl:SetAmbienceVolume(vol)
+						C.SoundControl:SetAmbienceVolume(vol)
 						handled = true
 					elseif args[3] == "toggle" or args[3] == "t" then
-						Chocobo.SoundControl:ToggleAmbienceVolume()
+						C.SoundControl:ToggleAmbienceVolume()
 						handled = true
 					else
-						Chocobo.SoundControl:PrintAmbienceVolume()
+						C.SoundControl:PrintAmbienceVolume()
 						handled = true
 					end
 				end
@@ -172,25 +177,25 @@ Chocobo.Command:Register({"soundcontrol", "sc", "sndctrl", "sound"}, function(ar
 		end
 	end
 	if not handled then
-		Chocobo:Msg(L["SCSyntax1"])
-		Chocobo:Msg(L["SCSyntax2"])
+		C:Msg(L["SCSyntax1"])
+		C:Msg(L["SCSyntax2"])
 	end
 end)
 
-Chocobo.Command:Register({"list", "l", "ls"}, function(args) Chocobo:PrintMusic() end)
-Chocobo.Command:Register({"reset", "r"}, function(args) Chocobo:ResetMusic() end)
-Chocobo.Command:Register({"listmounts", "lm"}, function(args) Chocobo:PrintMounts() end)
-Chocobo.Command:Register({"resetmounts", "rm"}, function(args) Chocobo:ResetMounts() end)
+CC:Register({"list", "l", "ls"}, function(args) C:PrintMusic() end)
+CC:Register({"reset", "r"}, function(args) C:ResetMusic() end)
+CC:Register({"listmounts", "lm"}, function(args) C:PrintMounts() end)
+CC:Register({"resetmounts", "rm"}, function(args) C:ResetMounts() end)
 
-Chocobo.Command:Register({"debug", "d"}, function(args)
+CC:Register({"debug", "d"}, function(args)
 	if not args[1] then
-		Chocobo:Debug()
+		C:Debug()
 	else
-		Chocobo:Debug(args[1]:lower())
+		C:Debug(args[1]:lower())
 	end
 end)
 
-Chocobo.Command:Register({"add", "a"}, function(args)
+CC:Register({"add", "a"}, function(args)
 	if #args > 0 then
 		local song = args[1]
 		if #args > 1 then
@@ -198,13 +203,13 @@ Chocobo.Command:Register({"add", "a"}, function(args)
 				song = song .. " " .. args[i]
 			end
 		end
-		Chocobo:AddMusic(song)
+		C:AddMusic(song)
 	else
-		Chocobo:Msg(L["AddSyntax"])
+		C:Msg(L["AddSyntax"])
 	end
 end)
 
-Chocobo.Command:Register({"remove", "rem", "delete", "del"}, function(args)
+CC:Register({"remove", "rem", "delete", "del"}, function(args)
 	if #args > 0 then
 		local song = args[1]
 		if #args > 1 then
@@ -212,13 +217,13 @@ Chocobo.Command:Register({"remove", "rem", "delete", "del"}, function(args)
 				song = song .. " " .. args[i]
 			end
 		end
-		Chocobo:RemoveMusic(song)
+		C:RemoveMusic(song)
 	else
-		Chocobo:Msg(L["RemoveSyntax"])
+		C:Msg(L["RemoveSyntax"])
 	end
 end)
 
-Chocobo.Command:Register({"addmount", "addm"}, function(args)
+CC:Register({"addmount", "addm"}, function(args)
 	if #args > 0 then
 		local mount = args[1]
 		if #args > 1 then
@@ -226,13 +231,13 @@ Chocobo.Command:Register({"addmount", "addm"}, function(args)
 				mount = mount .. " " .. args[i]
 			end
 		end
-		Chocobo:AddMount(mount)
+		C:AddMount(mount)
 	else
-		Chocobo:Msg(L["AddMountSyntax"])
+		C:Msg(L["AddMountSyntax"])
 	end
 end)
 
-Chocobo.Command:Register({"removemount", "remm", "deletemount", "delmount", "delm"}, function(args)
+CC:Register({"removemount", "remm", "deletemount", "delmount", "delm"}, function(args)
 	if #args > 0 then
 		local mount = args[1]
 		if #args > 1 then
@@ -240,17 +245,17 @@ Chocobo.Command:Register({"removemount", "remm", "deletemount", "delmount", "del
 				mount = mount .. " " .. args[i]
 			end
 		end
-		Chocobo:RemoveMount(mount)
+		C:RemoveMount(mount)
 	else
-		Chocobo:Msg(L["RemoveMountSyntax"])
+		C:Msg(L["RemoveMountSyntax"])
 	end
 end)
 
-for i,v in ipairs(Chocobo.Command.Slash) do
-	_G["SLASH_" .. Chocobo.Name:upper() .. i] = "/" .. v
+for i,v in ipairs(CC.Slash) do
+	_G["SLASH_" .. C.Name:upper() .. i] = "/" .. v
 end
 
-SlashCmdList[Chocobo.Name:upper()] = function(msg, editBox)
+SlashCmdList[C.Name:upper()] = function(msg, editBox)
 	msg = CLib:Trim(msg)
 	local args = CLib:Split(msg)
 	local cmd = args[1]
@@ -260,5 +265,5 @@ SlashCmdList[Chocobo.Name:upper()] = function(msg, editBox)
 			table.insert(t, args[i])
 		end
 	end
-	Chocobo.Command:HandleCommand(cmd, t)
+	CC:HandleCommand(cmd, t)
 end

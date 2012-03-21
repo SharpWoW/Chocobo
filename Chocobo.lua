@@ -53,13 +53,21 @@ Chocobo = {
 			35028, -- Swift Warstrider (Thanks Khormin for pointing it out)
 			46628  -- Swift White Hawkstrider
 		},
+		Plainstriders = {
+			102346, -- Swift Forest Strider
+			102350, -- Swift Lovebird
+			101573, -- Swift Shorestrider
+			102349  -- Swift Springtrider
+		},
 		RavenLord = {41252}, -- Raven Lord (If enabled in options)
 		DruidForms = {33943, 40120} -- When AllMounts is enabled
 	}
 }
 
+local C = Chocobo
+
 --@debug@
-if Chocobo.Version == "@".."project-version".."@" then Chocobo.Version = "Development" end
+if C.Version == "@".."project-version".."@" then C.Version = "Development" end
 --@end-debug@
 
 local t = 0
@@ -70,31 +78,35 @@ local L = _G["ChocoboLocale"]
 assert(CLib, "Chocobo Lib not loaded")
 assert(L, "Chocobo Locales not loaded")
 
-function Chocobo:OnEvent(frame, event, ...)
+function C:OnEvent(frame, event, ...)
 	if self.Events[event] then self.Events[event](self, ...) end
 end
 
-function Chocobo.Events.ADDON_LOADED(self, ...)
+function C.Events.ADDON_LOADED(self, ...)
 	-- Currently, this seems a bit bugged when having multiple addons. The "loaded" message will disappear sometimes.
 	local addonName = (select(1, ...)):lower()
 	if addonName ~= "chocobo" or self.Loaded then return end
 	if type(_G["CHOCOBO"]) ~= "table" then _G["CHOCOBO"] = {} end
 	self.Global = _G["CHOCOBO"]
-	if self.Global["DEBUG"] == nil then
+	if not self.Global["DEBUG"] then
 		-- Should be fired on first launch, set the saved variable to default value
 		self:Msg(L["DebugNotSet"])
 		self.Global["DEBUG"] = false
 	end
-	if self.Global["ALLMOUNTS"] == nil then
+	if not self.Global["ALLMOUNTS"] then
 		-- Should be fired on first launch, set the saved variable to default value
 		self:Msg(L["AllMountsNotSet"])
 		self.Global["ALLMOUNTS"] = false
 	end
-	if self.Global["RAVENLORD"] == nil then
+	if not self.Global["PLAINSTRIDER"] then
+		self:Msg(L["PlainstridersNotSet"])
+		self.Global["PLAINSTRIDER"] = true
+	end
+	if not self.Global["RAVENLORD"] then
 		self:Msg(L["RavenLordNotSet"])
 		self.Global["RAVENLORD"] = false
 	end
-	if self.Global["MUSIC"] == nil then -- If the song list is empty
+	if not self.Global["MUSIC"] then -- If the song list is empty
 		-- Populate the table with default songs
 		self:Msg(L["NoMusic"])
 		self.Global["MUSIC"] = {}
@@ -102,11 +114,11 @@ function Chocobo.Events.ADDON_LOADED(self, ...)
 			self:AddMusic(v)
 		end
 	end
-	if self.Global["MOUNTS"] == nil then
+	if not self.Global["MOUNTS"] then
 		self:Msg(L["NoMounts"])
 		self.Global["MOUNTS"] = {}
 	end
-	if self.Global["ENABLED"] == nil then
+	if not self.Global["ENABLED"] then
 		-- Should be fired on first launch, set the saved variable to default value
 		self:Msg(L["EnabledNotSet"])
 		self.Global["ENABLED"] = true
@@ -124,7 +136,7 @@ function Chocobo.Events.ADDON_LOADED(self, ...)
 	self.Loaded = true
 end
 
-function Chocobo.Events.UNIT_AURA(self, ...)
+function C.Events.UNIT_AURA(self, ...)
 	local unitName = (select(1, ...)):lower()
 	if unitName ~= "player" or not self.Global["ENABLED"] then return end -- Return if addon is disabled or player was unaffected
 	self:DebugMsg((L["Event_UNIT_AURA"]):format(unitName))
@@ -139,13 +151,13 @@ function Chocobo.Events.UNIT_AURA(self, ...)
 	self.Frame:SetScript("OnUpdate", function (_, elapsed) Chocobo:OnUpdate(_, elapsed) end)
 end
 
-function Chocobo.Events.PLAYER_LOGOUT(self, ...)
+function C.Events.PLAYER_LOGOUT(self, ...)
 	-- Save local copy of globals
 	-- TODO: Is this redundant?
 	_G["CHOCOBO"] = self.Global
 end
 
-function Chocobo:OnUpdate(_, elapsed)
+function C:OnUpdate(_, elapsed)
 	t = t + elapsed
 	-- When 1 second has elapsed, this is because it takes ~0.5 secs from the event detection for IsMounted() to return true.
 	if t >= 1 then
@@ -180,10 +192,15 @@ function Chocobo:OnUpdate(_, elapsed)
 	end
 end
 
-function Chocobo:HasMount()
+function C:HasMount()
 	local mountColl = {}
 	for _,v in pairs(self.IDs.Hawkstriders) do
 		table.insert(mountColl, v)
+	end
+	if self.Global["PLAINSTRIDER"] then
+		for _,v in pairs(self.IDs.Plainstriders) do
+			table.insert(mountColl, v)
+		end
 	end
 	if self.Global["RAVENLORD"] then
 		for _,v in pairs(self.IDs.RavenLord) do
@@ -203,7 +220,7 @@ function Chocobo:HasMount()
 	return CLib:HasBuff(mountColl)
 end
 
-function Chocobo:MusicCheck()
+function C:MusicCheck()
 	local matchString = "^" .. self.MusicDir -- Match the music dir path at the beginning of the string only.
 	local length = self.MusicDir:len() + 1 -- The substring has to start AFTER the matched string, adding one to the length.
 	local updated = 0 -- Keep track of how many songs that had to update
@@ -222,7 +239,7 @@ function Chocobo:MusicCheck()
 	end
 end
 
-function Chocobo:PlayMusic(song)
+function C:PlayMusic(song)
 	local songFile
 	if type(song) == "string" then
 		songFile = song
@@ -238,11 +255,11 @@ function Chocobo:PlayMusic(song)
 	PlayMusic(songFile)
 end
 
-function Chocobo:PlayRandomMusic()
+function C:PlayRandomMusic()
 	self:PlayMusic(math.random(1, #self.Global["MUSIC"]))
 end
 
-function Chocobo:AddMusic(songName) -- Add a song the the list
+function C:AddMusic(songName) -- Add a song the the list
 	songName = CLib:Trim(songName)
 	if songName == "" or songName == nil then
 		self:ErrorMsg(L["NoFile"])
@@ -259,7 +276,7 @@ function Chocobo:AddMusic(songName) -- Add a song the the list
 	return true
 end
 
-function Chocobo:RemoveMusic(songName) -- Remove a song from the list
+function C:RemoveMusic(songName) -- Remove a song from the list
 	if type(songName) == "number" then
 		if self.Global["MUSIC"][songName] then
 			local name = self.Global["MUSIC"][songName]
@@ -285,7 +302,7 @@ function Chocobo:RemoveMusic(songName) -- Remove a song from the list
 	return false
 end
 
-function Chocobo:PrintMusic() -- Print all the songs currently in list to chat
+function C:PrintMusic() -- Print all the songs currently in list to chat
 	if #self.Global["MUSIC"] <= 0 then
 		self:Msg(L["MusicListEmpty"])
 	else
@@ -295,7 +312,7 @@ function Chocobo:PrintMusic() -- Print all the songs currently in list to chat
 	end
 end
 
-function Chocobo:ResetMusic() -- Resets the values in Chocobo.Global["MUSIC"] to default
+function C:ResetMusic() -- Resets the values in Chocobo.Global["MUSIC"] to default
 	self:Msg(L["ResetMusic"])
 	self.Global["MUSIC"] = nil -- "Erase" the data from Chocobo.Global["MUSIC"]
 	self.Global["MUSIC"] = {} -- Make it a new table
@@ -304,7 +321,7 @@ function Chocobo:ResetMusic() -- Resets the values in Chocobo.Global["MUSIC"] to
 	end
 end
 
-function Chocobo:AddMount(mount)
+function C:AddMount(mount)
 	mount = CLib:Trim(mount)
 	mount = tonumber(mount) or mount
 	if mount == "" or mount == nil then
@@ -322,7 +339,7 @@ function Chocobo:AddMount(mount)
 	self:Msg((L["AddedMount"]):format(mount))
 end
 
-function Chocobo:RemoveMount(mount)
+function C:RemoveMount(mount)
 	if mount == "" or mount == nil then
 		self:ErrorMsg(L["NoMount"])
 		return
@@ -338,7 +355,7 @@ function Chocobo:RemoveMount(mount)
 	self:ErrorMsg(L["MountNotFound"])
 end
 
-function Chocobo:PrintMounts()
+function C:PrintMounts()
 	if #self.Global["MOUNTS"] <= 0 then
 		self:Msg(L["MountListEmpty"])
 	else
@@ -348,13 +365,13 @@ function Chocobo:PrintMounts()
 	end
 end
 
-function Chocobo:ResetMounts()
+function C:ResetMounts()
 	self:Msg(L["ResetMounts"])
 	self.Global["MOUNTS"] = nil
 	self.Global["MOUNTS"] = {}
 end
 
-function Chocobo:FilterMount(filter, silent)
+function C:FilterMount(filter, silent)
 	if type(filter) == "nil" then filter = Chocobo.Global["ALLMOUNTS"] end
 	if filter then
 		if not silent then self:Msg(L["HawkstriderOnly"]) end
@@ -365,11 +382,11 @@ function Chocobo:FilterMount(filter, silent)
 	end
 end
 
-function Chocobo:ToggleDebug()
+function C:ToggleDebug()
 	self:Debug(not self.Global["DEBUG"], true)
 end
 
-function Chocobo:Debug(set, silent)
+function C:Debug(set, silent)
 	if set == "enable" or set == "on" or set == true then
 		if not silent then self:Msg(L["DebuggingEnabled"]) end
 		self.Global["DEBUG"] = true
@@ -385,7 +402,17 @@ function Chocobo:Debug(set, silent)
 	end
 end
 
-function Chocobo:RavenLordToggle(silent)
+function C:PlainstriderToggle(silent)
+	self.Global["PLAINSTRIDER"] = not self.Global["PLAINSTRIDER"]
+	if silent then return end
+	if self.Global["PLAINSTRIDER"] then
+		self:Msg(L["PlainstriderTrue"])
+	else
+		self:Msg(L["PlainstriderFalse"])
+	end
+end
+
+function C:RavenLordToggle(silent)
 	self.Global["RAVENLORD"] = not self.Global["RAVENLORD"]
 	if silent then return end
 	if self.Global["RAVENLORD"] then
@@ -395,7 +422,7 @@ function Chocobo:RavenLordToggle(silent)
 	end
 end
 
-function Chocobo:Toggle(silent) -- Toggle the AddOn on and off
+function C:Toggle(silent) -- Toggle the AddOn on and off
 	if self.Global["ENABLED"] then -- If the addon is enabled
 		self.Global["ENABLED"] = false -- Disable it
 		StopMusic()
@@ -406,31 +433,31 @@ function Chocobo:Toggle(silent) -- Toggle the AddOn on and off
 	end
 end
 
-function Chocobo:GetGlobal(var)
+function C:GetGlobal(var)
 	return self.Global[var]
 end
 
-function Chocobo:Msg(msg) -- Send a normal message
+function C:Msg(msg) -- Send a normal message
 	DEFAULT_CHAT_FRAME:AddMessage(L["MsgPrefix"] .. msg)
 end
 
-function Chocobo:ErrorMsg(msg) -- Send an error message, these are prefixed with the word "ERROR" in red
+function C:ErrorMsg(msg) -- Send an error message, these are prefixed with the word "ERROR" in red
 	DEFAULT_CHAT_FRAME:AddMessage(L["ErrorPrefix"] .. msg)
 end
 
-function Chocobo:DebugMsg(msg) -- Send a debug message, these are only sent when debugging is enabled and are prefixed by the word "Debug" in yellow
+function C:DebugMsg(msg) -- Send a debug message, these are only sent when debugging is enabled and are prefixed by the word "Debug" in yellow
 	if self.Global["DEBUG"] == true then
 		DEFAULT_CHAT_FRAME:AddMessage(L["DebugPrefix"] .. msg)
 	end
 end
 
-function Chocobo:GetVersion()
+function C:GetVersion()
 	return self.Version
 end
 
 -- Create the frame, no need for an XML file!
-Chocobo.Frame = CreateFrame("Frame")
-Chocobo.Frame:SetScript("OnEvent", function (frame, event, ...) Chocobo:OnEvent(frame, event, ...) end)
-for k,_ in pairs(Chocobo.Events) do
-	Chocobo.Frame:RegisterEvent(k)
+C.Frame = CreateFrame("Frame")
+C.Frame:SetScript("OnEvent", function (frame, event, ...) C:OnEvent(frame, event, ...) end)
+for k,_ in pairs(C.Events) do
+	C.Frame:RegisterEvent(k)
 end

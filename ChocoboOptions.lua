@@ -35,6 +35,7 @@ function Chocobo.Options:OnLoad(panel)
 	ChocoboOptions_MountPanel_RemoveMount:SetText(L["Options_Remove"])
 	ChocoboOptions_MountPanel_ResetMounts:SetText(L["Options_Reset"])
 	ChocoboOptions_MountPanel_ListMounts:SetText(L["Options_List"])
+	ChocoboOptions_PlainstriderToggleText:SetText(L["Options_PlainstriderToggle"])
 	ChocoboOptions_RavenLordToggleText:SetText(L["Options_RavenLordToggle"])
 end
 
@@ -61,11 +62,6 @@ function Chocobo.Options:Update()
 	ChocoboOptions_ToggleMount:SetText(MountState)
 	ChocoboOptions_ToggleDebug:SetText((L["Options_DebugState"]):format(dColor, DebugState))
 	ChocoboOptions_DescriptionLabel:SetText((L["Options_Description"]):format(Chocobo:GetVersion()))
+	ChocoboOptions_PlainstriderToggle:SetChecked(Chocobo.Global["PLAINSTRIDER"])
 	ChocoboOptions_RavenLordToggle:SetChecked(Chocobo.Global["RAVENLORD"])
-end
-
-function Chocobo.Options:HorseHelp(frame)
-	GameTooltip:SetOwner(frame, "ANCHOR_BOTTOMRIGHT")
-	GameTooltip:SetText(L["Options_HorseHelp"])
-	GameTooltip:Show()
 end
