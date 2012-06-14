@@ -1,18 +1,18 @@
 --[[
     Copyright (c) 2010-2011 by Adam Hellberg
-    
+
     This file is part of Chocobo.
-    
+
     Chocobo is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    
+
     Chocobo is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
-    
+
     You should have received a copy of the GNU General Public License
     along with Chocobo. If not, see <http://www.gnu.org/licenses/>.
 --]]
@@ -45,15 +45,24 @@ L["Event_UNIT_AURA"]		= "UNIT_AURA Event Detected (%s)"
 
 L["NotLoaded"]				= "Something is wrong, addon doesn't seem to have loaded correctly"
 
-L["PlayerIsMounted"]		= "Player is mounted"
-L["PlayerOnHawkstrider"]	= "Player is on a hawkstrider or CHOCOBO_ALLMOUNTS is set to true"
-L["PlayingMusic"]			= "Playing Music"
-L["PlayingSong"]			= "Playing song id |cff00CCFF%d|r (|cff00CCFF%s|r)"
-L["AlreadyMounted"]			= "Player was already mounted, song already playing"
-L["DisabledNotPlaying"] 	= "AddOn currently disabled, not playing music"
-L["NoHawkstrider"]			= "Player is not on a hawkstrider"
-L["NotMounted"]				= "Player not mounted, stopping music"
-L["CurrentMount"]			= "Found that %q is your current mount"
+L["PlayerIsMounted"]		    = "Player is mounted"
+L["PlayerOnHawkstrider"]	    = "Player is on a hawkstrider or CHOCOBO_ALLMOUNTS is set to true"
+L["PlayingMusic"]			    = "Playing Music"
+L["PlayingSong"]			    = "Playing song id |cff00CCFF%d|r (|cff00CCFF%s|r)"
+L["CustomNotDefined"]           = "Custom songs for |cff00CCFF%q|r have not been defined, aborting PlayMusic."
+L["CustomSongNotFound"]         = "Custom song for |cff00CCFF%q|r not found, aborting PlayMusic."
+L["AlreadyMounted"]			    = "Player was already mounted, song already playing"
+L["DisabledNotPlaying"] 	    = "AddOn currently disabled, not playing music"
+L["NoHawkstrider"]			    = "Player is not on a hawkstrider"
+L["NotMounted"]				    = "Player not mounted, stopping music"
+L["CurrentMount"]			    = "Found that %q is your current mount"
+L["AddCustomInvalidSong"]       = "No/Invalid song specified: |cff00CCFF%q|r"
+L["AddCustomInvalidMount"]      = "No/Invalid mount specified: |cff00CCFF%q|r"
+L["AddCustomExists"]            = "|cff00CCFF%q|r is already in the custom list for |cff00CCFF%s|r."
+L["AddCustomSuccess"]           = "Added |cff00CCFF%q|r to the custom list of |cff00CCFF%s|r!"
+L["RemoveCustomInvalidMount"]   = "Invalid mount name specified: %q."
+L["RemoveCustomNotExist"]       = "%q does not exist in the custom list."
+L["RemoveCustomSuccess"]        = "Successfully removed all custom songs from %q!"
 
 L["MusicListEmpty"]			= "The music list is empty"
 L["SongUpdated"]			= "Updated song with ID |cff00CCFF%d|r to path |cff00CCFF%q|r"
@@ -65,6 +74,10 @@ L["AddedSong"]				= "Added |cff00CCFF%s|r to the music list!"
 L["RemovedSong"]			= "Removed |cff00CCFF%s|r from the music list!"
 L["SongNotFound"]			= "Unable to find the specified song in list"
 L["ResetMusic"]				= "Resetting music list to DEFAULT"
+
+L["PrintMusicCustomStart"]  = "Custom music list:"
+L["PrintMusicCustomHeader"] = "Custom music for |cff00CCFF%s|r:"
+L["PrintMusicCustomSong"]   = "\t%s"
 
 L["MountListEmpty"]			= "The mount list is empty"
 L["NoMount"]				= "No mount specified"
@@ -132,6 +145,8 @@ L["AddSyntax"]				= "Syntax: add <name of song>"
 L["RemoveSyntax"]			= "Syntax: remove <name of song>"
 L["AddMountSyntax"]			= "Syntax: addmount <name or ID of mount>"
 L["RemoveMountSyntax"]		= "Syntax: removemount <name or ID of mount>"
+L["AddCustomSyntax"]        = "Syntax: addcustom \"<mount name>\" \"<song name>\""
+L["RemoveCustomSyntax"]     = "Syntax: removecustom <mount name>"
 L["SCSyntax1"]				= "Syntax: soundcontrol |cff00CCFFgui|r|||cff00CCFFtoggle|r|||cff00CCFFdefault|r"
 L["SCSyntax2"]				= "Syntax: soundcontrol |cff00CCFFmusic|r|||cff00CCFFsfx|r|||cff00CCFFambience|r |cff00CCFFtoggle|r|||cff00CCFFmount|r|||cff00CCFFnomount|r|||cff00CCFFvolume|r"
 L["HelpMessage1"]			= "Commands:"
@@ -211,6 +226,12 @@ L["SoundControl_AmbienceMount"]		= "Ambience enabled when mounted"
 L["SoundControl_AmbienceNoMount"]	= "Ambience enabled when not mounted"
 L["SoundControl_AmbienceVolume"]	= "Enable ambience volume control"
 L["SoundControl_AmbienceSetVolume"]	= "Set ambience volume to:"
+
+--[[Custom Song Panel Strings]]--
+L["CustomSongPanel_Description"]    = "Specify specific songs to be played for a mount, multiple songs can added per mount, just use the same mount name when adding more songs."
+L["CustomSongPanel_PanelDesc"]      = "Specify a song name to combine with a mount."
+L["CustomSongPanel_SongEditDefault"]    = "<Name of Song>"
+L["CustomSongPanel_MountEditDefault"]   = "<Name of Mount>"
 
 --[[Broker Plugin Strings]]--
 L["Broker_Text"]		= "Open Chocobo options"

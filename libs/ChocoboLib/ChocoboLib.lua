@@ -48,6 +48,14 @@ function ChocoboLib:InTable(tbl, val)
 	return false
 end
 
+function ChocoboLib:Count(tbl)
+	local c = 0
+	for k,v in pairs(tbl) do
+		c = c + 1
+	end
+	return c
+end
+
 --[[ChocoboLib Specific Functions]]--
 -- Buff/Aura functions
 

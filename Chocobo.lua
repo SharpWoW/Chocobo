@@ -1,23 +1,23 @@
 --[[
     Copyright (c) 2010-2011 by Adam Hellberg
-    
+
     This file is part of Chocobo.
-    
+
     Chocobo is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    
+
     Chocobo is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
-    
+
     You should have received a copy of the GNU General Public License
     along with Chocobo. If not, see <http://www.gnu.org/licenses/>.
 
 	------
-	
+
 	Chocobo AddOn
 	Dedicated to Shishu (Flurdy) on Azuremyst-EU
 --]]
@@ -123,19 +123,22 @@ function C.Events.ADDON_LOADED(self, ...)
 		self:Msg(L["NoMounts"])
 		self.Global["MOUNTS"] = {}
 	end
+	if not self.Global["CUSTOM"] then
+		self.Global["CUSTOM"] = {}
+	end
 	if not self.Global["ENABLED"] then
 		-- Should be fired on first launch, set the saved variable to default value
 		self:Msg(L["EnabledNotSet"])
 		self.Global["ENABLED"] = true
 	end
-	
+
 	self.SoundControl:Init()
 	self.SoundControl:Check()
-	
+
 	-- [NEW] Check all songs and convert out-of-date ones to new format
 	-- (Removing the Interface\\AddOns\\Chocobo\\music\\ part)
 	self:MusicCheck()
-	
+
 	self:Msg((L["AddOnLoaded"]):format(self.Version))
 	self:Msg(L["Enjoy"])
 	self.Loaded = true
@@ -180,7 +183,11 @@ function C:OnUpdate(_, elapsed)
 					self.SoundControl:Check() -- Enable sound if disabled and the option is enabled
 					self:DebugMsg(L["PlayingMusic"])
 					self.Mounted = true
-					self:PlayRandomMusic()
+					if self.Global["CUSTOM"][mountName:lower()] then
+						self:PlayRandomMusic(mountName)
+					else
+						self:PlayRandomMusic()
+					end
 				else -- If the player has already mounted
 					self:DebugMsg(L["AlreadyMounted"])
 				end
@@ -249,9 +256,24 @@ function C:MusicCheck()
 	end
 end
 
-function C:PlayMusic(song)
+-- If isMount is true, treat song as the mount name/ID
+function C:PlayMusic(song, isMount)
 	local songFile
-	if type(song) == "string" then
+	if isMount then
+		song = song:lower()
+		if self.Global["CUSTOM"][song] then
+			local id = math.random(1, #self.Global["CUSTOM"][song])
+			songFile = self.Global["CUSTOM"][song][id]
+			self:DebugMsg((L["PlayingSong"]):format(id, songFile))
+		else
+			self:ErrorMsg((L["CustomNotDefined"]):format(song))
+			return
+		end
+		if type(songFile) ~= "string" then
+			self:ErrorMsg((L["CustomSongNotFound"]):format(song))
+			return
+		end
+	elseif type(song) == "string" then
 		songFile = song
 	else
 		songFile = self.Global["MUSIC"][song]
@@ -265,8 +287,12 @@ function C:PlayMusic(song)
 	PlayMusic(songFile)
 end
 
-function C:PlayRandomMusic()
-	self:PlayMusic(math.random(1, #self.Global["MUSIC"]))
+function C:PlayRandomMusic(mount)
+	if mount then
+		self:PlayMusic(mount, true)
+	else
+		self:PlayMusic(math.random(1, #self.Global["MUSIC"]))
+	end
 end
 
 function C:AddMusic(songName) -- Add a song the the list
@@ -312,12 +338,61 @@ function C:RemoveMusic(songName) -- Remove a song from the list
 	return false
 end
 
+function C:AddCustomMusic(song, mount)
+	song = CLib:Trim(tostring(song))
+	mount = mount:lower()
+	if song == "" or type(song) ~= "string" then
+		self:ErrorMsg((L["AddCustomInvalidSong"]):format(tostring(song)))
+		return
+	elseif type(mount) ~= "string" then
+		self:ErrorMsg((L["AddCustomInvalidMount"]):format(tostring(mount)))
+	end
+	if self.Global["CUSTOM"][mount] then
+		if CLib:InTable(self.Global["CUSTOM"][mount], song) then
+			self:ErrorMsg((L["AddCustomExists"]):format(song, mount))
+			return
+		end
+		table.insert(self.Global["CUSTOM"][mount], song)
+		self:Msg((L["AddCustomSuccess"]):format(song, mount))
+	else
+		self.Global["CUSTOM"][mount] = {song}
+		self:Msg((L["AddCustomSuccess"]):format(song, mount))
+	end
+end
+
+function C:RemoveCustomMusic(mount)
+	mount = mount:lower()
+	if type(mount) ~= "string" then
+		self:ErrorMsg((L["RemoveCustomInvalidMount"]):format(tostring(mount)))
+	end
+	if self.Global["CUSTOM"][mount] then
+		wipe(self.Global["CUSTOM"][mount])
+		self.Global["CUSTOM"][mount] = nil
+		self:Msg((L["RemoveCustomSuccess"]):format(mount))
+	else
+		self:ErrorMsg((L["RemoveCustomNotExist"]):format(mount))
+	end
+end
+
 function C:PrintMusic() -- Print all the songs currently in list to chat
 	if #self.Global["MUSIC"] <= 0 then
 		self:Msg(L["MusicListEmpty"])
 	else
 		for i,v in ipairs(self.Global["MUSIC"]) do
 			self:Msg(("\124cff00CCFF%i: %s\124r"):format(i, v))
+		end
+	end
+
+	if CLib:Count(self.Global["CUSTOM"]) <= 0 then
+		return
+	end
+
+	self:Msg(L["PrintMusicCustomStart"])
+
+	for k,v in pairs(self.Global["CUSTOM"]) do
+		self:Msg((L["PrintMusicCustomHeader"]):format(k))
+		for _,s in pairs(v) do
+			self:Msg((L["PrintMusicCustomSong"]):format(s))
 		end
 	end
 end
@@ -356,7 +431,7 @@ function C:RemoveMount(mount)
 	end
 	mount = mount:lower()
 	for i,v in ipairs(self.Global["MOUNTS"]) do
-		if v:lower() == mount then 
+		if v:lower() == mount then
 			table.remove(self.Global["MOUNTS"], i)
 			self:Msg((L["RemovedMount"]):format(mount))
 			return

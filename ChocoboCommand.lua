@@ -29,6 +29,10 @@ local CC = C.Command
 local CLib = ChocoboLib
 local L = _G["ChocoboLocale"]
 
+local AddCustomPattern = "\"([%w%p%s]+)\" \"([%w%p%s]+)\""
+local AddCustomStart = "^\""
+local AddCustomEnd = "\"$"
+
 -- Argument #1 (command) can be either string or a table.
 function CC:Register(command, func)
 	if type(command) == "string" then
@@ -223,6 +227,37 @@ CC:Register({"remove", "rem", "delete", "del"}, function(args)
 	else
 		C:Msg(L["RemoveSyntax"])
 	end
+end)
+
+CC:Register({"addcustom", "addc", "ac"}, function(args)
+	if #args < 2 then
+		C:ErrorMsg(L["AddCustomSyntax"])
+		return
+	end
+	local arg = args[1]
+	for i=2,#args do
+		arg = arg .. " " .. args[i]
+	end
+	local mount, song = arg:match(AddCustomPattern)
+	if not mount or not song then
+		C:ErrorMsg(L["AddCustomSyntax"])
+		return
+	end
+	C:AddCustomMusic(song, mount)
+end)
+
+CC:Register({"removecustom", "removec", "remc", "rc"}, function(args)
+	if #args < 1 then
+		C:ErrorMsg(L["RemoveCustomSyntax"])
+		return
+	end
+	local arg = args[1]
+	if #args > 1 then
+		for i=2,#args do
+			arg = arg .. " " .. args[i]
+		end
+	end
+	C:RemoveCustomMusic(arg)
 end)
 
 CC:Register({"addmount", "addm"}, function(args)
