@@ -271,11 +271,18 @@ end
 -- If isMount is true, treat song as the mount name/ID
 function C:PlayMusic(song, isMount)
 	local songFile
+	local rawFileName -- Song file name without folder structure
 	if isMount then
 		song = song:lower()
 		if self.Global["CUSTOM"][song] then
 			local id = math.random(1, #self.Global["CUSTOM"][song])
 			songFile = self.Global["CUSTOM"][song][id]
+			if #self.Global["CUSTOM"][song] > 1 and self.Global["PREVENTDUPE"] and songFile == nowPlaying then
+				while songFile == nowPlaying do
+					id = math.random(1, #self.Global["CUSTOM"][song])
+					songFile = self.Global["CUSTOM"][song][id]
+				end
+			end
 			self:DebugMsg((L["PlayingSong"]):format(id, songFile))
 		else
 			self:ErrorMsg((L["CustomNotDefined"]):format(song))
@@ -293,9 +300,10 @@ function C:PlayMusic(song, isMount)
 			self:ErrorMsg(L["SongNotFound"])
 			return false
 		end
-		songFile = self.MusicDir .. songFile
 		self:DebugMsg((L["PlayingSong"]):format(song, songFile))
 	end
+	nowPlaying = songFile
+	songFile = self.MusicDir .. songFile
 	PlayMusic(songFile)
 end
 
