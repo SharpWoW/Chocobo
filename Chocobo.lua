@@ -183,7 +183,19 @@ function C:OnUpdate(_, elapsed)
 					self.SoundControl:Check() -- Enable sound if disabled and the option is enabled
 					self:DebugMsg(L["PlayingMusic"])
 					self.Mounted = true
-					if self.Global["CUSTOM"][mountName:lower()] then
+					if type(mountName) ~= "string" then -- Player mounted but mount is not recognised, check all buffs to find a match
+						local found = false
+						local index = 1
+						repeat
+							local name = (select(1, UnitAura("player", index)))
+							if self.Global["CUSTOM"][name:lower()] then
+								self:PlayRandomMusic(name)
+								found = true
+							end
+							index = index + 1
+						until found or index > 40
+						if not found then self:PlayRandomMusic() end
+					elseif self.Global["CUSTOM"][mountName:lower()] then
 						self:PlayRandomMusic(mountName)
 					else
 						self:PlayRandomMusic()
