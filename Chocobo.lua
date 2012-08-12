@@ -188,7 +188,7 @@ function C:OnUpdate(_, elapsed)
 						local index = 1
 						repeat
 							local name = (select(1, UnitAura("player", index)))
-							if self.Global["CUSTOM"][name:lower()] then
+							if type(name) == "string" and self.Global["CUSTOM"][name:lower()] then
 								self:PlayRandomMusic(name)
 								found = true
 							end
