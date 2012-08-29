@@ -1,18 +1,18 @@
 --[[
     Copyright (c) 2010-2011 by Adam Hellberg
-    
+
     This file is part of Chocobo.
-    
+
     Chocobo is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    
+
     Chocobo is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
-    
+
     You should have received a copy of the GNU General Public License
     along with Chocobo. If not, see <http://www.gnu.org/licenses/>.
 --]]
@@ -35,6 +35,7 @@ function Chocobo.Options:OnLoad(panel)
 	ChocoboOptions_MountPanel_RemoveMount:SetText(L["Options_Remove"])
 	ChocoboOptions_MountPanel_ResetMounts:SetText(L["Options_Reset"])
 	ChocoboOptions_MountPanel_ListMounts:SetText(L["Options_List"])
+	ChocoboOptions_PreventDupeToggleText:SetText(L["Options_PreventDupeToggle"])
 	ChocoboOptions_PlainstriderToggleText:SetText(L["Options_PlainstriderToggle"])
 	ChocoboOptions_RavenLordToggleText:SetText(L["Options_RavenLordToggle"])
 	ChocoboOptions_FlametalonToggleText:SetText(L["Options_FlametalonToggle"])
@@ -63,6 +64,7 @@ function Chocobo.Options:Update()
 	ChocoboOptions_ToggleMount:SetText(MountState)
 	ChocoboOptions_ToggleDebug:SetText((L["Options_DebugState"]):format(dColor, DebugState))
 	ChocoboOptions_DescriptionLabel:SetText((L["Options_Description"]):format(Chocobo:GetVersion()))
+	ChocoboOptions_PreventDupeToggle:SetChecked(Chocobo.Global["PREVENTDUPE"])
 	ChocoboOptions_PlainstriderToggle:SetChecked(Chocobo.Global["PLAINSTRIDER"])
 	ChocoboOptions_RavenLordToggle:SetChecked(Chocobo.Global["RAVENLORD"])
 	ChocoboOptions_FlametalonToggle:SetChecked(Chocobo.Global["FLAMETALON"])

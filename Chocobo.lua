@@ -79,6 +79,8 @@ local L = _G["ChocoboLocale"]
 assert(CLib, "Chocobo Lib not loaded")
 assert(L, "Chocobo Locales not loaded")
 
+local nowPlaying -- The current song playing, used when preventing the same song playing twice
+
 function C:OnEvent(frame, event, ...)
 	if self.Events[event] then self.Events[event](self, ...) end
 end
@@ -89,25 +91,25 @@ function C.Events.ADDON_LOADED(self, ...)
 	if addonName ~= "chocobo" or self.Loaded then return end
 	if type(_G["CHOCOBO"]) ~= "table" then _G["CHOCOBO"] = {} end
 	self.Global = _G["CHOCOBO"]
-	if not self.Global["DEBUG"] then
+	if type(self.Global["DEBUG"]) ~= "boolean" then
 		-- Should be fired on first launch, set the saved variable to default value
 		self:Msg(L["DebugNotSet"])
 		self.Global["DEBUG"] = false
 	end
-	if not self.Global["ALLMOUNTS"] then
+	if type(self.Global["ALLMOUNTS"]) ~= "boolean" then
 		-- Should be fired on first launch, set the saved variable to default value
 		self:Msg(L["AllMountsNotSet"])
 		self.Global["ALLMOUNTS"] = false
 	end
-	if not self.Global["PLAINSTRIDER"] then
+	if type(self.Global["PLAINSTRIDER"]) ~= "boolean" then
 		self:Msg(L["PlainstridersNotSet"])
 		self.Global["PLAINSTRIDER"] = true
 	end
-	if not self.Global["RAVENLORD"] then
+	if type(self.Global["RAVENLORD"]) ~= "boolean" then
 		self:Msg(L["RavenLordNotSet"])
 		self.Global["RAVENLORD"] = false
 	end
-	if not self.Global["FLAMETALON"] then
+	if type(self.Global["FLAMETALON"]) ~= "boolean" then
 		self:Msg(L["FlametalonNotSet"])
 		self.Global["FLAMETALON"] = false
 	end
@@ -119,6 +121,10 @@ function C.Events.ADDON_LOADED(self, ...)
 			self:AddMusic(v)
 		end
 	end
+	if type(self.Global["PREVENTDUPE"]) ~= "boolean" then
+		self:Msg(L["PreventDupeNotSet"])
+		self.Global["PREVENTDUPE"] = true
+	end
 	if not self.Global["MOUNTS"] then
 		self:Msg(L["NoMounts"])
 		self.Global["MOUNTS"] = {}
@@ -126,7 +132,7 @@ function C.Events.ADDON_LOADED(self, ...)
 	if not self.Global["CUSTOM"] then
 		self.Global["CUSTOM"] = {}
 	end
-	if not self.Global["ENABLED"] then
+	if type(self.Global["ENABLED"]) ~= "boolean" then
 		-- Should be fired on first launch, set the saved variable to default value
 		self:Msg(L["EnabledNotSet"])
 		self.Global["ENABLED"] = true
@@ -311,7 +317,15 @@ function C:PlayRandomMusic(mount)
 	if mount then
 		self:PlayMusic(mount, true)
 	else
-		self:PlayMusic(math.random(1, #self.Global["MUSIC"]))
+		local id = math.random(1, #self.Global["MUSIC"])
+		if self.Global["PREVENTDUPE"] and #self.Global["MUSIC"] > 1 then
+			local name = self.Global["MUSIC"][id]
+			while name == nowPlaying do
+				id = math.random(1, #self.Global["MUSIC"])
+				name = self.Global["MUSIC"][id]
+			end
+		end
+		self:PlayMusic(id)
 	end
 end
 
@@ -545,6 +559,16 @@ function C:Toggle(silent) -- Toggle the AddOn on and off
 	else -- If the addon is disabled
 		self.Global["ENABLED"] = true -- Enable it
 		if not silent then self:Msg(L["AddOnEnabled"]) end -- Print status
+	end
+end
+
+function C:PreventDupeToggle(silent)
+	if self.Global["PREVENTDUPE"] then
+		self.Global["PREVENTDUPE"] = false
+		if not silent then self:Msg(L["PreventDupeDisabled"]) end
+	else
+		self.Global["PREVENTDUPE"] = true
+		if not silent then self:Msg(L["PreventDupeEnabled"]) end
 	end
 end
 

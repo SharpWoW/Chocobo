@@ -1,18 +1,18 @@
 <!--
     Copyright (c) 2010-2011 by Adam Hellberg
-    
+
     This file is part of Chocobo.
-    
+
     Chocobo is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    
+
     Chocobo is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
-    
+
     You should have received a copy of the GNU General Public License
     along with Chocobo. If not, see <http://www.gnu.org/licenses/>.
 -->
@@ -382,14 +382,29 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 				<OnClick>Chocobo:Toggle(true); Chocobo.Options:Update();</OnClick>
 			</Scripts>
 		</Button>
-		<CheckButton name="$parent_PlainstriderToggle" inherits="OptionsCheckButtonTemplate">
+		<CheckButton name="$parent_PreventDupeToggle" inherits="OptionsCheckButtonTemplate">
 			<Size>
 				<AbsDimension x="40" y="40" />
 			</Size>
 			<Anchors>
 				<Anchor point="BOTTOMLEFT">
 					<Offset>
-						<AbsDimension x="20" y="90" />
+						<AbsDimension x="20" y="140" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Scripts>
+				<OnClick>Chocobo:PreventDupeToggle(true); Chocobo.Options:Update();</OnClick>
+			</Scripts>
+		</CheckButton>
+		<CheckButton name="$parent_PlainstriderToggle" inherits="OptionsCheckButtonTemplate">
+			<Size>
+				<AbsDimension x="40" y="40" />
+			</Size>
+			<Anchors>
+				<Anchor point="BOTTOMLEFT" relativeTo="$parent_PreventDupeToggle">
+					<Offset>
+						<AbsDimension x="0" y="-40" />
 					</Offset>
 				</Anchor>
 			</Anchors>
