@@ -92,6 +92,7 @@ CC:Register({"hawkstrider", "hs", "hawk"}, function(args) C:FilterMount(true) en
 CC:Register({"modetoggle", "mounttoggle", "mt"}, function(args) C:FilterMount() end)
 CC:Register({"toggle", "t"}, function(args) C:Toggle() end)
 CC:Register({"plainstridertoggle", "plainstrider", "plainstriders", "ps"}, function(args) C:PlainstriderToggle() end)
+CC:Register({"ridingcranetoggle", "ridingcrane", "ridingcranes", "rc"}, function(args) C:RidingCraneToggle() end)
 CC:Register({"ravenlordtoggle", "ravenlord", "rl"}, function(args) C:RavenLordToggle() end)
 CC:Register({"flametalontoggle", "flametalon", "flame", "alysrazor", "alys"}, function(args) C:FlametalonToggle() end)
 CC:Register({"preventdupetoggle", "pdtoggle", "pdt"}, function(args) C:PreventDupeToggle() end)

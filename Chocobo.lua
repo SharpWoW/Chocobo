@@ -59,6 +59,11 @@ Chocobo = {
 			101573, -- Swift Shorestrider
 			102349  -- Swift Springtrider
 		},
+		RidingCranes = {
+			127174, -- Azure Riding Crane
+			127176, -- Golden Riding Crane
+			127177  -- Regal Riding Crane
+		},
 		RavenLord = {41252}, -- Raven Lord (If enabled in options)
 		Flametalon = {101542}, -- Flametalon of Alysrazor (Fire version of Raven Lord)
 		DruidForms = {33943, 40120} -- When AllMounts is enabled
@@ -104,6 +109,10 @@ function C.Events.ADDON_LOADED(self, ...)
 	if type(self.Global["PLAINSTRIDER"]) ~= "boolean" then
 		self:Msg(L["PlainstridersNotSet"])
 		self.Global["PLAINSTRIDER"] = true
+	end
+	if type(self.Global["RIDINGCRANE"]) ~= "boolean" then
+		self:Msg(L["RidingCranesNotSet"])
+		self.Global["RIDINGCRANE"] = true
 	end
 	if type(self.Global["RAVENLORD"]) ~= "boolean" then
 		self:Msg(L["RavenLordNotSet"])
@@ -225,31 +234,36 @@ end
 function C:HasMount()
 	local mountColl = {}
 	for _,v in pairs(self.IDs.Hawkstriders) do
-		table.insert(mountColl, v)
+		mountColl[#mountColl + 1] = v
 	end
 	if self.Global["PLAINSTRIDER"] then
 		for _,v in pairs(self.IDs.Plainstriders) do
-			table.insert(mountColl, v)
+			mountColl[#mountColl + 1] = v
+		end
+	end
+	if self.Global["RIDINGCRANE"] then
+		for _,v in pairs(self.IDs.RidingCranes) do
+			mountColl[#mountColl + 1] = v
 		end
 	end
 	if self.Global["RAVENLORD"] then
 		for _,v in pairs(self.IDs.RavenLord) do
-			table.insert(mountColl, v)
+			mountColl[#mountColl + 1] = v
 		end
 	end
 	if self.Global["FLAMETALON"] then
 		for _,v in pairs(self.IDs.Flametalon) do
-			table.insert(mountColl, v)
+			mountColl[#mountColl + 1] = v
 		end
 	end
 	if self.Global["ALLMOUNTS"] then -- Add druid flight forms
 		for _,v in pairs(self.IDs.DruidForms) do
-			table.insert(mountColl, v)
+			mountColl[#mountColl + 1] = v
 		end
 	end
 	if #self.Global["MOUNTS"] > 0 then
 		for _,v in pairs(self.Global["MOUNTS"]) do
-			table.insert(mountColl, v) -- Can be both a string and a number value
+			mountColl[#mountColl + 1] = v -- Can be both a string and a number value
 		end
 	end
 	return CLib:HasBuff(mountColl)
@@ -528,6 +542,16 @@ function C:PlainstriderToggle(silent)
 		self:Msg(L["PlainstriderTrue"])
 	else
 		self:Msg(L["PlainstriderFalse"])
+	end
+end
+
+function C:RidingCraneToggle(silent)
+	self.Global["RIDINGCRANE"] = not self.Global["RIDINGCRANE"]
+	if silent then return end
+	if self.Global["RIDINGCRANE"] then
+		self:Msg(L["RidingCranesTrue"])
+	else
+		self:Msg(L["RidingCranesFalse"])
 	end
 end
 

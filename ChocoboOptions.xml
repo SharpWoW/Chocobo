@@ -389,7 +389,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 			<Anchors>
 				<Anchor point="BOTTOMLEFT">
 					<Offset>
-						<AbsDimension x="20" y="140" />
+						<AbsDimension x="20" y="160" />
 					</Offset>
 				</Anchor>
 			</Anchors>
@@ -440,6 +440,21 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 			</Anchors>
 			<Scripts>
 				<OnClick>Chocobo:FlametalonToggle(true); Chocobo.Options:Update();</OnClick>
+			</Scripts>
+		</CheckButton>
+		<CheckButton name="$parent_RidingCraneToggle" inherits="OptionsCheckButtonTemplate">
+			<Size>
+				<AbsDimension x="40" y="40" />
+			</Size>
+			<Anchors>
+				<Anchor point="BOTTOMLEFT" relativeTo="$parent_FlametalonToggle">
+					<Offset>
+						<AbsDimension x="0" y="-40" />
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Scripts>
+				<OnClick>Chocobo:RidingCraneToggle(true); Chocobo.Options:Update();</OnClick>
 			</Scripts>
 		</CheckButton>
 	</Frames>
