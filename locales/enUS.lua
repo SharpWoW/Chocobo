@@ -79,7 +79,7 @@ L["ResetMusic"]				= "Resetting music list to DEFAULT"
 
 L["PrintMusicCustomStart"]  = "Custom music list:"
 L["PrintMusicCustomHeader"] = "Custom music for |cff00CCFF%s|r:"
-L["PrintMusicCustomSong"]   = "\t%s"
+L["PrintMusicCustomSong"]   = "%s"
 
 L["MountListEmpty"]			= "The mount list is empty"
 L["NoMount"]				= "No mount specified"
