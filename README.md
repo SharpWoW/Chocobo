@@ -19,7 +19,7 @@ Some commands have more details about them in the sections below.
  * **/chocobo toggle** - Toggle the AddOn on or off, will stop music if it's currently playing.
  * **/chocobo debug [enable|disable]** - Enable or disable debugging, calling with no argument shows current debug status.
  * **/chocobo add &lt;name of song&gt;** - Add a song.
- * **/chocobo remove &lt:name of song&gt;** - Remove a song.
+ * **/chocobo remove &lt;name of song&gt;** - Remove a song.
  * **/chocobo list** - List songs.
  * **/chocobo reset** - Reset song list to default.
  * **/chocobo addmount &lt;name or ID of mount&gt;** - Add a mount.
@@ -78,8 +78,8 @@ Adding your own mounts
 Feel like you want the addon to play on some additional mounts but not every single one? Well in Chocobo 2.14 it's possible!
 When the AddOn is in "Hawkstrider Only" mode, in addition to the Hawkstriders, it will also play music if you mount on any of the mounts added in the list of user-defined mounts.
 
-To add a mount to the list, type **/chocobo addmount &lt:name or ID of mount&gt;**.
-To remove it, type **/chocobo removemount &lt:name or ID of mount&gt;**.
+To add a mount to the list, type **/chocobo addmount &lt;name or ID of mount&gt;**.
+To remove it, type **/chocobo removemount &lt;name or ID of mount&gt;**.
 To list all mounts in the list, type **/chocobo listmounts**.
 To reset the list to default (empty), type **/chocobo resetmounts**.
 
