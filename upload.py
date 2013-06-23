@@ -191,7 +191,8 @@ for line in toc_handle.readlines():
             version = value
 
 game_version_id, game_version = get_game_version(interface)
-assert game_version != None, "{0}: get_game_version('{1}') returned None!".format(SCRIPT, interface)
+assert game_version_id != None, "{0}: get_game_version('{1}') returned None for id!".format(SCRIPT, interface)
+assert game_version != None, "{0}: get_game_version('{1}') returned None for version!".format(SCRIPT, interface)
 
 ver_type = None
 
@@ -216,4 +217,4 @@ make_zip('.', zipname)
 
 slug = toc_data['X-Project-Slug']
 
-upload_zip(zipname, friendly_version_name, slug, game_version_id, ver_type)
+#upload_zip(zipname, friendly_version_name, slug, game_version_id, ver_type)
