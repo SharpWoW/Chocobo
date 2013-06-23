@@ -226,3 +226,16 @@ make_zip('.', zipname)
 slug = toc_data['X-Project-Slug']
 
 upload_zip(zipname, friendly_version_name, slug, game_version_id, ver_type)
+
+if ver_type == 'r':
+    print "{0}: writing WoWI config to build/wowi_config".format(SCRIPT)
+    wl = open('wowisetup', 'r')
+    f = open('build/wowi', 'w')
+    f.write("{0} -skip -ver {1} -zip {2}".format(wl.read().strip(), friendly_version_name, zipname))
+    f.close()
+    wl.close()
+    print "{0}: SUCCESS! Version written to build/version".format(SCRIPT)
+elif os.path.isfile('build/wowi'):
+    print "{0}: not release, removing wowi file".format(SCRIPT)
+    os.unlink('build/wowi')
+    print "{0}: SUCCESS! wowi file removed".format(SCRIPT)
