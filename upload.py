@@ -82,8 +82,10 @@ def get_game_version(interface_version):
     response = conn.getresponse()
     assert response.status == 200, "/game-versions.json returned invalid response code"
     assert response.getheader('Content-Type') == 'application/json', "/game-versions.json returned invalid content type"
+    print "{0}: get_game_version: CurseForge responded with status code {1}".format(SCRIPT, response.status)
     data = json.load(response)
     for game_version in data:
+        print "{0}: reading game version {1}".format(SCRIPT, game_version)
         if data[game_version]['internal_id'] == interface_version:
             return game_version, data[game_version]
     return None, None
