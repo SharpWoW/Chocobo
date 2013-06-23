@@ -76,9 +76,8 @@ def is_file_ignored(file):
     return False
 
 def get_game_version(interface_version):
-    interface_version = str(interface_version)
+    interface_version = int(interface_version)
     print "{0}: querying CurseForge for info about interface version {1}".format(SCRIPT, interface_version)
-    print "{0}: type of arg: {1}".format(SCRIPT, type(interface_version))
     conn = HTTPConnection('wow.curseforge.com')
     conn.request('GET', '/game-versions.json')
     response = conn.getresponse()
@@ -86,12 +85,12 @@ def get_game_version(interface_version):
     assert response.getheader('Content-Type') == 'application/json', "/game-versions.json returned invalid content type"
     print "{0}: get_game_version: CurseForge responded with status code {1}".format(SCRIPT, response.status)
     data = json.load(response)
-    for version_id in data:
-        version = data[version_id]
-        version['internal_id'] = str(version['internal_id'])
-        print "{0}: reading game version {1} with internal id {2}".format(SCRIPT, version_id, version['internal_id'])
-        if version['internal_id'] == interface_version:
-            return version_id, version
+    for i in data:
+        ver = data[i]
+        internal_id = int(ver['internal_id'])
+        print "{0}: reading game version {1} with internal id {2}".format(SCRIPT, i, internal_id)
+        if internal_id == interface_version:
+            return i, ver
     return None, None
 
 def make_zip(src, dst):
