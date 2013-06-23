@@ -24,8 +24,8 @@ name = None
 build = None
 
 try:
-    name = str(sys.argv[1])
-    build = int(sys.argv[2])
+    name = str(sys.argv[1]).strip()
+    build = int(sys.argv[2].strip())
 except ValueError:
     print "{0}: expected build number argument of type integer".format(SCRIPT)
     sys.exit(1)
@@ -171,8 +171,10 @@ def upload_zip(zip, ver_name, slug, game_ver_id, ver_type):
         for key, items in errors.iteritems():
             for item in items:
                 print "{0}:      {1}: {2}".format(SCRIPT, key, item)
+        sys.exit(1)
     else:
         print "{0}: ERROR: Unknown error while uploading {1}: {2} ({3})".format(SCRIPT, zip, response.status, response.reason)
+        sys.exit(1)
 
 toc_regex = re.compile(r"^## ([\w\d\-]+): (.*)$", re.I)
 a_regex = re.compile(r"^\d+\.\d+\.\d+\-alpha$")
@@ -188,8 +190,8 @@ version = None
 for line in toc_handle.readlines():
     match = toc_regex.match(line)
     if match:
-        key = match.group(1)
-        value = match.group(2)
+        key = match.group(1).strip()
+        value = match.group(2).strip()
         toc_data[key] = value
         if key == 'Interface':
             interface = value
