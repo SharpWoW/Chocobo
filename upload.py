@@ -76,16 +76,17 @@ def is_file_ignored(file):
     return False
 
 def get_game_version(interface_version):
+    print "{0}: querying CurseForge for info about interface version {1}".format(SCRIPT, interface_version)
     conn = HTTPConnection('wow.curseforge.com')
     conn.request('GET', '/game-versions.json')
     response = conn.getresponse()
-    assert response.status == 200, "{0}: {1} ({2}) from /game-versions.json".format(SCRIPT, response.status, response.reason)
-    assert response.getheader('Content-Type') == 'application/json', "{0}: /game-versions.json returned invalid content type".format(SCRIPT)
+    assert response.status == 200, "/game-versions.json returned invalid response code"
+    assert response.getheader('Content-Type') == 'application/json', "/game-versions.json returned invalid content type"
     data = json.load(response)
     for game_version in data:
         if data[game_version]['internal_id'] == interface_version:
             return game_version, data[game_version]
-    return None
+    return None, None
 
 def make_zip(src, dst):
     ignored.append(dst)
@@ -191,8 +192,8 @@ for line in toc_handle.readlines():
             version = value
 
 game_version_id, game_version = get_game_version(interface)
-assert game_version_id != None, "{0}: get_game_version('{1}') returned None for id!".format(SCRIPT, interface)
-assert game_version != None, "{0}: get_game_version('{1}') returned None for version!".format(SCRIPT, interface)
+assert game_version_id != None, "get_game_version returned None for id!"
+assert game_version != None, "get_game_version returned None for version!"
 
 ver_type = None
 
@@ -217,4 +218,4 @@ make_zip('.', zipname)
 
 slug = toc_data['X-Project-Slug']
 
-#upload_zip(zipname, friendly_version_name, slug, game_version_id, ver_type)
+upload_zip(zipname, friendly_version_name, slug, game_version_id, ver_type)
