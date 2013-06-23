@@ -1,9 +1,10 @@
 ## Interface: 50300
-## Version: @project-version@
+## Version: 4.3.0
 ## Title: Chocobo
 ## Notes: Plays the Chocobo song when you mount on a hawkstrider! |cffFF0000Version @project-version@|r |cff00CCFFBy F16Gaming|r
 ## Author: F16Gaming
 ## SavedVariables: CHOCOBO
+## X-Project-Slug: chocobo
 
 #@no-lib-strip@
 libs\LibStub\LibStub.lua

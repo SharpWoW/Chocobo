@@ -1,5 +1,8 @@
 *.png
 *.psd
 *.jpg
+*.zip
 /images/chocobo_2.tga
 /music/chocarena.mp3
+/cfapikey
+/build
