@@ -49,8 +49,12 @@ print "{0}: Build directory cleanup completed!".format(SCRIPT)
 ignored = ['/.*', SCRIPT]
 
 try:
-    for line in open('.gitignore').read().splitlines():
-        ignored.append(line)
+    if os.path.isfile('.gitignore'):
+        print "Reading ignore rules from .gitignore file"
+        for line in open('.gitignore').read().splitlines():
+            ignored.append(line)
+    else:
+        print ".gitignore not found, skipping"
 except Exception, e:
     print "{0}: failed to read .gitignore: {1}".format(SCRIPT, e)
 
