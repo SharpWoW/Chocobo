@@ -1,4 +1,4 @@
-## Interface: 50400
+## Interface: 60000
 ## Version: 4.3.1
 ## Title: Chocobo
 ## Notes: Plays the Chocobo song when you mount on a hawkstrider! |cffFF0000Version @project-version@|r |cff00CCFFBy F16Gaming|r
