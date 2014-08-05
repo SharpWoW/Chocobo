@@ -76,8 +76,6 @@ local C = Chocobo
 if C.Version == "@".."project-version".."@" then C.Version = "Development" end
 --@end-debug@
 
-local t = 0
-
 local CLib = ChocoboLib
 local L = _G["ChocoboLocale"]
 
@@ -168,10 +166,9 @@ function C.Events.UNIT_AURA(self, ...)
 		self:ErrorMsg(L["NotLoaded"])
 		return
 	end
-	if self.Running then return end -- Return if the OnUpdate script is already running.
+	if self.Running then return end -- Return if the timer is already running.
 	self.Running = true
-	t = 0
-	self.Frame:SetScript("OnUpdate", function (_, elapsed) Chocobo:OnUpdate(_, elapsed) end)
+	C_Timer.After(1, function() self:CheckMount() end)
 end
 
 function C.Events.PLAYER_LOGOUT(self, ...)
@@ -180,55 +177,49 @@ function C.Events.PLAYER_LOGOUT(self, ...)
 	_G["CHOCOBO"] = self.Global
 end
 
-function C:OnUpdate(_, elapsed)
-	t = t + elapsed
-	-- When 1 second has elapsed, this is because it takes ~0.5 secs from the event detection for IsMounted() to return true.
-	if t >= 1 then
-		-- Unregister the OnUpdate script
-		self.Frame:SetScript("OnUpdate", nil)
-		local mounted, mountName, mountID = self:HasMount() -- Get mounted status and name of mount (if mounted)
-		if IsMounted() or mounted then -- More efficient way to make it also detect flight form here?
-			if mountName then self:DebugMsg((L["CurrentMount"]):format(mountName)) end -- Print what mount the player is mounted on
-			self:DebugMsg(L["PlayerIsMounted"]) -- Print that the player is mounted
-			-- TODO: Redundant to have both the above messages? Remove the second?
-			-- Proceed if player is on one of the activated mounts or if allmounts (override) is true
-			if mounted or self.Global["ALLMOUNTS"] then
-				self:DebugMsg(L["PlayerOnHawkstrider"])
-				if not self.Mounted then -- Check so that the player is not already mounted
-					self.SoundControl:Check() -- Enable sound if disabled and the option is enabled
-					self:DebugMsg(L["PlayingMusic"])
-					self.Mounted = true
-					if type(mountName) ~= "string" then -- Player mounted but mount is not recognised, check all buffs to find a match
-						local found = false
-						local index = 1
-						repeat
-							local name = (select(1, UnitAura("player", index)))
-							if type(name) == "string" and self.Global["CUSTOM"][name:lower()] then
-								self:PlayRandomMusic(name)
-								found = true
-							end
-							index = index + 1
-						until found or index > 40
-						if not found then self:PlayRandomMusic() end
-					elseif self.Global["CUSTOM"][mountName:lower()] then
-						self:PlayRandomMusic(mountName)
-					else
-						self:PlayRandomMusic()
-					end
-				else -- If the player has already mounted
-					self:DebugMsg(L["AlreadyMounted"])
+function C:CheckMount()
+	local mounted, mountName, mountID = self:HasMount() -- Get mounted status and name of mount (if mounted)
+	if IsMounted() or mounted then -- More efficient way to make it also detect flight form here?
+		if mountName then self:DebugMsg((L["CurrentMount"]):format(mountName)) end -- Print what mount the player is mounted on
+		self:DebugMsg(L["PlayerIsMounted"]) -- Print that the player is mounted
+		-- TODO: Redundant to have both the above messages? Remove the second?
+		-- Proceed if player is on one of the activated mounts or if allmounts (override) is true
+		if mounted or self.Global["ALLMOUNTS"] then
+			self:DebugMsg(L["PlayerOnHawkstrider"])
+			if not self.Mounted then -- Check so that the player is not already mounted
+				self.SoundControl:Check() -- Enable sound if disabled and the option is enabled
+				self:DebugMsg(L["PlayingMusic"])
+				self.Mounted = true
+				if type(mountName) ~= "string" then -- Player mounted but mount is not recognised, check all buffs to find a match
+					local found = false
+					local index = 1
+					repeat
+						local name = (select(1, UnitAura("player", index)))
+						if type(name) == "string" and self.Global["CUSTOM"][name:lower()] then
+							self:PlayRandomMusic(name)
+							found = true
+						end
+						index = index + 1
+					until found or index > 40
+					if not found then self:PlayRandomMusic() end
+				elseif self.Global["CUSTOM"][mountName:lower()] then
+					self:PlayRandomMusic(mountName)
+				else
+					self:PlayRandomMusic()
 				end
-			else -- Player is not on a hawkstrider
-				self:DebugMsg(L["NoHawkstrider"])
+			else -- If the player has already mounted
+				self:DebugMsg(L["AlreadyMounted"])
 			end
-		elseif self.Mounted then -- When the player has dismounted
-			self.SoundControl:Check() -- Disable sound if enabled and the option is enabled
-			self:DebugMsg(L["NotMounted"])
-			self.Mounted = false
-			StopMusic() -- Note that StopMusic() will also stop any other custom music playing (such as from EpicMusicPlayer)
+		else -- Player is not on a hawkstrider
+			self:DebugMsg(L["NoHawkstrider"])
 		end
-		self.Running = false
+	elseif self.Mounted then -- When the player has dismounted
+		self.SoundControl:Check() -- Disable sound if enabled and the option is enabled
+		self:DebugMsg(L["NotMounted"])
+		self.Mounted = false
+		StopMusic() -- Note that StopMusic() will also stop any other custom music playing (such as from EpicMusicPlayer)
 	end
+	self.Running = false
 end
 
 function C:HasMount()
