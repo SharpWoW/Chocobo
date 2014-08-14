@@ -169,7 +169,7 @@ function C.Events.ADDON_LOADED(self, ...)
 end
 
 function C.Events.UNIT_AURA(self)
-	if not self.Global["ENABLED"] then return end -- Return if addon is disabled or player was unaffected
+	if not self.Global["ENABLED"] then return end -- Return if addon is disabled
 	self:DebugMsg((L["Event_UNIT_AURA"]):format("player"))
 	if self.Loaded == false then
 		-- This should NOT happen
