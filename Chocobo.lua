@@ -641,6 +641,6 @@ end
 
 for _, section in pairs(C.Mounts) do
 	for id, _ in pairs(section) do
-		tbl[id] = GetSpellInfo(id)
+		section[id] = GetSpellInfo(id)
 	end
 end
