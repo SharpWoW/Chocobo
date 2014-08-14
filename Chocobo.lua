@@ -187,7 +187,6 @@ function C.Events.PLAYER_LOGOUT(self, ...)
 	_G["CHOCOBO"] = self.Global
 end
 
-<<<<<<< HEAD
 function C:CheckMount()
 	local mounted, mountName, mountID = self:HasMount() -- Get mounted status and name of mount (if mounted)
 	if IsMounted() or mounted then -- More efficient way to make it also detect flight form here?
