@@ -59,12 +59,22 @@ end
 --[[ChocoboLib Specific Functions]]--
 -- Buff/Aura functions
 
+local function GetBuffs()
+	local buffs = {}
+	for i=1,40 do -- Loop through all 40 possible buff indexes
+		local name,_,_,_,_,_,_,_,_,_,id = UnitBuff("player", i, nil, "PLAYER CANCELABLE") -- Get buff on index i
+		-- Insert it into the buffs table, break if buff is nil (that means no other buffs exist on the player)
+		if name and id then buffs[name] = id else break end
+	end
+	return buffs
+end
+
 -- ChocoboLib:HasBuff
---- Argument #1: [table] containing numeric buff IDs to check
+--- Argument #1: [table] containing numeric buff IDs or names to check
 --- Overload #1.1: [number] ID of buff to check
 --- Overload #1.2: [string] name of buff to check
 --- RETURNS: false if the buff wasn't found, true, id of buff and name of buff if buff was found
-function ChocoboLib:HasBuff(idColl) -- idColl is either a number or a table with IDs
+function ChocoboLib:HasBuff(idColl) -- idColl is either a number or a table with IDs or buff names
 	-- TODO: Implement ability to pass IDs as varargs (1, 2, 3, 4, 5, ...)
 	if type(idColl) == "number" then
 		return self:HasBuff({idColl})
@@ -74,24 +84,21 @@ function ChocoboLib:HasBuff(idColl) -- idColl is either a number or a table with
 		error("Argument #1 must be of type 'table', 'number' or 'string'.") -- Localize error?
 		return false -- Just in case the error() did not cause it to exit, for whatever reason.
 	end
-	local buffs = {}
-	for i=1,40 do -- Loop through all 40 possible buff indexes
-		local name,_,_,_,_,_,_,_,_,_,id = UnitAura("player", i) -- Get buff on index i
-		-- Insert it into the buffs table, break if buff is nil (that means no other buffs exist on the player)
-		if name and id then buffs[name] = id else break end
-	end
-	for name,id in pairs(buffs) do -- Loop through all buffs found
-		for _,v in pairs(idColl) do -- Loop through all supplied IDs
-			if type(v) == "number" then -- Check if the value is a number
-				if id == v then -- Check if ID equals current buff ID and return true if it does
-					return true, (name or "<No Name>"), (id or 0)
-				end
-			elseif type(v) == "string" then -- Check if the value is a string
-				if name:lower() == v:lower() then -- Check if name equals current buff name and return true if it does
-					return true, (name or "<No Name>"), (id or 0)
-				end
+
+	local buffs
+
+	for _, value in pairs(idColl) do
+		local vType = type(value)
+		if vType == "string" then -- Check for buff using name
+			local name, _, _, _, _, _, _, _, _, _, id = UnitBuff("player", value, nil, "PLAYER CANCELABLE")
+			if name == value then return true, name, id or 0 end
+		elseif vType == "number" then -- Check using ID
+			buffs = buffs or GetBuffs()
+			for name, id in buffs do
+				if id == value then return true, name or "<No Name>", id end
 			end
 		end
 	end
+	
 	return false -- Else return false (Player does not have the buff)
 end
