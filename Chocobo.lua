@@ -38,35 +38,46 @@ Chocobo = {
 		"chocobo_ffxii.mp3",
 		"chocobo_ffxiii.mp3"
 	},
-	IDs	= {
+
+	-- Values are overridden later with the return from GetSpellInfo
+	-- The ones specified here are just placeholders and to help
+	-- identify IDs during development
+	Mounts = {
 		Hawkstriders = {
-			35022, -- Black Hawkstrider
-			35020, -- Blue Hawkstrider
-			35018, -- Purple Hawkstrider
-			34795, -- Red Hawkstrider
-			63642, -- Silvermoon Hawkstrider
-			66091, -- Sunreaver Hawkstrider
-			35025, -- Swift Green Hawkstrider
-			33660, -- Swift Pink Hawkstrider
-			35027, -- Swift Purple Hawkstrider
-			65639, -- Swift Red Hawkstrider
-			35028, -- Swift Warstrider (Thanks Khormin for pointing it out)
-			46628  -- Swift White Hawkstrider
+			[35022] = "Black Hawkstrider",
+			[35020] = "Blue Hawkstrider",
+			[35018] = "Purple Hawkstrider",
+			[34795] = "Red Hawkstrider",
+			[63642] = "Silvermoon Hawkstrider",
+			[66091] = "Sunreaver Hawkstrider",
+			[35025] = "Swift Green Hawkstrider",
+			[33660] = "Swift Pink Hawkstrider",
+			[35027] = "Swift Purple Hawkstrider",
+			[65639] = "Swift Red Hawkstrider",
+			[35028] = "Swift Warstrider", -- (Thanks Khormin for pointing it out)
+			[46628] = "Swift White Hawkstrider"
 		},
 		Plainstriders = {
-			102346, -- Swift Forest Strider
-			102350, -- Swift Lovebird
-			101573, -- Swift Shorestrider
-			102349  -- Swift Springtrider
+			[102346] = "Swift Forest Strider",
+			[102350] = "Swift Lovebird",
+			[101573] = "Swift Shorestrider",
+			[102349] = "Swift Springtrider"
 		},
 		RidingCranes = {
-			127174, -- Azure Riding Crane
-			127176, -- Golden Riding Crane
-			127177  -- Regal Riding Crane
+			[127174] = "Azure Riding Crane",
+			[127176] = "Golden Riding Crane",
+			[127177] = "Regal Riding Crane"
 		},
-		RavenLord = {41252}, -- Raven Lord (If enabled in options)
-		Flametalon = {101542}, -- Flametalon of Alysrazor (Fire version of Raven Lord)
-		DruidForms = {33943, 40120} -- When AllMounts is enabled
+		RavenLord = {
+			[41252] = "Raven Lord" -- (If enabled in options)
+		},
+		Flametalon = {
+			[101542] = "Flametalon of Alysrazor" -- (Fire version of Raven Lord)
+		},
+		DruidForms = { -- When AllMounts is enabled
+			[33943] = "Flight form",
+			[40120] = "Swift Flight Form"
+		}
 	}
 }
 
@@ -159,10 +170,9 @@ function C.Events.ADDON_LOADED(self, ...)
 	self.Loaded = true
 end
 
-function C.Events.UNIT_AURA(self, ...)
-	local unitName = (select(1, ...)):lower()
-	if unitName ~= "player" or not self.Global["ENABLED"] then return end -- Return if addon is disabled or player was unaffected
-	self:DebugMsg((L["Event_UNIT_AURA"]):format(unitName))
+function C.Events.UNIT_AURA(self)
+	if not self.Global["ENABLED"] then return end -- Return if addon is disabled or player was unaffected
+	self:DebugMsg((L["Event_UNIT_AURA"]):format("player"))
 	if self.Loaded == false then
 		-- This should NOT happen
 		self:ErrorMsg(L["NotLoaded"])
@@ -202,8 +212,9 @@ function C:OnUpdate(_, elapsed)
 						local found = false
 						local index = 1
 						repeat
-							local name = (select(1, UnitAura("player", index)))
-							if type(name) == "string" and self.Global["CUSTOM"][name:lower()] then
+							local name = UnitBuff("player", index, nil, "PLAYER CANCELABLE")
+							if not name then break end -- No more buffs to check
+							if self.Global["CUSTOM"][name:lower()] then
 								self:PlayRandomMusic(name)
 								found = true
 							end
@@ -233,39 +244,47 @@ end
 
 function C:HasMount()
 	local mountColl = {}
-	for _,v in pairs(self.IDs.Hawkstriders) do
-		mountColl[#mountColl + 1] = v
+	
+	for _, name in pairs(self.Mounts.Hawkstriders) do
+		mountColl[#mountColl + 1] = name
 	end
+
 	if self.Global["PLAINSTRIDER"] then
-		for _,v in pairs(self.IDs.Plainstriders) do
-			mountColl[#mountColl + 1] = v
+		for _, name in pairs(self.Mounts.Plainstriders) do
+			mountColl[#mountColl + 1] = name
 		end
 	end
+
 	if self.Global["RIDINGCRANE"] then
-		for _,v in pairs(self.IDs.RidingCranes) do
-			mountColl[#mountColl + 1] = v
+		for _, name in pairs(self.Mounts.RidingCranes) do
+			mountColl[#mountColl + 1] = name
 		end
 	end
+
 	if self.Global["RAVENLORD"] then
-		for _,v in pairs(self.IDs.RavenLord) do
-			mountColl[#mountColl + 1] = v
+		for _, name in pairs(self.Mounts.RavenLord) do
+			mountColl[#mountColl + 1] = name
 		end
 	end
+
 	if self.Global["FLAMETALON"] then
-		for _,v in pairs(self.IDs.Flametalon) do
-			mountColl[#mountColl + 1] = v
+		for _, name in pairs(self.Mounts.Flametalon) do
+			mountColl[#mountColl + 1] = name
 		end
 	end
+
 	if self.Global["ALLMOUNTS"] then -- Add druid flight forms
-		for _,v in pairs(self.IDs.DruidForms) do
-			mountColl[#mountColl + 1] = v
+		for _, name in pairs(self.Mounts.DruidForms) do
+			mountColl[#mountColl + 1] = name
 		end
 	end
+
 	if #self.Global["MOUNTS"] > 0 then
-		for _,v in pairs(self.Global["MOUNTS"]) do
+		for _, v in pairs(self.Global["MOUNTS"]) do
 			mountColl[#mountColl + 1] = v -- Can be both a string and a number value
 		end
 	end
+	
 	return CLib:HasBuff(mountColl)
 end
 
@@ -622,5 +641,15 @@ end
 C.Frame = CreateFrame("Frame")
 C.Frame:SetScript("OnEvent", function (frame, event, ...) C:OnEvent(frame, event, ...) end)
 for k,_ in pairs(C.Events) do
-	C.Frame:RegisterEvent(k)
+	if k == "UNIT_AURA" then
+		C.Frame:RegisterUnitEvent(k, "player")
+	else
+		C.Frame:RegisterEvent(k)
+	end
+end
+
+for _, section in pairs(C.Mounts) do
+	for id, _ in pairs(section) do
+		tbl[id] = GetSpellInfo(id)
+	end
 end
