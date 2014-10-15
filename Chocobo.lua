@@ -33,10 +33,10 @@ Chocobo = {
 	Events = {},
 	Songs = { -- Default songs loaded on first run
 		-- Please note that you can't add custom songs here, this is only used when restoring default settings or on initial setup
-		"chocobo.mp3",
-		"chocobo_ffiv.mp3",
-		"chocobo_ffxii.mp3",
-		"chocobo_ffxiii.mp3"
+		"chocobo.ogg",
+		"chocobo_ffiv.ogg",
+		"chocobo_ffxii.ogg",
+		"chocobo_ffxiii.ogg"
 	},
 
 	-- Values are overridden later with the return from GetSpellInfo
@@ -139,6 +139,10 @@ function C.Events.ADDON_LOADED(self, ...)
 			self:AddMusic(v)
 		end
 	end
+    if not self.Global["MUSIC_OGG_UPDATE"] then -- Reset music if still using mp3s
+        self:ResetMusic()
+        self.Global["MUSIC_OGG_UPDATE"] = true
+    end
 	if type(self.Global["PREVENTDUPE"]) ~= "boolean" then
 		self:Msg(L["PreventDupeNotSet"])
 		self.Global["PREVENTDUPE"] = true
