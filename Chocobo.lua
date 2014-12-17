@@ -279,6 +279,10 @@ function C:HasMount()
 			mountColl[#mountColl + 1] = v -- Can be both a string and a number value
 		end
 	end
+
+	for mountName, _ in pairs(self.Global["CUSTOM"]) do
+		mountColl[#mountColl + 1] = mountName
+	end
 	
 	return CLib:HasBuff(mountColl)
 end
