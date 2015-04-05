@@ -94,7 +94,7 @@ function ChocoboLib:HasBuff(idColl) -- idColl is either a number or a table with
 			if name and name:lower() == value:lower() then return true, name, id or 0 end
 		elseif vType == "number" then -- Check using ID
 			buffs = buffs or GetBuffs()
-			for name, id in buffs do
+			for name, id in pairs(buffs) do
 				if id == value then return true, name or "<No Name>", id end
 			end
 		end
