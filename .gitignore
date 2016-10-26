@@ -3,7 +3,11 @@
 *.jpg
 *.zip
 /images/chocobo_2.tga
-/music/chocarena.ogg
+/music/*
+!/music/chocobo.ogg
+!/music/chocobo_ffiv.ogg
+!/music/chocobo_ffxii.ogg
+!/music/chocobo_ffxiii.ogg
 /cfapikey
 /wowisetup
 /WoWIUploader.class
