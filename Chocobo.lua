@@ -208,7 +208,7 @@ function C:CheckMount()
 					local found = false
 					local index = 1
 					repeat
-						local name = UnitBuff("player", index, nil, "PLAYER CANCELABLE")
+						local name = UnitBuff("player", index, "PLAYER CANCELABLE")
 						if not name then break end -- No more buffs to check
 						if self.Global["CUSTOM"][name:lower()] then
 							self:PlayRandomMusic(name)

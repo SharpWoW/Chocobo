@@ -62,7 +62,7 @@ end
 local function GetBuffs()
 	local buffs = {}
 	for i=1,40 do -- Loop through all 40 possible buff indexes
-		local name,_,_,_,_,_,_,_,_,_,id = UnitBuff("player", i, nil, "PLAYER CANCELABLE") -- Get buff on index i
+		local name, _, _, _, _, _, _, _, _, id = UnitBuff("player", i, "PLAYER CANCELABLE") -- Get buff on index i
 		-- Insert it into the buffs table, break if buff is nil (that means no other buffs exist on the player)
 		if name and id then buffs[name] = id else break end
 	end
@@ -85,19 +85,15 @@ function ChocoboLib:HasBuff(idColl) -- idColl is either a number or a table with
 		return false -- Just in case the error() did not cause it to exit, for whatever reason.
 	end
 
-	local buffs
+	local buffs = GetBuffs()
 
 	for _, value in pairs(idColl) do
 		local vType = type(value)
-		if vType == "string" then -- Check for buff using name
-			local name, _, _, _, _, _, _, _, _, _, id = UnitBuff("player", value, nil, "PLAYER CANCELABLE")
-			if name and name:lower() == value:lower() then return true, name, id or 0 end
-		elseif vType == "number" then -- Check using ID
-			buffs = buffs or GetBuffs()
-			for name, id in pairs(buffs) do
-				if id == value then return true, name or "<No Name>", id end
-			end
-		end
+        for name, id in pairs(buffs) do
+            if (vType == "number" and id == value) or (vType == "string" and name:lower() == value:lower()) then
+                return true, name or "<No Name>", id
+            end
+        end
 	end
 	
 	return false -- Else return false (Player does not have the buff)
