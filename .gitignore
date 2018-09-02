@@ -12,3 +12,6 @@
 /wowisetup
 /WoWIUploader.class
 /build
+
+/libs/LibStub
+/libs/CallbackHandler-1.0

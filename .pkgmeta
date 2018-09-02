@@ -15,8 +15,6 @@ tools-used:
 
 ignore:
     - Chocobo.bak
-    - libs/CallbackHandler-1.0
-    - libs/LibStub
     - COPYING
 
 license-output: COPYING
