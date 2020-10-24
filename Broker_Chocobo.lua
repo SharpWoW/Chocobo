@@ -1,18 +1,18 @@
 --[[
     Copyright (c) 2010-2011 by Adam Hellberg
-    
+
     This file is part of Chocobo.
-    
+
     Chocobo is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    
+
     Chocobo is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
-    
+
     You should have received a copy of the GNU General Public License
     along with Chocobo. If not, see <http://www.gnu.org/licenses/>.
 --]]
@@ -41,11 +41,11 @@ end
 function data.OnClick(self, button)
 	if button == "LeftButton" then
 		-- Open sound control first to expand group
-		InterfaceOptionsFrame_OpenToCategory(ChocoboSoundControl)
-		InterfaceOptionsFrame_OpenToCategory(ChocoboOptions)
+        Chocobo.SoundControl.Options:Open()
+        Chocobo.Options:Open()
 	elseif button == "MiddleButton" then
 		Chocobo.SoundControl:Toggle()
 	elseif button == "RightButton" then
-		InterfaceOptionsFrame_OpenToCategory(ChocoboSoundControl)
+        Chocobo.SoundControl.Options:Open()
 	end
 end

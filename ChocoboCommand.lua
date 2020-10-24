@@ -83,8 +83,8 @@ CC:Register("__DEFAULT__", function(args)
 end)
 
 CC:Register({"options", "o", "config", "gui"}, function(args)
-	InterfaceOptionsFrame_OpenToCategory(ChocoboSoundControl)
-	InterfaceOptionsFrame_OpenToCategory(ChocoboOptions)
+    Chocobo.SoundControl.Options:Open()
+    Chocobo.Options:Open()
 end)
 
 CC:Register({"allmounts", "am", "all"}, function(args) C:FilterMount(false) end)
@@ -101,8 +101,8 @@ CC:Register({"soundcontrol", "sc", "sndctrl", "sound"}, function(args)
 	local handled = false
 	if #args > 0 then
 		local vol = tonumber(args[3])
-		if args[1] == "gui" or args[1] == "options" then
-			InterfaceOptionsFrame_OpenToCategory(ChocoboSoundControl)
+        if args[1] == "gui" or args[1] == "options" then
+            Chocobo.SoundControl.Options:Open()
 			handled = true
 		elseif args[1] == "toggle" or args[1] == "t" then
 			C.SoundControl:Toggle()

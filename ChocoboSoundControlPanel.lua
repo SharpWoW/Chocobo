@@ -1,18 +1,18 @@
 --[[
     Copyright (c) 2010-2011 by Adam Hellberg
-    
+
     This file is part of Chocobo.
-    
+
     Chocobo is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-    
+
     Chocobo is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
-    
+
     You should have received a copy of the GNU General Public License
     along with Chocobo. If not, see <http://www.gnu.org/licenses/>.
 --]]
@@ -21,210 +21,460 @@ local L = _G["ChocoboLocale"]
 
 Chocobo.SoundControl.Options = {}
 
-function Chocobo.SoundControl.Options:OnLoad(panel)
-	PanelTemplates_SetNumTabs(ChocoboSoundControl_PanelContainer, 3)
-	PanelTemplates_SetTab(ChocoboSoundControl_PanelContainer, 1)
-	ChocoboSoundControl_PanelContainerPage1:Show()
-	ChocoboSoundControl_PanelContainerPage2:Hide()
-	ChocoboSoundControl_PanelContainerPage3:Hide()
-	panel.name = "Sound Control"
-	panel.parent = "Chocobo"
-	panel.refresh = function() Chocobo.SoundControl.Options:Update() end
-	InterfaceOptions_AddCategory(panel)
-	ChocoboSoundControl_CaptionLabel:SetText(L["SoundControl_Caption"])
-	ChocoboSoundControl_DescriptionLabel:SetText(L["SoundControl_Description"])
-	ChocoboSoundControl_DescriptionLabel:SetTextColor(1, 1, 1)
-	ChocoboSoundControl_ToggleText:SetText(L["SoundControl_Toggle"])
-	ChocoboSoundControl_ToggleText:SetTextColor(1, 1, 1)
-	ChocoboSoundControl_ToggleDefaultText:SetText(L["SoundControl_ToggleDefault"])
-	ChocoboSoundControl_DefaultHelpLabel:SetText(L["SoundControl_DefaultHelp"])
-	ChocoboSoundControl_DefaultHelpLabel:SetTextColor(1, 1, 1)
-	ChocoboSoundControl_DefaultNoteLabel:SetText(L["SoundControl_DefaultNote"])
-	ChocoboSoundControl_PanelContainerTab1:SetText(L["SoundControl_Music"])
-	ChocoboSoundControl_PanelContainerTab2:SetText(L["SoundControl_SFX"])
-	ChocoboSoundControl_PanelContainerTab3:SetText(L["SoundControl_Ambience"])
-	ChocoboSoundControl_PanelContainerPage1_PanelDesc:SetText(L["SoundControl_MusicDesc"])
-	ChocoboSoundControl_PanelContainerPage1_EnableText:SetText(L["SoundControl_MusicEnable"])
-	ChocoboSoundControl_PanelContainerPage1_EnableMountText:SetText(L["SoundControl_MusicMount"])
-	ChocoboSoundControl_PanelContainerPage1_EnableNoMountText:SetText(L["SoundControl_MusicNoMount"])
-	ChocoboSoundControl_PanelContainerPage1_EnableVolumeText:SetText(L["SoundControl_MusicVolume"])
-	ChocoboSoundControl_PanelContainerPage1_VolumeSliderText:SetText(L["SoundControl_MusicSetVolume"])
-	ChocoboSoundControl_PanelContainerPage1_VolumeSliderHigh:SetText("100")
-	ChocoboSoundControl_PanelContainerPage1_VolumeSliderLow:SetText("0")
-	ChocoboSoundControl_PanelContainerPage1_VolumeSlider:SetMinMaxValues(0, 100)
-	ChocoboSoundControl_PanelContainerPage1_VolumeSlider:SetValueStep(1)
-	ChocoboSoundControl_PanelContainerPage2_PanelDesc:SetText(L["SoundControl_SFXDesc"])
-	ChocoboSoundControl_PanelContainerPage2_EnableText:SetText(L["SoundControl_SFXEnable"])
-	ChocoboSoundControl_PanelContainerPage2_EnableMountText:SetText(L["SoundControl_SFXMount"])
-	ChocoboSoundControl_PanelContainerPage2_EnableNoMountText:SetText(L["SoundControl_SFXNoMount"])
-	ChocoboSoundControl_PanelContainerPage2_EnableVolumeText:SetText(L["SoundControl_SFXVolume"])
-	ChocoboSoundControl_PanelContainerPage2_VolumeSliderText:SetText(L["SoundControl_SFXSetVolume"])
-	ChocoboSoundControl_PanelContainerPage2_VolumeSliderHigh:SetText("100")
-	ChocoboSoundControl_PanelContainerPage2_VolumeSliderLow:SetText("0")
-	ChocoboSoundControl_PanelContainerPage2_VolumeSlider:SetMinMaxValues(0, 100)
-	ChocoboSoundControl_PanelContainerPage2_VolumeSlider:SetValueStep(1)
-	ChocoboSoundControl_PanelContainerPage3_PanelDesc:SetText(L["SoundControl_AmbienceDesc"])
-	ChocoboSoundControl_PanelContainerPage3_EnableText:SetText(L["SoundControl_AmbienceEnable"])
-	ChocoboSoundControl_PanelContainerPage3_EnableMountText:SetText(L["SoundControl_AmbienceMount"])
-	ChocoboSoundControl_PanelContainerPage3_EnableNoMountText:SetText(L["SoundControl_AmbienceNoMount"])
-	ChocoboSoundControl_PanelContainerPage3_EnableVolumeText:SetText(L["SoundControl_AmbienceVolume"])
-	ChocoboSoundControl_PanelContainerPage3_VolumeSliderText:SetText(L["SoundControl_AmbienceSetVolume"])
-	ChocoboSoundControl_PanelContainerPage3_VolumeSliderHigh:SetText("100")
-	ChocoboSoundControl_PanelContainerPage3_VolumeSliderLow:SetText("0")
-	ChocoboSoundControl_PanelContainerPage3_VolumeSlider:SetMinMaxValues(0, 100)
-	ChocoboSoundControl_PanelContainerPage3_VolumeSlider:SetValueStep(1)
+local function checkbox(name, parent)
+    local f = CreateFrame("CheckButton", name, parent, "OptionsCheckButtonTemplate")
+    f:SetSize(40, 40)
+    f.label = _G[f:GetName() .. "Text"]
+
+    return f
 end
 
-function Chocobo.SoundControl.Options:Update()
-	local settings = Chocobo.SoundControl.Settings
-	ChocoboSoundControl_Toggle:SetChecked(settings["ENABLED"])
-	ChocoboSoundControl_ToggleDefault:SetChecked(settings["DEFAULT"])
-	ChocoboSoundControl_PanelContainerPage1_Enable:SetChecked(settings["MUSIC"]["ENABLED"])
-	ChocoboSoundControl_PanelContainerPage1_EnableMount:SetChecked(settings["MUSIC"]["MOUNTED"])
-	ChocoboSoundControl_PanelContainerPage1_EnableNoMount:SetChecked(settings["MUSIC"]["NOTMOUNTED"])
-	ChocoboSoundControl_PanelContainerPage1_EnableVolume:SetChecked(settings["MUSIC"]["MOD_VOLUME"])
-	ChocoboSoundControl_PanelContainerPage1_VolumeSlider:SetValue(settings["MUSIC"]["VOLUME"] * 100)
-	ChocoboSoundControl_PanelContainerPage1_VolumeSlider_Current:SetText(tostring(settings["MUSIC"]["VOLUME"] * 100))
-	ChocoboSoundControl_PanelContainerPage2_Enable:SetChecked(settings["SFX"]["ENABLED"])
-	ChocoboSoundControl_PanelContainerPage2_EnableMount:SetChecked(settings["SFX"]["MOUNTED"])
-	ChocoboSoundControl_PanelContainerPage2_EnableNoMount:SetChecked(settings["SFX"]["NOTMOUNTED"])
-	ChocoboSoundControl_PanelContainerPage2_EnableVolume:SetChecked(settings["SFX"]["MOD_VOLUME"])
-	ChocoboSoundControl_PanelContainerPage2_VolumeSlider:SetValue(settings["SFX"]["VOLUME"] * 100)
-	ChocoboSoundControl_PanelContainerPage2_VolumeSlider_Current:SetText(tostring(settings["SFX"]["VOLUME"] * 100))
-	ChocoboSoundControl_PanelContainerPage3_Enable:SetChecked(settings["AMBIENCE"]["ENABLED"])
-	ChocoboSoundControl_PanelContainerPage3_EnableMount:SetChecked(settings["AMBIENCE"]["MOUNTED"])
-	ChocoboSoundControl_PanelContainerPage3_EnableNoMount:SetChecked(settings["AMBIENCE"]["NOTMOUNTED"])
-	ChocoboSoundControl_PanelContainerPage3_EnableVolume:SetChecked(settings["AMBIENCE"]["MOD_VOLUME"])
-	ChocoboSoundControl_PanelContainerPage3_VolumeSlider:SetValue(settings["AMBIENCE"]["VOLUME"] * 100)
-	ChocoboSoundControl_PanelContainerPage3_VolumeSlider_Current:SetText(tostring(settings["AMBIENCE"]["VOLUME"] * 100))
-	
-	local enabled = settings["ENABLED"]
-	local default = settings["DEFAULT"]
-	
-	if settings["MUSIC"]["MOD_VOLUME"] and enabled and not default then
-		ChocoboSoundControl_PanelContainerPage1_VolumeSlider:Enable()
-		ChocoboSoundControl_PanelContainerPage1_VolumeSliderText:SetTextColor(1, 1, 1)
-		ChocoboSoundControl_PanelContainerPage1_VolumeSliderHigh:SetTextColor(1, 1, 1)
-		ChocoboSoundControl_PanelContainerPage1_VolumeSliderLow:SetTextColor(1, 1, 1)
-		ChocoboSoundControl_PanelContainerPage1_VolumeSlider_Current:SetTextColor(1, 1, 1)
-	else
-		ChocoboSoundControl_PanelContainerPage1_VolumeSlider:Disable()
-		ChocoboSoundControl_PanelContainerPage1_VolumeSliderText:SetTextColor(0.5, 0.5, 0.5)
-		ChocoboSoundControl_PanelContainerPage1_VolumeSliderHigh:SetTextColor(0.5, 0.5, 0.5)
-		ChocoboSoundControl_PanelContainerPage1_VolumeSliderLow:SetTextColor(0.5, 0.5, 0.5)
-		ChocoboSoundControl_PanelContainerPage1_VolumeSlider_Current:SetTextColor(0.5, 0.5, 0.5)
-	end
-	
-	if settings["SFX"]["MOD_VOLUME"] and enabled and not default then
-		ChocoboSoundControl_PanelContainerPage2_VolumeSlider:Enable()
-		ChocoboSoundControl_PanelContainerPage2_VolumeSliderText:SetTextColor(1, 1, 1)
-		ChocoboSoundControl_PanelContainerPage2_VolumeSliderHigh:SetTextColor(1, 1, 1)
-		ChocoboSoundControl_PanelContainerPage2_VolumeSliderLow:SetTextColor(1, 1, 1)
-		ChocoboSoundControl_PanelContainerPage2_VolumeSlider_Current:SetTextColor(1, 1, 1)
-	else
-		ChocoboSoundControl_PanelContainerPage2_VolumeSlider:Disable()
-		ChocoboSoundControl_PanelContainerPage2_VolumeSliderText:SetTextColor(0.5, 0.5, 0.5)
-		ChocoboSoundControl_PanelContainerPage2_VolumeSliderHigh:SetTextColor(0.5, 0.5, 0.5)
-		ChocoboSoundControl_PanelContainerPage2_VolumeSliderLow:SetTextColor(0.5, 0.5, 0.5)
-		ChocoboSoundControl_PanelContainerPage2_VolumeSlider_Current:SetTextColor(0.5, 0.5, 0.5)
-	end
-	
-	if settings["AMBIENCE"]["MOD_VOLUME"] and enabled and not default then
-		ChocoboSoundControl_PanelContainerPage3_VolumeSlider:Enable()
-		ChocoboSoundControl_PanelContainerPage3_VolumeSliderText:SetTextColor(1, 1, 1)
-		ChocoboSoundControl_PanelContainerPage3_VolumeSliderHigh:SetTextColor(1, 1, 1)
-		ChocoboSoundControl_PanelContainerPage3_VolumeSliderLow:SetTextColor(1, 1, 1)
-		ChocoboSoundControl_PanelContainerPage3_VolumeSlider_Current:SetTextColor(1, 1, 1)
-	else
-		ChocoboSoundControl_PanelContainerPage3_VolumeSlider:Disable()
-		ChocoboSoundControl_PanelContainerPage3_VolumeSliderText:SetTextColor(0.5, 0.5, 0.5)
-		ChocoboSoundControl_PanelContainerPage3_VolumeSliderHigh:SetTextColor(0.5, 0.5, 0.5)
-		ChocoboSoundControl_PanelContainerPage3_VolumeSliderLow:SetTextColor(0.5, 0.5, 0.5)
-		ChocoboSoundControl_PanelContainerPage3_VolumeSlider_Current:SetTextColor(0.5, 0.5, 0.5)
-	end
-	
-	if not enabled or default then
-		self:CheckboxesEnabled(false)
-	else
-		self:CheckboxesEnabled(true)
-	end
-	
-	if enabled then
-		ChocoboSoundControl_ToggleDefault:Enable()
-		ChocoboSoundControl_ToggleDefaultText:SetTextColor(1, 1, 1)
-	else
-		ChocoboSoundControl_ToggleDefault:Disable()
-		ChocoboSoundControl_ToggleDefaultText:SetTextColor(0.5, 0.5, 0.5)
-	end
+local function slider(name, parent)
+    local f = CreateFrame("Slider", name, parent, "OptionsSliderTemplate")
+    f.label = _G[f:GetName() .. "Text"]
+    f.high = _G[f:GetName() .. "High"]
+    f.low = _G[f:GetName() .. "Low"]
+    f.current = f:CreateFontString(name .. "Current", "OVERLAY")
+    f.current:SetFont([[Fonts\FRIZQT__.TTF]], 10, "OUTLINE")
+    f.current:SetPoint("TOP", 0, -16)
+
+    return f
 end
 
-function Chocobo.SoundControl.Options:CheckboxesEnabled(enabled)
-	local function setEnabled(frame, enabled)
-		if enabled then
-			frame:Enable()
-		else
-			frame:Disable()
-		end
-	end
-	local dr, dg, db = 0.5, 0.5, 0.5
-	local r, g, b = 0.5, 0.5, 0.5
-	if enabled then
-		dr, dg, db = 1, 0.82, 0
-		r, g, b = 1, 1, 1
-	end
-	if enabled then
-		setEnabled(ChocoboSoundControl_PanelContainerTab1, true)
-		setEnabled(ChocoboSoundControl_PanelContainerTab2, true)
-		setEnabled(ChocoboSoundControl_PanelContainerTab3, true)
-	end
-	self:SetToCurrentTab()
-	ChocoboSoundControl_PanelContainerPage1_PanelDesc:SetTextColor(dr, dg, db)
-	ChocoboSoundControl_PanelContainerPage2_PanelDesc:SetTextColor(dr, dg, db)
-	ChocoboSoundControl_PanelContainerPage3_PanelDesc:SetTextColor(dr, dg, db)
-	setEnabled(ChocoboSoundControl_PanelContainerPage1_Enable, enabled)
-	setEnabled(ChocoboSoundControl_PanelContainerPage1_EnableMount, enabled)
-	setEnabled(ChocoboSoundControl_PanelContainerPage1_EnableNoMount, enabled)
-	setEnabled(ChocoboSoundControl_PanelContainerPage1_EnableVolume, enabled)
-	setEnabled(ChocoboSoundControl_PanelContainerPage2_Enable, enabled)
-	setEnabled(ChocoboSoundControl_PanelContainerPage2_EnableMount, enabled)
-	setEnabled(ChocoboSoundControl_PanelContainerPage2_EnableNoMount, enabled)
-	setEnabled(ChocoboSoundControl_PanelContainerPage2_EnableVolume, enabled)
-	setEnabled(ChocoboSoundControl_PanelContainerPage3_Enable, enabled)
-	setEnabled(ChocoboSoundControl_PanelContainerPage3_EnableMount, enabled)
-	setEnabled(ChocoboSoundControl_PanelContainerPage3_EnableNoMount, enabled)
-	setEnabled(ChocoboSoundControl_PanelContainerPage3_EnableVolume, enabled)
-	if not enabled then
-		setEnabled(ChocoboSoundControl_PanelContainerTab1, false)
-		setEnabled(ChocoboSoundControl_PanelContainerTab2, false)
-		setEnabled(ChocoboSoundControl_PanelContainerTab3, false)
-	end
-	ChocoboSoundControl_PanelContainerPage1_EnableText:SetTextColor(r, g, b)
-	ChocoboSoundControl_PanelContainerPage1_EnableMountText:SetTextColor(r, g, b)
-	ChocoboSoundControl_PanelContainerPage1_EnableNoMountText:SetTextColor(r, g, b)
-	ChocoboSoundControl_PanelContainerPage1_EnableVolumeText:SetTextColor(r, g, b)
-	ChocoboSoundControl_PanelContainerPage2_EnableText:SetTextColor(r, g, b)
-	ChocoboSoundControl_PanelContainerPage2_EnableMountText:SetTextColor(r, g, b)
-	ChocoboSoundControl_PanelContainerPage2_EnableNoMountText:SetTextColor(r, g, b)
-	ChocoboSoundControl_PanelContainerPage2_EnableVolumeText:SetTextColor(r, g, b)
-	ChocoboSoundControl_PanelContainerPage3_EnableText:SetTextColor(r, g, b)
-	ChocoboSoundControl_PanelContainerPage3_EnableMountText:SetTextColor(r, g, b)
-	ChocoboSoundControl_PanelContainerPage3_EnableNoMountText:SetTextColor(r, g, b)
-	ChocoboSoundControl_PanelContainerPage3_EnableVolumeText:SetTextColor(r, g, b)
+local CSCO = Chocobo.SoundControl.Options
+
+local frame = CreateFrame("Frame")
+frame:Hide()
+
+frame.logo = frame:CreateTexture(nil, "ARTWORK")
+frame.logo:SetTexture([[Interface\AddOns\Chocobo\images\chocobo_small.tga]])
+frame.logo:SetBlendMode("BLEND")
+frame.logo:SetSize(128, 128)
+frame.logo:SetPoint("BOTTOMRIGHT", -220, 5)
+frame.caption = CreateFrame("Frame", nil, frame)
+frame.caption:SetSize(600, 25)
+frame.caption:SetPoint("TOP", 0, -5)
+frame.caption.label = frame.caption:CreateFontString(nil, "OVERLAY")
+frame.caption.label:SetFont([[Fonts\FRIZQT__.TTF]], 12, "OUTLINE")
+frame.caption.label:SetPoint("TOPLEFT")
+frame.caption.label:SetPoint("BOTTOMRIGHT")
+frame.caption.label:SetTextColor(1, 0.8196079, 0)
+frame.description = CreateFrame("Frame", nil, frame)
+frame.description:SetSize(600, 25)
+frame.description:SetPoint("TOP", 0, -30)
+frame.description.label = frame.description:CreateFontString(nil, "OVERLAY")
+frame.description.label:SetFont([[Fonts\FRIZQT__.TTF]], 12, "OUTLINE")
+frame.description.label:SetPoint("TOPLEFT")
+frame.description.label:SetPoint("BOTTOMRIGHT")
+frame.description.label:SetTextColor(1, 0.8196079, 0)
+
+frame.toggle = checkbox("ChocoboSoundControlOptionsToggle", frame)
+frame.toggle:SetPoint("TOPLEFT", 10, -85)
+frame.toggle:SetScript("OnClick", function()
+    Chocobo.SoundControl:Toggle(true)
+    CSCO:Update()
+end)
+frame.toggleDefault = checkbox("ChocoboSoundControlOptionsToggleDefault", frame)
+frame.toggleDefault:SetPoint("TOPLEFT", 10, -125)
+frame.toggleDefault:SetScript("OnClick", function()
+    Chocobo.SoundControl:ToggleDefault(true)
+    CSCO:Update()
+end)
+
+frame.defaultHelp = CreateFrame("Frame", nil, frame)
+frame.defaultHelp:SetSize(400, 50)
+frame.defaultHelp:SetPoint("TOPRIGHT", -10, -90)
+frame.defaultHelp.label = frame.defaultHelp:CreateFontString(nil, "OVERLAY")
+frame.defaultHelp.label:SetFont([[Fonts\FRIZQT__.TTF]], 12, "OUTLINE")
+frame.defaultHelp.label:SetPoint("TOPLEFT")
+frame.defaultHelp.label:SetPoint("BOTTOMRIGHT")
+frame.defaultHelp.label:SetTextColor(1, 0.8196079, 0)
+frame.defaultNote = CreateFrame("Frame", nil, frame)
+frame.defaultNote:SetSize(400, 40)
+frame.defaultNote:SetPoint("TOPRIGHT", -10, -130)
+frame.defaultNote.label = frame.defaultNote:CreateFontString(nil, "OVERLAY")
+frame.defaultNote.label:SetFont([[Fonts\FRIZQT__.TTF]], 12, "OUTLINE")
+frame.defaultNote.label:SetPoint("TOPLEFT")
+frame.defaultNote.label:SetPoint("BOTTOMRIGHT")
+frame.defaultNote.label:SetTextColor(1, 0.8196079, 0)
+
+frame.panelContainer = CreateFrame("Frame", "ChocoboSoundControlOptionsPanelContainer", frame, BackdropTemplateMixin and "BackdropTemplate")
+frame.panelContainer:SetSize(500, 240)
+frame.panelContainer:SetPoint("TOP", 0, -200)
+frame.panelContainer:SetBackdrop(_G.BACKDROP_TOOLTIP_16_16_5555)
+frame.panelContainer:SetBackdropColor(0.2, 0.2, 0.2, 0.9)
+frame.panelContainer:SetBackdropBorderColor(0.3, 0.3, 0.3, 1)
+frame.panelContainer.tab1 = CreateFrame("Button", "ChocoboSoundControlOptionsPanelContainerTab1", frame.panelContainer, "CharacterFrameTabButtonTemplate")
+frame.panelContainer.tab1:SetPoint("LEFT", frame.panelContainer, "BOTTOMLEFT", 5, -12)
+frame.panelContainer.tab1:SetScript("OnClick", function()
+    PanelTemplates_SetTab(frame.panelContainer, 1)
+    frame.panelContainer.page1:Show()
+    frame.panelContainer.page2:Hide()
+    frame.panelContainer.page3:Hide()
+end)
+frame.panelContainer.tab2 = CreateFrame("Button", "ChocoboSoundControlOptionsPanelContainerTab2", frame.panelContainer, "CharacterFrameTabButtonTemplate")
+frame.panelContainer.tab2:SetPoint("LEFT", frame.panelContainer.tab1, "RIGHT", -10, 0)
+frame.panelContainer.tab2:SetScript("OnClick", function()
+    PanelTemplates_SetTab(frame.panelContainer, 2)
+    frame.panelContainer.page1:Hide()
+    frame.panelContainer.page2:Show()
+    frame.panelContainer.page3:Hide()
+end)
+frame.panelContainer.tab3 = CreateFrame("Button", "ChocoboSoundControlOptionsPanelContainerTab3", frame.panelContainer, "CharacterFrameTabButtonTemplate")
+frame.panelContainer.tab3:SetPoint("LEFT", frame.panelContainer.tab2, "RIGHT", -10, 0)
+frame.panelContainer.tab3:SetScript("OnClick", function()
+    PanelTemplates_SetTab(frame.panelContainer, 3)
+    frame.panelContainer.page1:Hide()
+    frame.panelContainer.page2:Hide()
+    frame.panelContainer.page3:Show()
+end)
+
+frame.panelContainer.page1 = CreateFrame("Frame", "ChocoboSoundControlOptionsPanelContainerPage1", frame.panelContainer)
+frame.panelContainer.page1:SetPoint("TOPLEFT")
+frame.panelContainer.page1:SetPoint("BOTTOMRIGHT")
+frame.panelContainer.page1.panel = CreateFrame("Frame", nil, frame.panelContainer.page1)
+frame.panelContainer.page1.panel:SetSize(360, 20)
+frame.panelContainer.page1.panel:SetPoint("TOP", 0, -10)
+frame.panelContainer.page1.panel.desc = frame.panelContainer.page1.panel:CreateFontString(nil, "OVERLAY")
+frame.panelContainer.page1.panel.desc:SetFont([[Fonts\FRIZQT__.TTF]], 12, "OUTLINE")
+frame.panelContainer.page1.panel.desc:SetPoint("TOPLEFT")
+frame.panelContainer.page1.panel.desc:SetPoint("BOTTOMRIGHT")
+frame.panelContainer.page1.enable = checkbox("ChocoboSoundControlOptionsPage1Enable", frame.panelContainer.page1)
+frame.panelContainer.page1.enable:SetPoint("TOPLEFT", 10, -25)
+frame.panelContainer.page1.enable:SetScript("OnClick", function()
+    Chocobo.SoundControl:ToggleMusic(true)
+    CSCO:Update()
+end)
+frame.panelContainer.page1.enableMount = checkbox("ChocoboSoundControlOptionsPage1EnableMount", frame.panelContainer.page1)
+frame.panelContainer.page1.enableMount:SetPoint("TOPLEFT", 10, -65)
+frame.panelContainer.page1.enableMount:SetScript("OnClick", function()
+    Chocobo.SoundControl:ToggleMusicMount(true)
+    CSCO:Update()
+end)
+frame.panelContainer.page1.enableNoMount = checkbox("ChocoboSoundControlOptionsPage1EnableNoMount", frame.panelContainer.page1)
+frame.panelContainer.page1.enableNoMount:SetPoint("TOPLEFT", 10, -105)
+frame.panelContainer.page1.enableNoMount:SetScript("OnClick", function()
+    Chocobo.SoundControl:ToggleMusicNoMount(true)
+    CSCO:Update()
+end)
+frame.panelContainer.page1.enableVolume = checkbox("ChocoboSoundControlOptionsPage1EnableVolume", frame.panelContainer.page1)
+frame.panelContainer.page1.enableVolume:SetPoint("TOPLEFT", 10, -145)
+frame.panelContainer.page1.enableVolume:SetScript("OnClick", function()
+    Chocobo.SoundControl:ToggleMusicVolume(true)
+    CSCO:Update()
+end)
+frame.panelContainer.page1.volumeSlider = slider("ChocoboSoundControlOptionsPage1VolumeSlider", frame.panelContainer.page1)
+frame.panelContainer.page1.volumeSlider:SetSize(450, 16)
+frame.panelContainer.page1.volumeSlider:SetPoint("TOP", 0, -195)
+frame.panelContainer.page1.volumeSlider:SetScript("OnValueChanged", function(self)
+    Chocobo.SoundControl:SetMusicVolume(self:GetValue(), true)
+    CSCO:Update()
+end)
+frame.panelContainer.page1.volumeSlider:SetScript("OnMouseWheel", function(self, delta)
+    CSCO:VolumeScroll(self, delta, 1)
+end)
+
+frame.panelContainer.page2 = CreateFrame("Frame", "ChocoboSoundControlOptionsPanelContainerPage2", frame.panelContainer)
+frame.panelContainer.page2:SetPoint("TOPLEFT")
+frame.panelContainer.page2:SetPoint("BOTTOMRIGHT")
+frame.panelContainer.page2.panel = CreateFrame("Frame", nil, frame.panelContainer.page2)
+frame.panelContainer.page2.panel:SetSize(360, 20)
+frame.panelContainer.page2.panel:SetPoint("TOP", 0, -10)
+frame.panelContainer.page2.panel.desc = frame.panelContainer.page2.panel:CreateFontString(nil, "OVERLAY")
+frame.panelContainer.page2.panel.desc:SetFont([[Fonts\FRIZQT__.TTF]], 12, "OUTLINE")
+frame.panelContainer.page2.panel.desc:SetPoint("TOPLEFT")
+frame.panelContainer.page2.panel.desc:SetPoint("BOTTOMRIGHT")
+frame.panelContainer.page2.enable = checkbox("ChocoboSoundControlOptionsPage2Enable", frame.panelContainer.page2)
+frame.panelContainer.page2.enable:SetPoint("TOPLEFT", 10, -25)
+frame.panelContainer.page2.enable:SetScript("OnClick", function()
+    Chocobo.SoundControl:ToggleSFX(true)
+    CSCO:Update()
+end)
+frame.panelContainer.page2.enableMount = checkbox("ChocoboSoundControlOptionsPage2EnableMount", frame.panelContainer.page2)
+frame.panelContainer.page2.enableMount:SetPoint("TOPLEFT", 10, -65)
+frame.panelContainer.page2.enableMount:SetScript("OnClick", function()
+    Chocobo.SoundControl:ToggleSFXMount(true)
+    CSCO:Update()
+end)
+frame.panelContainer.page2.enableNoMount = checkbox("ChocoboSoundControlOptionsPage2EnableNoMount", frame.panelContainer.page2)
+frame.panelContainer.page2.enableNoMount:SetPoint("TOPLEFT", 10, -105)
+frame.panelContainer.page2.enableNoMount:SetScript("OnClick", function()
+    Chocobo.SoundControl:ToggleSFXNoMount(true)
+    CSCO:Update()
+end)
+frame.panelContainer.page2.enableVolume = checkbox("ChocoboSoundControlOptionsPage2EnableVolume", frame.panelContainer.page2)
+frame.panelContainer.page2.enableVolume:SetPoint("TOPLEFT", 10, -145)
+frame.panelContainer.page2.enableVolume:SetScript("OnClick", function()
+    Chocobo.SoundControl:ToggleSFXVolume(true)
+    CSCO:Update()
+end)
+frame.panelContainer.page2.volumeSlider = slider("ChocoboSoundControlOptionsPage2VolumeSlider", frame.panelContainer.page2)
+frame.panelContainer.page2.volumeSlider:SetSize(450, 16)
+frame.panelContainer.page2.volumeSlider:SetPoint("TOP", 0, -195)
+frame.panelContainer.page2.volumeSlider:SetScript("OnValueChanged", function(self)
+    Chocobo.SoundControl:SetSFXVolume(self:GetValue(), true)
+    CSCO:Update()
+end)
+frame.panelContainer.page2.volumeSlider:SetScript("OnMouseWheel", function(self, delta)
+    CSCO:VolumeScroll(self, delta, 1)
+end)
+
+frame.panelContainer.page3 = CreateFrame("Frame", "ChocoboSoundControlOptionsPanelContainerPage3", frame.panelContainer)
+frame.panelContainer.page3:SetPoint("TOPLEFT")
+frame.panelContainer.page3:SetPoint("BOTTOMRIGHT")
+frame.panelContainer.page3.panel = CreateFrame("Frame", nil, frame.panelContainer.page3)
+frame.panelContainer.page3.panel:SetSize(360, 20)
+frame.panelContainer.page3.panel:SetPoint("TOP", 0, -10)
+frame.panelContainer.page3.panel.desc = frame.panelContainer.page3.panel:CreateFontString(nil, "OVERLAY")
+frame.panelContainer.page3.panel.desc:SetFont([[Fonts\FRIZQT__.TTF]], 12, "OUTLINE")
+frame.panelContainer.page3.panel.desc:SetPoint("TOPLEFT")
+frame.panelContainer.page3.panel.desc:SetPoint("BOTTOMRIGHT")
+frame.panelContainer.page3.enable = checkbox("ChocoboSoundControlOptionsPage3Enable", frame.panelContainer.page3)
+frame.panelContainer.page3.enable:SetPoint("TOPLEFT", 10, -25)
+frame.panelContainer.page3.enable:SetScript("OnClick", function()
+    Chocobo.SoundControl:ToggleAmbience(true)
+    CSCO:Update()
+end)
+frame.panelContainer.page3.enableMount = checkbox("ChocoboSoundControlOptionsPage3EnableMount", frame.panelContainer.page3)
+frame.panelContainer.page3.enableMount:SetPoint("TOPLEFT", 10, -65)
+frame.panelContainer.page3.enableMount:SetScript("OnClick", function()
+    Chocobo.SoundControl:ToggleAmbienceMount(true)
+    CSCO:Update()
+end)
+frame.panelContainer.page3.enableNoMount = checkbox("ChocoboSoundControlOptionsPage3EnableNoMount", frame.panelContainer.page3)
+frame.panelContainer.page3.enableNoMount:SetPoint("TOPLEFT", 10, -105)
+frame.panelContainer.page3.enableNoMount:SetScript("OnClick", function()
+    Chocobo.SoundControl:ToggleAmbienceNoMount(true)
+    CSCO:Update()
+end)
+frame.panelContainer.page3.enableVolume = checkbox("ChocoboSoundControlOptionsPage3EnableVolume", frame.panelContainer.page3)
+frame.panelContainer.page3.enableVolume:SetPoint("TOPLEFT", 10, -145)
+frame.panelContainer.page3.enableVolume:SetScript("OnClick", function()
+    Chocobo.SoundControl:ToggleAmbienceVolume(true)
+    CSCO:Update()
+end)
+frame.panelContainer.page3.volumeSlider = slider("ChocoboSoundControlOptionsPage3VolumeSlider", frame.panelContainer.page3)
+frame.panelContainer.page3.volumeSlider:SetSize(450, 16)
+frame.panelContainer.page3.volumeSlider:SetPoint("TOP", 0, -195)
+frame.panelContainer.page3.volumeSlider:SetScript("OnValueChanged", function(self)
+    Chocobo.SoundControl:SetAmbienceVolume(self:GetValue(), true)
+    CSCO:Update()
+end)
+frame.panelContainer.page3.volumeSlider:SetScript("OnMouseWheel", function(self, delta)
+    CSCO:VolumeScroll(self, delta, 1)
+end)
+
+function CSCO:Open()
+    InterfaceOptions_OpenToCategory(frame)
 end
 
-function Chocobo.SoundControl.Options:SetToCurrentTab()
-	PanelTemplates_SetTab(ChocoboSoundControl_PanelContainer, PanelTemplates_GetSelectedTab(ChocoboSoundControl_PanelContainer))
+function CSCO:OnLoad(panel)
+    PanelTemplates_SetNumTabs(frame.panelContainer, 3)
+    PanelTemplates_SetTab(frame.panelContainer, 1)
+    frame.panelContainer.page1:Show()
+    frame.panelContainer.page2:Hide()
+    frame.panelContainer.page3:Hide()
+    panel.name = "Sound Control"
+    panel.parent = "Chocobo"
+    panel.refresh = function() CSCO:Update() end
+    InterfaceOptions_AddCategory(panel)
+    frame.caption.label:SetText(L["SoundControl_Caption"])
+    frame.description.label:SetText(L["SoundControl_Description"])
+    frame.description.label:SetTextColor(1, 1, 1)
+    frame.toggle.label:SetText(L["SoundControl_Toggle"])
+    frame.toggle.label:SetTextColor(1, 1, 1)
+    frame.toggleDefault.label:SetText(L["SoundControl_ToggleDefault"])
+    frame.defaultHelp.label:SetText(L["SoundControl_DefaultHelp"])
+    frame.defaultHelp.label:SetTextColor(1, 1, 1)
+    frame.defaultNote.label:SetText(L["SoundControl_DefaultNote"])
+    frame.panelContainer.tab1:SetText(L["SoundControl_Music"])
+    frame.panelContainer.tab2:SetText(L["SoundControl_SFX"])
+    frame.panelContainer.tab3:SetText(L["SoundControl_Ambience"])
+    frame.panelContainer.page1.panel.desc:SetText(L["SoundControl_MusicDesc"])
+    frame.panelContainer.page1.enable.label:SetText(L["SoundControl_MusicEnable"])
+    frame.panelContainer.page1.enableMount.label:SetText(L["SoundControl_MusicMount"])
+    frame.panelContainer.page1.enableNoMount.label:SetText(L["SoundControl_MusicNoMount"])
+    frame.panelContainer.page1.enableVolume.label:SetText(L["SoundControl_MusicVolume"])
+    frame.panelContainer.page1.volumeSlider.label:SetText(L["SoundControl_MusicSetVolume"])
+    frame.panelContainer.page1.volumeSlider.high:SetText("100")
+    frame.panelContainer.page1.volumeSlider.low:SetText("0")
+    frame.panelContainer.page1.volumeSlider:SetMinMaxValues(0, 100)
+    frame.panelContainer.page1.volumeSlider:SetValueStep(1)
+    frame.panelContainer.page2.panel.desc:SetText(L["SoundControl_SFXDesc"])
+    frame.panelContainer.page2.enable.label:SetText(L["SoundControl_SFXEnable"])
+    frame.panelContainer.page2.enableMount.label:SetText(L["SoundControl_SFXMount"])
+    frame.panelContainer.page2.enableNoMount.label:SetText(L["SoundControl_SFXNoMount"])
+    frame.panelContainer.page2.enableVolume.label:SetText(L["SoundControl_SFXVolume"])
+    frame.panelContainer.page2.volumeSlider.label:SetText(L["SoundControl_SFXSetVolume"])
+    frame.panelContainer.page2.volumeSlider.high:SetText("100")
+    frame.panelContainer.page2.volumeSlider.low:SetText("0")
+    frame.panelContainer.page2.volumeSlider:SetMinMaxValues(0, 100)
+    frame.panelContainer.page2.volumeSlider:SetValueStep(1)
+    frame.panelContainer.page3.panel.desc:SetText(L["SoundControl_AmbienceDesc"])
+    frame.panelContainer.page3.enable.label:SetText(L["SoundControl_AmbienceEnable"])
+    frame.panelContainer.page3.enableMount.label:SetText(L["SoundControl_AmbienceMount"])
+    frame.panelContainer.page3.enableNoMount.label:SetText(L["SoundControl_AmbienceNoMount"])
+    frame.panelContainer.page3.enableVolume.label:SetText(L["SoundControl_AmbienceVolume"])
+    frame.panelContainer.page3.volumeSlider.label:SetText(L["SoundControl_AmbienceSetVolume"])
+    frame.panelContainer.page3.volumeSlider.high:SetText("100")
+    frame.panelContainer.page3.volumeSlider.low:SetText("0")
+    frame.panelContainer.page3.volumeSlider:SetMinMaxValues(0, 100)
+    frame.panelContainer.page3.volumeSlider:SetValueStep(1)
 end
 
-function Chocobo.SoundControl.Options:VolumeScroll(slider, delta, num)
-	local new = slider:GetValue() + delta
-	if new < 0 or new > 100 then return end
-	if num == 1 then
-		Chocobo.SoundControl:SetMusicVolume(new, true)
-	elseif num == 2 then
-		Chocobo.SoundControl:SetSFXVolume(new, true)
-	elseif num == 3 then
-		Chocobo.SoundControl:SetAmbienceVolume(new, true)
-	end
-	self:Update()
+function CSCO:Update()
+    local settings = Chocobo.SoundControl.Settings
+    frame.toggle:SetChecked(settings["ENABLED"])
+    frame.toggleDefault:SetChecked(settings["DEFAULT"])
+    frame.panelContainer.page1.enable:SetChecked(settings["MUSIC"]["ENABLED"])
+    frame.panelContainer.page1.enableMount:SetChecked(settings["MUSIC"]["MOUNTED"])
+    frame.panelContainer.page1.enableNoMount:SetChecked(settings["MUSIC"]["NOTMOUNTED"])
+    frame.panelContainer.page1.enableVolume:SetChecked(settings["MUSIC"]["MOD_VOLUME"])
+    frame.panelContainer.page1.volumeSlider:SetValue(settings["MUSIC"]["VOLUME"] * 100)
+    frame.panelContainer.page1.volumeSlider.current:SetText(tostring(settings["MUSIC"]["VOLUME"] * 100))
+    frame.panelContainer.page2.enable:SetChecked(settings["SFX"]["ENABLED"])
+    frame.panelContainer.page2.enableMount:SetChecked(settings["SFX"]["MOUNTED"])
+    frame.panelContainer.page2.enableNoMount:SetChecked(settings["SFX"]["NOTMOUNTED"])
+    frame.panelContainer.page2.enableVolume:SetChecked(settings["SFX"]["MOD_VOLUME"])
+    frame.panelContainer.page2.volumeSlider:SetValue(settings["SFX"]["VOLUME"] * 100)
+    frame.panelContainer.page2.volumeSlider.current:SetText(tostring(settings["SFX"]["VOLUME"] * 100))
+    frame.panelContainer.page3.enable:SetChecked(settings["AMBIENCE"]["ENABLED"])
+    frame.panelContainer.page3.enableMount:SetChecked(settings["AMBIENCE"]["MOUNTED"])
+    frame.panelContainer.page3.enableNoMount:SetChecked(settings["AMBIENCE"]["NOTMOUNTED"])
+    frame.panelContainer.page3.enableVolume:SetChecked(settings["AMBIENCE"]["MOD_VOLUME"])
+    frame.panelContainer.page3.volumeSlider:SetValue(settings["AMBIENCE"]["VOLUME"] * 100)
+    frame.panelContainer.page3.volumeSlider.current:SetText(tostring(settings["AMBIENCE"]["VOLUME"] * 100))
+
+    local enabled = settings["ENABLED"]
+    local default = settings["DEFAULT"]
+
+    if settings["MUSIC"]["MOD_VOLUME"] and enabled and not default then
+        frame.panelContainer.page1.volumeSlider:Enable()
+        frame.panelContainer.page1.volumeSlider.label:SetTextColor(1, 1, 1)
+        frame.panelContainer.page1.volumeSlider.high:SetTextColor(1, 1, 1)
+        frame.panelContainer.page1.volumeSlider.low:SetTextColor(1, 1, 1)
+        frame.panelContainer.page1.volumeSlider.current:SetTextColor(1, 1, 1)
+    else
+        frame.panelContainer.page1.volumeSlider:Disable()
+        frame.panelContainer.page1.volumeSlider.label:SetTextColor(0.5, 0.5, 0.5)
+        frame.panelContainer.page1.volumeSlider.high:SetTextColor(0.5, 0.5, 0.5)
+        frame.panelContainer.page1.volumeSlider.low:SetTextColor(0.5, 0.5, 0.5)
+        frame.panelContainer.page1.volumeSlider.current:SetTextColor(0.5, 0.5, 0.5)
+    end
+
+    if settings["SFX"]["MOD_VOLUME"] and enabled and not default then
+        frame.panelContainer.page2.volumeSlider:Enable()
+        frame.panelContainer.page2.volumeSlider.label:SetTextColor(1, 1, 1)
+        frame.panelContainer.page2.volumeSlider.high:SetTextColor(1, 1, 1)
+        frame.panelContainer.page2.volumeSlider.low:SetTextColor(1, 1, 1)
+        frame.panelContainer.page2.volumeSlider.current:SetTextColor(1, 1, 1)
+    else
+        frame.panelContainer.page2.volumeSlider:Disable()
+        frame.panelContainer.page2.volumeSlider.label:SetTextColor(0.5, 0.5, 0.5)
+        frame.panelContainer.page2.volumeSlider.high:SetTextColor(0.5, 0.5, 0.5)
+        frame.panelContainer.page2.volumeSlider.low:SetTextColor(0.5, 0.5, 0.5)
+        frame.panelContainer.page2.volumeSlider.current:SetTextColor(0.5, 0.5, 0.5)
+    end
+
+    if settings["AMBIENCE"]["MOD_VOLUME"] and enabled and not default then
+        frame.panelContainer.page3.volumeSlider:Enable()
+        frame.panelContainer.page3.volumeSlider.label:SetTextColor(1, 1, 1)
+        frame.panelContainer.page3.volumeSlider.high:SetTextColor(1, 1, 1)
+        frame.panelContainer.page3.volumeSlider.low:SetTextColor(1, 1, 1)
+        frame.panelContainer.page3.volumeSlider.current:SetTextColor(1, 1, 1)
+    else
+        frame.panelContainer.page3.volumeSlider:Disable()
+        frame.panelContainer.page3.volumeSlider.label:SetTextColor(0.5, 0.5, 0.5)
+        frame.panelContainer.page3.volumeSlider.high:SetTextColor(0.5, 0.5, 0.5)
+        frame.panelContainer.page3.volumeSlider.low:SetTextColor(0.5, 0.5, 0.5)
+        frame.panelContainer.page3.volumeSlider.current:SetTextColor(0.5, 0.5, 0.5)
+    end
+
+    if not enabled or default then
+        self:CheckboxesEnabled(false)
+    else
+        self:CheckboxesEnabled(true)
+    end
+
+    if enabled then
+        frame.toggleDefault:Enable()
+        frame.toggleDefault.label:SetTextColor(1, 1, 1)
+    else
+        frame.toggleDefault:Disable()
+        frame.toggleDefault.label:SetTextColor(0.5, 0.5, 0.5)
+    end
 end
+
+function CSCO:CheckboxesEnabled(enabled)
+    local function setEnabled(f, e)
+        if e then
+            f:Enable()
+        else
+            f:Disable()
+        end
+    end
+    local dr, dg, db = 0.5, 0.5, 0.5
+    local r, g, b = 0.5, 0.5, 0.5
+    if enabled then
+        dr, dg, db = 1, 0.82, 0
+        r, g, b = 1, 1, 1
+    end
+    if enabled then
+        setEnabled(frame.panelContainer.tab1, true)
+        setEnabled(frame.panelContainer.tab2, true)
+        setEnabled(frame.panelContainer.tab3, true)
+    end
+    self:SetToCurrentTab()
+    frame.panelContainer.page1.panel.desc:SetTextColor(dr, dg, db)
+    frame.panelContainer.page2.panel.desc:SetTextColor(dr, dg, db)
+    frame.panelContainer.page3.panel.desc:SetTextColor(dr, dg, db)
+    setEnabled(frame.panelContainer.page1.enable, enabled)
+    setEnabled(frame.panelContainer.page1.enableMount, enabled)
+    setEnabled(frame.panelContainer.page1.enableNoMount, enabled)
+    setEnabled(frame.panelContainer.page1.enableVolume, enabled)
+    setEnabled(frame.panelContainer.page2.enable, enabled)
+    setEnabled(frame.panelContainer.page2.enableMount, enabled)
+    setEnabled(frame.panelContainer.page2.enableNoMount, enabled)
+    setEnabled(frame.panelContainer.page2.enableVolume, enabled)
+    setEnabled(frame.panelContainer.page3.enable, enabled)
+    setEnabled(frame.panelContainer.page3.enableMount, enabled)
+    setEnabled(frame.panelContainer.page3.enableNoMount, enabled)
+    setEnabled(frame.panelContainer.page3.enableVolume, enabled)
+    if not enabled then
+        setEnabled(frame.panelContainer.tab1, false)
+        setEnabled(frame.panelContainer.tab2, false)
+        setEnabled(frame.panelContainer.tab3, false)
+    end
+    frame.panelContainer.page1.enable.label:SetTextColor(r, g, b)
+    frame.panelContainer.page1.enableMount.label:SetTextColor(r, g, b)
+    frame.panelContainer.page1.enableNoMount.label:SetTextColor(r, g, b)
+    frame.panelContainer.page1.enableVolume.label:SetTextColor(r, g, b)
+    frame.panelContainer.page2.enable.label:SetTextColor(r, g, b)
+    frame.panelContainer.page2.enableMount.label:SetTextColor(r, g, b)
+    frame.panelContainer.page2.enableNoMount.label:SetTextColor(r, g, b)
+    frame.panelContainer.page2.enableVolume.label:SetTextColor(r, g, b)
+    frame.panelContainer.page3.enable.label:SetTextColor(r, g, b)
+    frame.panelContainer.page3.enableMount.label:SetTextColor(r, g, b)
+    frame.panelContainer.page3.enableNoMount.label:SetTextColor(r, g, b)
+    frame.panelContainer.page3.enableVolume.label:SetTextColor(r, g, b)
+end
+
+function CSCO:SetToCurrentTab()
+    PanelTemplates_SetTab(frame.panelContainer, PanelTemplates_GetSelectedTab(frame.panelContainer))
+end
+
+function CSCO:VolumeScroll(s, delta, num)
+    local new = s:GetValue() + delta
+    if new < 0 or new > 100 then return end
+    if num == 1 then
+        Chocobo.SoundControl:SetMusicVolume(new, true)
+    elseif num == 2 then
+        Chocobo.SoundControl:SetSFXVolume(new, true)
+    elseif num == 3 then
+        Chocobo.SoundControl:SetAmbienceVolume(new, true)
+    end
+    self:Update()
+end
+
+frame:SetScript("OnLoad", function(self) CSCO:OnLoad(self) end)
+frame:SetScript("OnShow", function() CSCO:Update() end)
