@@ -75,7 +75,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 				</Layer>
 			</Layers>
 		</Frame>
-		<Frame name="$parent_SongsPanel">
+		<Frame name="$parent_SongsPanel" inherits="BackdropTemplate">
 			<Size>
 				<AbsDimension x="370" y="95" />
 			</Size>
@@ -86,19 +86,15 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 					</Offset>
 				</Anchor>
 			</Anchors>
-			<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
-				<Color r="0.2" g="0.2" b="0.2" a="0.9" />
-				<BorderColor r="0.3" g="0.3" b="0.3" a="1" />
-				<BackgroundInsets>
-					<AbsInset left="5" right="5" top="5" bottom="5" />
-				</BackgroundInsets>
-				<TileSize>
-					<AbsValue val="16" />
-				</TileSize>
-				<EdgeSize>
-					<AbsValue val="16" />
-				</EdgeSize>
-			</Backdrop>
+			<KeyValues>
+                <KeyValue key="backdropInfo" value="BACKDROP_TOOLTIP_16_16_5555" type="global"/>
+            </KeyValues>
+            <Scripts>
+                <OnLoad inherit="prepend">
+                    self:SetBackdropColor(0.2, 0.2, 0.2, 0.9)
+                    self:SetBackdropBorderColor(0.3, 0.3, 0.3, 1)
+                </OnLoad>
+            </Scripts>
 			<Frames>
 				<Frame name="$parent_Song">
 					<Size>
@@ -206,7 +202,7 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 				</Button>
 			</Frames>
 		</Frame>
-		<Frame name="$parent_MountPanel">
+		<Frame name="$parent_MountPanel" inherits="BackdropTemplate">
 			<Size>
 				<AbsDimension x="370" y="95" />
 			</Size>
@@ -217,19 +213,15 @@ xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 					</Offset>
 				</Anchor>
 			</Anchors>
-			<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
-				<Color r="0.2" g="0.2" b="0.2" a="0.9" />
-				<BorderColor r="0.3" g="0.3" b="0.3" a="1" />
-				<BackgroundInsets>
-					<AbsInset left="5" right="5" top="5" bottom="5" />
-				</BackgroundInsets>
-				<TileSize>
-					<AbsValue val="16" />
-				</TileSize>
-				<EdgeSize>
-					<AbsValue val="16" />
-				</EdgeSize>
-			</Backdrop>
+			<KeyValues>
+                <KeyValue key="backdropInfo" value="BACKDROP_TOOLTIP_16_16_5555" type="global"/>
+            </KeyValues>
+            <Scripts>
+                <OnLoad inherit="prepend">
+                    self:SetBackdropColor(0.2, 0.2, 0.2, 0.9)
+                    self:SetBackdropBorderColor(0.3, 0.3, 0.3, 1)
+                </OnLoad>
+            </Scripts>
 			<Frames>
 				<Frame name="$parent_Mount">
 					<Size>
