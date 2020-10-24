@@ -25,27 +25,27 @@
 local L = _G["ChocoboLocale"]
 
 data = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject("Broker_Chocobo", {
-	type = "launcher",
-	label = Chocobo.Name .. " |cff00FF00(" .. Chocobo.Version .. ")|r",
-	icon = "Interface\\AddOns\\Chocobo\\icon.tga",
-	text = L["Broker_Text"]
+    type = "launcher",
+    label = Chocobo.Name .. " |cff00FF00(" .. Chocobo.Version .. ")|r",
+    icon = "Interface\\AddOns\\Chocobo\\icon.tga",
+    text = L["Broker_Text"]
 })
 
 function data.OnTooltipShow(tip)
-	tip:AddLine((L["Broker_Version"]):format(Chocobo.Version))
-	tip:AddLine(L["Broker_LeftClick"])
-	tip:AddLine(L["Broker_MiddleClick"])
-	tip:AddLine(L["Broker_RightClick"])
+    tip:AddLine((L["Broker_Version"]):format(Chocobo.Version))
+    tip:AddLine(L["Broker_LeftClick"])
+    tip:AddLine(L["Broker_MiddleClick"])
+    tip:AddLine(L["Broker_RightClick"])
 end
 
 function data.OnClick(self, button)
-	if button == "LeftButton" then
-		-- Open sound control first to expand group
+    if button == "LeftButton" then
+        -- Open sound control first to expand group
         Chocobo.SoundControl.Options:Open()
         Chocobo.Options:Open()
-	elseif button == "MiddleButton" then
-		Chocobo.SoundControl:Toggle()
-	elseif button == "RightButton" then
+    elseif button == "MiddleButton" then
+        Chocobo.SoundControl:Toggle()
+    elseif button == "RightButton" then
         Chocobo.SoundControl.Options:Open()
-	end
+    end
 end
