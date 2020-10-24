@@ -12,6 +12,9 @@
 /wowisetup
 /WoWIUploader.class
 /build
+/.release
+release.sh
+.env
 
 /libs/LibStub
 /libs/CallbackHandler-1.0
