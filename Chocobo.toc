@@ -24,7 +24,7 @@ locales\load.xml
 Chocobo.lua
 ChocoboCommand.lua
 ChocoboOptions.lua
+ChocoboCustomSongPanel.lua
 ChocoboSoundControl.lua
 ChocoboSoundControlPanel.lua
-ChocoboCustomSongPanel.lua
 Broker_Chocobo.lua
