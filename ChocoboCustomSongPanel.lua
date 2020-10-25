@@ -24,7 +24,11 @@ Chocobo.CustomSongPanel = {}
 local CSP = Chocobo.CustomSongPanel
 
 local frame = CreateFrame("Frame")
+CSP.Frame = frame
 frame:Hide()
+frame.name = "Custom Songs"
+frame.parent = "Chocobo"
+frame.refresh = function() CSP:Update() end
 
 frame.description = CreateFrame("Frame", nil, frame)
 frame.description:SetSize(600, 25)
@@ -35,6 +39,7 @@ frame.description.label:SetText("%CUSTOMSONG_DESCRIPTION%")
 frame.description.label:SetPoint("TOPLEFT")
 frame.description.label:SetPoint("BOTTOMRIGHT")
 frame.description.label:SetTextColor(1, 0.8196079, 0)
+frame.description.label:SetText(L["CustomSongPanel_Description"])
 
 frame.customPanel = CreateFrame("Frame", nil, frame, BackdropTemplateMixin and "BackdropTemplate")
 frame.customPanel:SetSize(370, 120)
@@ -50,19 +55,23 @@ frame.customPanel.custom.desc:SetFont([[Fonts\FRIZQT__.TTF]], 12, "OUTLINE")
 frame.customPanel.custom.desc:SetPoint("TOPLEFT")
 frame.customPanel.custom.desc:SetPoint("BOTTOMRIGHT")
 frame.customPanel.custom.desc:SetTextColor(1, 0.8196079, 0)
+frame.customPanel.custom.desc:SetText(L["CustomSongPanel_PanelDesc"])
 frame.customPanel.custom.songEditBox = CreateFrame("EditBox", nil, frame.customPanel.custom, "InputBoxTemplate")
 frame.customPanel.custom.songEditBox:SetMaxLetters(100)
 frame.customPanel.custom.songEditBox:EnableMouse(true)
 frame.customPanel.custom.songEditBox:SetSize(150, 22)
 frame.customPanel.custom.songEditBox:SetPoint("TOPLEFT", 110, -32)
+frame.customPanel.custom.songEditBox:SetAutoFocus(false)
 frame.customPanel.custom.mountEditBox = CreateFrame("EditBox", nil, frame.customPanel.custom, "InputBoxTemplate")
 frame.customPanel.custom.mountEditBox:SetMaxLetters(100)
 frame.customPanel.custom.mountEditBox:EnableMouse(true)
 frame.customPanel.custom.mountEditBox:SetSize(150, 22)
 frame.customPanel.custom.mountEditBox:SetPoint("TOPLEFT", 110, -56)
+frame.customPanel.custom.mountEditBox:SetAutoFocus(false)
 frame.customPanel.custom.addButton = CreateFrame("Button", nil, frame.customPanel.custom, "OptionsButtonTemplate")
 frame.customPanel.custom.addButton:SetSize(80, 22)
 frame.customPanel.custom.addButton:SetPoint("TOPLEFT", 64, -81)
+frame.customPanel.custom.addButton:SetText(L["Options_Add"])
 frame.customPanel.custom.addButton:SetScript("OnClick", function()
     local music = frame.customPanel.custom.songEditBox:GetText()
     local mount = frame.customPanel.custom.mountEditBox:GetText()
@@ -71,6 +80,7 @@ end)
 frame.customPanel.custom.removeButton = CreateFrame("Button", nil, frame.customPanel.custom, "OptionsButtonTemplate")
 frame.customPanel.custom.removeButton:SetSize(80, 22)
 frame.customPanel.custom.removeButton:SetPoint("TOPLEFT", 145, -81)
+frame.customPanel.custom.removeButton:SetText(L["Options_Remove"])
 frame.customPanel.custom.removeButton:SetScript("OnClick", function()
     local mount = frame.customPanel.custom.mountEditBox:GetText()
     Chocobo:RemoveCustomMusic(mount)
@@ -78,27 +88,16 @@ end)
 frame.customPanel.custom.listButton = CreateFrame("Button", nil, frame.customPanel.custom, "OptionsButtonTemplate")
 frame.customPanel.custom.listButton:SetSize(80, 22)
 frame.customPanel.custom.listButton:SetPoint("TOPLEFT", 227, -81)
+frame.customPanel.custom.listButton:SetText(L["Options_List"])
 frame.customPanel.custom.listButton:SetScript("OnClick", function()
     Chocobo:PrintMusic()
 end)
-
-function CSP:OnLoad(panel)
-    panel.name = "Custom Songs"
-    panel.parent = "Chocobo"
-    panel.refresh = function() CSP:Update() end
-    InterfaceOptions_AddCategory(panel)
-    frame.description.label:SetText(L["CustomSongPanel_Description"])
-    frame.customPanel.custom.desc:SetText(L["CustomSongPanel_PanelDesc"])
-    frame.customPanel.custom.addButton:SetText(L["Options_Add"])
-    frame.customPanel.custom.removeButton:SetText(L["Options_Remove"])
-    frame.customPanel.custom.listButton:SetText(L["Options_List"])
-    self:Update()
-end
 
 function CSP:Update()
     frame.customPanel.custom.songEditBox:SetText(L["CustomSongPanel_SongEditDefault"])
     frame.customPanel.custom.mountEditBox:SetText(L["CustomSongPanel_MountEditDefault"])
 end
 
-frame:SetScript("OnLoad", function(self) CSP:OnLoad(self) end)
 frame:SetScript("OnShow", function() CSP:Update() end)
+
+InterfaceOptions_AddCategory(frame)
