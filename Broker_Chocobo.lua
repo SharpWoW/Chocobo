@@ -24,7 +24,7 @@
 
 local L = _G["ChocoboLocale"]
 
-data = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject("Broker_Chocobo", {
+local data = LibStub:GetLibrary("LibDataBroker-1.1"):NewDataObject("Broker_Chocobo", {
     type = "launcher",
     label = Chocobo.Name .. " |cff00FF00(" .. Chocobo.Version .. ")|r",
     icon = "Interface\\AddOns\\Chocobo\\icon.tga",
