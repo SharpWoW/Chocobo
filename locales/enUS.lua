@@ -21,7 +21,7 @@ if type(_G["ChocoboLocale"]) ~= "table" then
     _G["ChocoboLocale"] = {}
 end
 
-function ChocoboLocale_Default(L, key)
+local function default(_, key)
     return ("%%%s%%"):format(key)
 end
 
@@ -242,4 +242,4 @@ L["Broker_LeftClick"]    = "Left Click - Open Chocobo Options"
 L["Broker_MiddleClick"]    = "Middle Click - Toggle Sound Control"
 L["Broker_RightClick"]    = "Right Click - Open Chocobo Sound Control"
 
-setmetatable(L, {__index=ChocoboLocale_Default})
+setmetatable(L, { __index = default })
