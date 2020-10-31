@@ -469,8 +469,7 @@ end
 
 function C:ResetMusic() -- Resets the values in Chocobo.Global["MUSIC"] to default
     self:Msg(L["ResetMusic"])
-    self.Global["MUSIC"] = nil -- "Erase" the data from Chocobo.Global["MUSIC"]
-    self.Global["MUSIC"] = {} -- Make it a new table
+    wipe(self.Global.MUSIC)
     for _,v in pairs(self.Songs) do -- Add all the default songs again
         self:AddMusic(v)
     end
@@ -522,8 +521,7 @@ end
 
 function C:ResetMounts()
     self:Msg(L["ResetMounts"])
-    self.Global["MOUNTS"] = nil
-    self.Global["MOUNTS"] = {}
+    wipe(self.Global.MOUNTS)
 end
 
 function C:FilterMount(filter, silent)
