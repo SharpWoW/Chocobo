@@ -23,6 +23,7 @@ locales\load.xml
 
 Chocobo.lua
 ChocoboCommand.lua
+SongsAndMountsPanel.xml
 ChocoboOptions.lua
 ChocoboCustomSongPanel.lua
 ChocoboSoundControl.lua
