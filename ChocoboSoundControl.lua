@@ -45,7 +45,24 @@ function SC:Init()
 end
 
 function SC:SetupVars(reset)
-    local e,d,se,sm,sn,sv,smv,me,mm,mn,mv,mmv,ae,am,an,av,amv=false,true,true,false,false,1.0,false,true,true,false,1.0,true,true,false,false,1.0,false
+    local e, d, se, sm, sn, sv, smv, me, mm, mn, mv, mmv, ae, am, an, av, amv =
+        false,
+        true,
+        true,
+        false,
+        false,
+        1.0,
+        false,
+        true,
+        true,
+        false,
+        1.0,
+        true,
+        true,
+        false,
+        false,
+        1.0,
+        false
     if reset then
         e = self.Settings["ENABLED"] or false
         d = self.Settings["DEFAULT"] or true
@@ -344,7 +361,8 @@ function SC:Check()
     if tonumber(GetCVar("Sound_EnableAllSound")) == 0 then
         SetCVar("Sound_EnableAllSound", 1)
     end
-    if (C.Mounted and C.Running) or (not C.Mounted and not C.Running) then -- Player is currently dismounting or dismounted
+    -- Player is currently dismounting or dismounted
+    if (C.Mounted and C.Running) or (not C.Mounted and not C.Running) then
         if self.Settings["DEFAULT"] then
             SetCVar("Sound_EnableMusic", 0)
             SetCVar("Sound_EnableSFX", 0)

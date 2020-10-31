@@ -50,7 +50,7 @@ end
 
 function ChocoboLib:Count(tbl)
     local c = 0
-    for k,v in pairs(tbl) do
+    for _, _ in pairs(tbl) do
         c = c + 1
     end
     return c

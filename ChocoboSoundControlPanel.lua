@@ -109,13 +109,21 @@ frame.defaultNote.label:SetPoint("TOPLEFT")
 frame.defaultNote.label:SetPoint("BOTTOMRIGHT")
 frame.defaultNote.label:SetText(L["SoundControl_DefaultNote"])
 
-frame.panelContainer = CreateFrame("Frame", "ChocoboSoundControlOptionsPanelContainer", frame, BackdropTemplateMixin and "BackdropTemplate")
+frame.panelContainer = CreateFrame(
+    "Frame",
+    "ChocoboSoundControlOptionsPanelContainer",
+    frame,
+    BackdropTemplateMixin and "BackdropTemplate")
 frame.panelContainer:SetSize(500, 240)
 frame.panelContainer:SetPoint("TOP", 0, -200)
 frame.panelContainer:SetBackdrop(_G.BACKDROP_TOOLTIP_16_16_5555)
 frame.panelContainer:SetBackdropColor(0.2, 0.2, 0.2, 0.9)
 frame.panelContainer:SetBackdropBorderColor(0.3, 0.3, 0.3, 1)
-frame.panelContainer.tab1 = CreateFrame("Button", "ChocoboSoundControlOptionsPanelContainerTab1", frame.panelContainer, "CharacterFrameTabButtonTemplate")
+frame.panelContainer.tab1 = CreateFrame(
+    "Button",
+    "ChocoboSoundControlOptionsPanelContainerTab1",
+    frame.panelContainer,
+    "CharacterFrameTabButtonTemplate")
 frame.panelContainer.tab1:SetPoint("LEFT", frame.panelContainer, "BOTTOMLEFT", 5, -12)
 frame.panelContainer.tab1:SetText(L["SoundControl_Music"])
 frame.panelContainer.tab1:SetScript("OnClick", function()
@@ -124,7 +132,11 @@ frame.panelContainer.tab1:SetScript("OnClick", function()
     frame.panelContainer.page2:Hide()
     frame.panelContainer.page3:Hide()
 end)
-frame.panelContainer.tab2 = CreateFrame("Button", "ChocoboSoundControlOptionsPanelContainerTab2", frame.panelContainer, "CharacterFrameTabButtonTemplate")
+frame.panelContainer.tab2 = CreateFrame(
+    "Button",
+    "ChocoboSoundControlOptionsPanelContainerTab2",
+    frame.panelContainer,
+    "CharacterFrameTabButtonTemplate")
 frame.panelContainer.tab2:SetPoint("LEFT", frame.panelContainer.tab1, "RIGHT", -10, 0)
 frame.panelContainer.tab2:SetText(L["SoundControl_SFX"])
 frame.panelContainer.tab2:SetScript("OnClick", function()
@@ -133,7 +145,11 @@ frame.panelContainer.tab2:SetScript("OnClick", function()
     frame.panelContainer.page2:Show()
     frame.panelContainer.page3:Hide()
 end)
-frame.panelContainer.tab3 = CreateFrame("Button", "ChocoboSoundControlOptionsPanelContainerTab3", frame.panelContainer, "CharacterFrameTabButtonTemplate")
+frame.panelContainer.tab3 = CreateFrame(
+    "Button",
+    "ChocoboSoundControlOptionsPanelContainerTab3",
+    frame.panelContainer,
+    "CharacterFrameTabButtonTemplate")
 frame.panelContainer.tab3:SetPoint("LEFT", frame.panelContainer.tab2, "RIGHT", -10, 0)
 frame.panelContainer.tab3:SetText(L["SoundControl_Ambience"])
 frame.panelContainer.tab3:SetScript("OnClick", function()
@@ -162,28 +178,36 @@ frame.panelContainer.page1.enable:SetScript("OnClick", function()
     Chocobo.SoundControl:ToggleMusic(true)
     CSCO:Update()
 end)
-frame.panelContainer.page1.enableMount = checkbox("ChocoboSoundControlOptionsPage1EnableMount", frame.panelContainer.page1)
+frame.panelContainer.page1.enableMount = checkbox(
+    "ChocoboSoundControlOptionsPage1EnableMount",
+    frame.panelContainer.page1)
 frame.panelContainer.page1.enableMount:SetPoint("TOPLEFT", 10, -65)
 frame.panelContainer.page1.enableMount.label:SetText(L["SoundControl_MusicMount"])
 frame.panelContainer.page1.enableMount:SetScript("OnClick", function()
     Chocobo.SoundControl:ToggleMusicMount(true)
     CSCO:Update()
 end)
-frame.panelContainer.page1.enableNoMount = checkbox("ChocoboSoundControlOptionsPage1EnableNoMount", frame.panelContainer.page1)
+frame.panelContainer.page1.enableNoMount = checkbox(
+    "ChocoboSoundControlOptionsPage1EnableNoMount",
+    frame.panelContainer.page1)
 frame.panelContainer.page1.enableNoMount:SetPoint("TOPLEFT", 10, -105)
 frame.panelContainer.page1.enableNoMount.label:SetText(L["SoundControl_MusicNoMount"])
 frame.panelContainer.page1.enableNoMount:SetScript("OnClick", function()
     Chocobo.SoundControl:ToggleMusicNoMount(true)
     CSCO:Update()
 end)
-frame.panelContainer.page1.enableVolume = checkbox("ChocoboSoundControlOptionsPage1EnableVolume", frame.panelContainer.page1)
+frame.panelContainer.page1.enableVolume = checkbox(
+    "ChocoboSoundControlOptionsPage1EnableVolume",
+    frame.panelContainer.page1)
 frame.panelContainer.page1.enableVolume:SetPoint("TOPLEFT", 10, -145)
 frame.panelContainer.page1.enableVolume.label:SetText(L["SoundControl_MusicVolume"])
 frame.panelContainer.page1.enableVolume:SetScript("OnClick", function()
     Chocobo.SoundControl:ToggleMusicVolume(true)
     CSCO:Update()
 end)
-frame.panelContainer.page1.volumeSlider = slider("ChocoboSoundControlOptionsPage1VolumeSlider", frame.panelContainer.page1)
+frame.panelContainer.page1.volumeSlider = slider(
+    "ChocoboSoundControlOptionsPage1VolumeSlider",
+    frame.panelContainer.page1)
 frame.panelContainer.page1.volumeSlider:SetSize(450, 16)
 frame.panelContainer.page1.volumeSlider:SetPoint("TOP", 0, -195)
 frame.panelContainer.page1.volumeSlider:SetMinMaxValues(0, 100)
@@ -218,28 +242,36 @@ frame.panelContainer.page2.enable:SetScript("OnClick", function()
     Chocobo.SoundControl:ToggleSFX(true)
     CSCO:Update()
 end)
-frame.panelContainer.page2.enableMount = checkbox("ChocoboSoundControlOptionsPage2EnableMount", frame.panelContainer.page2)
+frame.panelContainer.page2.enableMount = checkbox(
+    "ChocoboSoundControlOptionsPage2EnableMount",
+    frame.panelContainer.page2)
 frame.panelContainer.page2.enableMount:SetPoint("TOPLEFT", 10, -65)
 frame.panelContainer.page2.enableMount.label:SetText(L["SoundControl_SFXMount"])
 frame.panelContainer.page2.enableMount:SetScript("OnClick", function()
     Chocobo.SoundControl:ToggleSFXMount(true)
     CSCO:Update()
 end)
-frame.panelContainer.page2.enableNoMount = checkbox("ChocoboSoundControlOptionsPage2EnableNoMount", frame.panelContainer.page2)
+frame.panelContainer.page2.enableNoMount = checkbox(
+    "ChocoboSoundControlOptionsPage2EnableNoMount",
+    frame.panelContainer.page2)
 frame.panelContainer.page2.enableNoMount:SetPoint("TOPLEFT", 10, -105)
 frame.panelContainer.page2.enableNoMount.label:SetText(L["SoundControl_SFXNoMount"])
 frame.panelContainer.page2.enableNoMount:SetScript("OnClick", function()
     Chocobo.SoundControl:ToggleSFXNoMount(true)
     CSCO:Update()
 end)
-frame.panelContainer.page2.enableVolume = checkbox("ChocoboSoundControlOptionsPage2EnableVolume", frame.panelContainer.page2)
+frame.panelContainer.page2.enableVolume = checkbox(
+    "ChocoboSoundControlOptionsPage2EnableVolume",
+    frame.panelContainer.page2)
 frame.panelContainer.page2.enableVolume:SetPoint("TOPLEFT", 10, -145)
 frame.panelContainer.page2.enableVolume.label:SetText(L["SoundControl_SFXVolume"])
 frame.panelContainer.page2.enableVolume:SetScript("OnClick", function()
     Chocobo.SoundControl:ToggleSFXVolume(true)
     CSCO:Update()
 end)
-frame.panelContainer.page2.volumeSlider = slider("ChocoboSoundControlOptionsPage2VolumeSlider", frame.panelContainer.page2)
+frame.panelContainer.page2.volumeSlider = slider(
+    "ChocoboSoundControlOptionsPage2VolumeSlider",
+    frame.panelContainer.page2)
 frame.panelContainer.page2.volumeSlider:SetSize(450, 16)
 frame.panelContainer.page2.volumeSlider:SetPoint("TOP", 0, -195)
 frame.panelContainer.page2.volumeSlider:SetMinMaxValues(0, 100)
@@ -274,28 +306,36 @@ frame.panelContainer.page3.enable:SetScript("OnClick", function()
     Chocobo.SoundControl:ToggleAmbience(true)
     CSCO:Update()
 end)
-frame.panelContainer.page3.enableMount = checkbox("ChocoboSoundControlOptionsPage3EnableMount", frame.panelContainer.page3)
+frame.panelContainer.page3.enableMount = checkbox(
+    "ChocoboSoundControlOptionsPage3EnableMount",
+    frame.panelContainer.page3)
 frame.panelContainer.page3.enableMount:SetPoint("TOPLEFT", 10, -65)
 frame.panelContainer.page3.enableMount.label:SetText(L["SoundControl_AmbienceMount"])
 frame.panelContainer.page3.enableMount:SetScript("OnClick", function()
     Chocobo.SoundControl:ToggleAmbienceMount(true)
     CSCO:Update()
 end)
-frame.panelContainer.page3.enableNoMount = checkbox("ChocoboSoundControlOptionsPage3EnableNoMount", frame.panelContainer.page3)
+frame.panelContainer.page3.enableNoMount = checkbox(
+    "ChocoboSoundControlOptionsPage3EnableNoMount",
+    frame.panelContainer.page3)
 frame.panelContainer.page3.enableNoMount:SetPoint("TOPLEFT", 10, -105)
 frame.panelContainer.page3.enableNoMount.label:SetText(L["SoundControl_AmbienceNoMount"])
 frame.panelContainer.page3.enableNoMount:SetScript("OnClick", function()
     Chocobo.SoundControl:ToggleAmbienceNoMount(true)
     CSCO:Update()
 end)
-frame.panelContainer.page3.enableVolume = checkbox("ChocoboSoundControlOptionsPage3EnableVolume", frame.panelContainer.page3)
+frame.panelContainer.page3.enableVolume = checkbox(
+    "ChocoboSoundControlOptionsPage3EnableVolume",
+    frame.panelContainer.page3)
 frame.panelContainer.page3.enableVolume:SetPoint("TOPLEFT", 10, -145)
 frame.panelContainer.page3.enableVolume.label:SetText(L["SoundControl_AmbienceVolume"])
 frame.panelContainer.page3.enableVolume:SetScript("OnClick", function()
     Chocobo.SoundControl:ToggleAmbienceVolume(true)
     CSCO:Update()
 end)
-frame.panelContainer.page3.volumeSlider = slider("ChocoboSoundControlOptionsPage3VolumeSlider", frame.panelContainer.page3)
+frame.panelContainer.page3.volumeSlider = slider(
+    "ChocoboSoundControlOptionsPage3VolumeSlider",
+    frame.panelContainer.page3)
 frame.panelContainer.page3.volumeSlider:SetSize(450, 16)
 frame.panelContainer.page3.volumeSlider:SetPoint("TOP", 0, -195)
 frame.panelContainer.page3.volumeSlider:SetMinMaxValues(0, 100)

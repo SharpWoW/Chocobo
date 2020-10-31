@@ -168,7 +168,11 @@ frame.toggleButton:SetScript("OnClick", function()
     CO:Update()
 end)
 
-frame.preventDupeToggle = CreateFrame("CheckButton", "ChocoboOptionsPreventDupeToggle", frame, "OptionsCheckButtonTemplate")
+frame.preventDupeToggle = CreateFrame(
+    "CheckButton",
+    "ChocoboOptionsPreventDupeToggle",
+    frame,
+    "OptionsCheckButtonTemplate")
 frame.preventDupeToggle:SetSize(40, 40)
 frame.preventDupeToggle:SetPoint("BOTTOMLEFT", 20, 160)
 frame.preventDupeToggle:SetScript("OnClick", function()
@@ -177,7 +181,11 @@ frame.preventDupeToggle:SetScript("OnClick", function()
 end)
 frame.preventDupeToggle.label = _G[frame.preventDupeToggle:GetName() .. "Text"]
 frame.preventDupeToggle.label:SetText(L["Options_PreventDupeToggle"])
-frame.plainstriderToggle = CreateFrame("CheckButton", "ChocoboOptionsPlainstriderToggle", frame, "OptionsCheckButtonTemplate")
+frame.plainstriderToggle = CreateFrame(
+    "CheckButton",
+    "ChocoboOptionsPlainstriderToggle",
+    frame,
+    "OptionsCheckButtonTemplate")
 frame.plainstriderToggle:SetSize(40, 40)
 frame.plainstriderToggle:SetPoint("BOTTOMLEFT", frame.preventDupeToggle, 0, -40)
 frame.plainstriderToggle:SetScript("OnClick", function()
@@ -195,7 +203,11 @@ frame.ravenLordToggle:SetScript("OnClick", function()
 end)
 frame.ravenLordToggle.label = _G[frame.ravenLordToggle:GetName() .. "Text"]
 frame.ravenLordToggle.label:SetText(L["Options_RavenLordToggle"])
-frame.flametalonToggle = CreateFrame("CheckButton", "ChocoboOptionsFlametalonToggle", frame, "OptionsCheckButtonTemplate")
+frame.flametalonToggle = CreateFrame(
+    "CheckButton",
+    "ChocoboOptionsFlametalonToggle",
+    frame,
+    "OptionsCheckButtonTemplate")
 frame.flametalonToggle:SetSize(40, 40)
 frame.flametalonToggle:SetPoint("BOTTOMLEFT", frame.ravenLordToggle, 0, -40)
 frame.flametalonToggle:SetScript("OnClick", function()
@@ -204,7 +216,11 @@ frame.flametalonToggle:SetScript("OnClick", function()
 end)
 frame.flametalonToggle.label = _G[frame.flametalonToggle:GetName() .. "Text"]
 frame.flametalonToggle.label:SetText(L["Options_FlametalonToggle"])
-frame.ridingCraneToggle = CreateFrame("CheckButton", "ChocoboOptionsRidingCraneToggle", frame, "OptionsCheckButtonTemplate")
+frame.ridingCraneToggle = CreateFrame(
+    "CheckButton",
+    "ChocoboOptionsRidingCraneToggle",
+    frame,
+    "OptionsCheckButtonTemplate")
 frame.ridingCraneToggle:SetSize(40, 40)
 frame.ridingCraneToggle:SetPoint("BOTTOMLEFT", frame.flametalonToggle, 0, -40)
 frame.ridingCraneToggle:SetScript("OnClick", function()
@@ -220,9 +236,9 @@ function CO:Open()
 end
 
 function CO:Update()
-    local AddOnState, MountState, DebugState = ""
-    local asColor = "FFFF00"
-    local dColor = "FFFF00"
+    local AddOnState, MountState, DebugState
+    local asColor
+    local dColor
     if Chocobo.Global["ENABLED"] then
         AddOnState = L["Options_Enabled"]
         asColor = "00FF00"
@@ -230,7 +246,11 @@ function CO:Update()
         AddOnState = L["Options_Disabled"]
         asColor = "FF0000"
     end
-    if Chocobo.Global["ALLMOUNTS"] then MountState = L["Options_AllMounts"] else MountState = L["Options_Hawkstrider"] end
+    if Chocobo.Global["ALLMOUNTS"] then
+        MountState = L["Options_AllMounts"]
+    else
+        MountState = L["Options_Hawkstrider"]
+    end
     if Chocobo.Global["DEBUG"] then
         DebugState = L["Options_Enabled"]
         dColor = "00FF00"

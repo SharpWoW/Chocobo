@@ -32,7 +32,8 @@ Chocobo = {
     Global = {},
     Events = {},
     Songs = { -- Default songs loaded on first run
-        -- Please note that you can't add custom songs here, this is only used when restoring default settings or on initial setup
+        -- Please note that you can't add custom songs here,
+        -- this is only used when restoring default settings or on initial setup
         "chocobo.ogg",
         "chocobo_ffiv.ogg",
         "chocobo_ffxii.ogg",
@@ -95,7 +96,7 @@ assert(L, "Chocobo Locales not loaded")
 
 local nowPlaying -- The current song playing, used when preventing the same song playing twice
 
-function C:OnEvent(frame, event, ...)
+function C:OnEvent(_, event, ...)
     if self.Events[event] then self.Events[event](self, ...) end
 end
 
@@ -185,16 +186,17 @@ function C.Events.UNIT_AURA(self)
     C_Timer.After(1, function() self:CheckMount() end)
 end
 
-function C.Events.PLAYER_LOGOUT(self, ...)
+function C.Events.PLAYER_LOGOUT(self)
     -- Save local copy of globals
     -- TODO: Is this redundant?
     _G["CHOCOBO"] = self.Global
 end
 
 function C:CheckMount()
-    local mounted, mountName, mountID = self:HasMount() -- Get mounted status and name of mount (if mounted)
+    local mounted, mountName, _ = self:HasMount() -- Get mounted status and name of mount (if mounted)
     if IsMounted() or mounted then -- More efficient way to make it also detect flight form here?
-        if mountName then self:DebugMsg((L["CurrentMount"]):format(mountName)) end -- Print what mount the player is mounted on
+        -- Print what mount the player is mounted on
+        if mountName then self:DebugMsg((L["CurrentMount"]):format(mountName)) end
         self:DebugMsg(L["PlayerIsMounted"]) -- Print that the player is mounted
         -- TODO: Redundant to have both the above messages? Remove the second?
         -- Proceed if player is on one of the activated mounts or if allmounts (override) is true
@@ -204,7 +206,8 @@ function C:CheckMount()
                 self.SoundControl:Check() -- Enable sound if disabled and the option is enabled
                 self:DebugMsg(L["PlayingMusic"])
                 self.Mounted = true
-                if type(mountName) ~= "string" then -- Player mounted but mount is not recognised, check all buffs to find a match
+                -- Player mounted but mount is not recognised, check all buffs to find a match
+                if type(mountName) ~= "string" then
                     local found = false
                     local index = 1
                     repeat
@@ -232,7 +235,8 @@ function C:CheckMount()
         self.SoundControl:Check() -- Disable sound if enabled and the option is enabled
         self:DebugMsg(L["NotMounted"])
         self.Mounted = false
-        StopMusic() -- Note that StopMusic() will also stop any other custom music playing (such as from EpicMusicPlayer)
+        -- Note that StopMusic() will also stop any other custom music playing (such as from EpicMusicPlayer)
+        StopMusic()
     end
     self.Running = false
 end
@@ -289,7 +293,8 @@ end
 
 function C:MusicCheck()
     local matchString = "^" .. self.MusicDir -- Match the music dir path at the beginning of the string only.
-    local length = self.MusicDir:len() + 1 -- The substring has to start AFTER the matched string, adding one to the length.
+    -- The substring has to start AFTER the matched string, adding one to the length.
+    local length = self.MusicDir:len() + 1
     local updated = 0 -- Keep track of how many songs that had to update
     for i,v in ipairs(self.Global["MUSIC"]) do
         if v:match(matchString) then
@@ -309,7 +314,6 @@ end
 -- If isMount is true, treat song as the mount name/ID
 function C:PlayMusic(song, isMount)
     local songFile
-    local rawFileName -- Song file name without folder structure
     if isMount then
         song = song:lower()
         if self.Global["CUSTOM"][song] then
@@ -626,7 +630,8 @@ function C:ErrorMsg(msg) -- Send an error message, these are prefixed with the w
     DEFAULT_CHAT_FRAME:AddMessage(L["ErrorPrefix"] .. msg)
 end
 
-function C:DebugMsg(msg) -- Send a debug message, these are only sent when debugging is enabled and are prefixed by the word "Debug" in yellow
+-- Send a debug message, these are only sent when debugging is enabled and are prefixed by the word "Debug" in yellow
+function C:DebugMsg(msg)
     if self.Global["DEBUG"] == true then
         DEFAULT_CHAT_FRAME:AddMessage(L["DebugPrefix"] .. msg)
     end

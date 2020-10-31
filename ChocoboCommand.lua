@@ -30,8 +30,6 @@ local CLib = ChocoboLib
 local L = _G["ChocoboLocale"]
 
 local AddCustomPattern = "\"([%w%p%s]+)\" \"([%w%p%s]+)\""
-local AddCustomStart = "^\""
-local AddCustomEnd = "\"$"
 
 -- Argument #1 (command) can be either string or a table.
 function CC:Register(command, func)
@@ -60,7 +58,7 @@ function CC:HandleCommand(command, args)
     end
 end
 
-CC:Register("__DEFAULT__", function(args)
+CC:Register("__DEFAULT__", function()
     C:Msg(L["HelpMessage1"])
     C:Msg(L["HelpMessage2"])
     C:Msg(L["HelpMessage3"])
@@ -82,20 +80,20 @@ CC:Register("__DEFAULT__", function(args)
     C:Msg(L["HelpMessage11"])
 end)
 
-CC:Register({"options", "o", "config", "gui"}, function(args)
+CC:Register({"options", "o", "config", "gui"}, function()
     Chocobo.SoundControl.Options:Open()
     Chocobo.Options:Open()
 end)
 
-CC:Register({"allmounts", "am", "all"}, function(args) C:FilterMount(false) end)
-CC:Register({"hawkstrider", "hs", "hawk"}, function(args) C:FilterMount(true) end)
-CC:Register({"modetoggle", "mounttoggle", "mt"}, function(args) C:FilterMount() end)
-CC:Register({"toggle", "t"}, function(args) C:Toggle() end)
-CC:Register({"plainstridertoggle", "plainstrider", "plainstriders", "ps"}, function(args) C:PlainstriderToggle() end)
-CC:Register({"ridingcranetoggle", "ridingcrane", "ridingcranes", "rc"}, function(args) C:RidingCraneToggle() end)
-CC:Register({"ravenlordtoggle", "ravenlord", "rl"}, function(args) C:RavenLordToggle() end)
-CC:Register({"flametalontoggle", "flametalon", "flame", "alysrazor", "alys"}, function(args) C:FlametalonToggle() end)
-CC:Register({"preventdupetoggle", "pdtoggle", "pdt"}, function(args) C:PreventDupeToggle() end)
+CC:Register({"allmounts", "am", "all"}, function() C:FilterMount(false) end)
+CC:Register({"hawkstrider", "hs", "hawk"}, function() C:FilterMount(true) end)
+CC:Register({"modetoggle", "mounttoggle", "mt"}, function() C:FilterMount() end)
+CC:Register({"toggle", "t"}, function() C:Toggle() end)
+CC:Register({"plainstridertoggle", "plainstrider", "plainstriders", "ps"}, function() C:PlainstriderToggle() end)
+CC:Register({"ridingcranetoggle", "ridingcrane", "ridingcranes", "rc"}, function() C:RidingCraneToggle() end)
+CC:Register({"ravenlordtoggle", "ravenlord", "rl"}, function() C:RavenLordToggle() end)
+CC:Register({"flametalontoggle", "flametalon", "flame", "alysrazor", "alys"}, function() C:FlametalonToggle() end)
+CC:Register({"preventdupetoggle", "pdtoggle", "pdt"}, function() C:PreventDupeToggle() end)
 
 CC:Register({"soundcontrol", "sc", "sndctrl", "sound"}, function(args)
     local handled = false
@@ -190,10 +188,10 @@ CC:Register({"soundcontrol", "sc", "sndctrl", "sound"}, function(args)
     end
 end)
 
-CC:Register({"list", "l", "ls"}, function(args) C:PrintMusic() end)
-CC:Register({"reset", "r"}, function(args) C:ResetMusic() end)
-CC:Register({"listmounts", "lm"}, function(args) C:PrintMounts() end)
-CC:Register({"resetmounts", "rm"}, function(args) C:ResetMounts() end)
+CC:Register({"list", "l", "ls"}, function() C:PrintMusic() end)
+CC:Register({"reset", "r"}, function() C:ResetMusic() end)
+CC:Register({"listmounts", "lm"}, function() C:PrintMounts() end)
+CC:Register({"resetmounts", "rm"}, function() C:ResetMounts() end)
 
 CC:Register({"debug", "d"}, function(args)
     if not args[1] then
@@ -294,7 +292,7 @@ for i,v in ipairs(CC.Slash) do
     _G["SLASH_" .. C.Name:upper() .. i] = "/" .. v
 end
 
-SlashCmdList[C.Name:upper()] = function(msg, editBox)
+SlashCmdList[C.Name:upper()] = function(msg)
     msg = CLib:Trim(msg)
     local args = CLib:Split(msg)
     local cmd = args[1]
