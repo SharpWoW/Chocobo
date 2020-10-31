@@ -203,6 +203,7 @@ L["Options_Description"] = "Configuration page for Chocobo|n%s"
 L["SongsAndMounts_Description"] = "Configure song files to play and mounts to trigger on"
 L["SongsAndMounts_Songs"] = "Song files"
 L["SongsAndMounts_Mounts"] = "Mounts to trigger on (name or ID)"
+L["SongsAndMounts_SongsForMount"] = "Song files for %s"
 
 --[[Sound Control Strings]]--
 --The frame

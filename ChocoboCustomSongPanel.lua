@@ -19,9 +19,95 @@
 
 local L = _G["ChocoboLocale"]
 
-Chocobo.CustomSongPanel = {}
+local C = Chocobo
 
-local CSP = Chocobo.CustomSongPanel
+C.CustomSongPanel = {}
+
+local CSP = C.CustomSongPanel
+
+local function createList(parent, header, listGetter, addFunc, removeFunc, resetFunc, itemClickFunc)
+    local list = CreateFrame("Frame", nil, parent, "ChocoboSongsAndMountsListTemplate")
+    list.items = {}
+    list.Header:SetText(header)
+    list.AddButton:SetText(L["Options_Add"])
+    list.AddButton:SetScript("OnClick", function()
+        local item = list.EditBox:GetText()
+        addFunc(item)
+        list:RefreshLayout()
+        list.EditBox:SetText("")
+    end)
+    list.ResetButton:SetText(L["Options_Reset"])
+    list.ResetButton:SetScript("OnClick", function()
+        resetFunc()
+        list:RefreshLayout()
+    end)
+    list.ListScrollFrame.update = function() list:RefreshLayout() end
+    list:SetScript("OnShow", function(self)
+        self.items = listGetter()
+        HybridScrollFrame_CreateButtons(self.ListScrollFrame, "ChocoboSongsAndMountsItemTemplate")
+        self:RefreshLayout()
+    end)
+    function list:RemoveItem(index)
+        local item = listGetter()[index]
+        removeFunc(item)
+        self:RefreshLayout()
+    end
+    function list:RefreshLayout()
+        local items = listGetter()
+
+        if items then
+            self.EditBox:Enable()
+            self.AddButton:Enable()
+        else
+            self.EditBox:Disable()
+            self.AddButton:Disable()
+            items = {}
+        end
+
+        local buttons = HybridScrollFrame_GetButtons(self.ListScrollFrame)
+        local offset = HybridScrollFrame_GetOffset(self.ListScrollFrame)
+
+        for buttonIndex = 1, #buttons do
+            local button = buttons[buttonIndex]
+            local itemIndex = buttonIndex + offset
+
+            button:UnlockHighlight()
+
+            if itemIndex <= #items then
+                local item = items[itemIndex]
+                button:SetID(itemIndex)
+                button.Text:SetText(item)
+                button:SetWidth(self.ListScrollFrame.scrollChild:GetWidth())
+                if itemClickFunc then
+                    button:SetScript("OnClick", function(btn)
+                        for _, b in pairs(buttons) do b:UnlockHighlight() end
+                        btn:LockHighlight()
+                        itemClickFunc(item)
+                    end)
+                end
+                button:Show()
+            else
+                button:Hide()
+            end
+        end
+
+        local buttonHeight = self.ListScrollFrame.buttonHeight
+        local totalHeight = #items * buttonHeight
+        local shownHeight = #buttons * buttonHeight
+
+        HybridScrollFrame_Update(self.ListScrollFrame, totalHeight, shownHeight)
+    end
+    function list:ClearHighlights()
+        local buttons = HybridScrollFrame_GetButtons(self.ListScrollFrame)
+        for _, btn in pairs(buttons) do
+            btn:UnlockHighlight()
+        end
+    end
+
+    HybridScrollFrame_SetDoNotHideScrollBar(list.ListScrollFrame, true)
+
+    return list
+end
 
 local frame = CreateFrame("Frame")
 CSP.Frame = frame
@@ -41,61 +127,76 @@ frame.description.label:SetPoint("BOTTOMRIGHT")
 frame.description.label:SetTextColor(1, 0.8196079, 0)
 frame.description.label:SetText(L["CustomSongPanel_Description"])
 
-frame.customPanel = CreateFrame("Frame", nil, frame, BackdropTemplateMixin and "BackdropTemplate")
-frame.customPanel:SetSize(370, 120)
-frame.customPanel:SetPoint("TOP", 0, -50)
-frame.customPanel:SetBackdrop(_G.BACKDROP_TOOLTIP_16_16_5555)
-frame.customPanel:SetBackdropColor(0.2, 0.2, 0.2, 0.9)
-frame.customPanel:SetBackdropBorderColor(0.3, 0.3, 0.3, 1)
-frame.customPanel.custom = CreateFrame("Frame", nil, frame.customPanel)
-frame.customPanel.custom:SetSize(360, 18)
-frame.customPanel.custom:SetPoint("TOPLEFT", 5, -8)
-frame.customPanel.custom.desc = frame.customPanel.custom:CreateFontString(nil, "OVERLAY", nil)
-frame.customPanel.custom.desc:SetFont([[Fonts\FRIZQT__.TTF]], 12, "OUTLINE")
-frame.customPanel.custom.desc:SetPoint("TOPLEFT")
-frame.customPanel.custom.desc:SetPoint("BOTTOMRIGHT")
-frame.customPanel.custom.desc:SetTextColor(1, 0.8196079, 0)
-frame.customPanel.custom.desc:SetText(L["CustomSongPanel_PanelDesc"])
-frame.customPanel.custom.songEditBox = CreateFrame("EditBox", nil, frame.customPanel.custom, "InputBoxTemplate")
-frame.customPanel.custom.songEditBox:SetMaxLetters(100)
-frame.customPanel.custom.songEditBox:EnableMouse(true)
-frame.customPanel.custom.songEditBox:SetSize(150, 22)
-frame.customPanel.custom.songEditBox:SetPoint("TOPLEFT", 110, -32)
-frame.customPanel.custom.songEditBox:SetAutoFocus(false)
-frame.customPanel.custom.mountEditBox = CreateFrame("EditBox", nil, frame.customPanel.custom, "InputBoxTemplate")
-frame.customPanel.custom.mountEditBox:SetMaxLetters(100)
-frame.customPanel.custom.mountEditBox:EnableMouse(true)
-frame.customPanel.custom.mountEditBox:SetSize(150, 22)
-frame.customPanel.custom.mountEditBox:SetPoint("TOPLEFT", 110, -56)
-frame.customPanel.custom.mountEditBox:SetAutoFocus(false)
-frame.customPanel.custom.addButton = CreateFrame("Button", nil, frame.customPanel.custom, "OptionsButtonTemplate")
-frame.customPanel.custom.addButton:SetSize(80, 22)
-frame.customPanel.custom.addButton:SetPoint("TOPLEFT", 64, -81)
-frame.customPanel.custom.addButton:SetText(L["Options_Add"])
-frame.customPanel.custom.addButton:SetScript("OnClick", function()
-    local music = frame.customPanel.custom.songEditBox:GetText()
-    local mount = frame.customPanel.custom.mountEditBox:GetText()
-    Chocobo:AddCustomMusic(music, mount)
-end)
-frame.customPanel.custom.removeButton = CreateFrame("Button", nil, frame.customPanel.custom, "OptionsButtonTemplate")
-frame.customPanel.custom.removeButton:SetSize(80, 22)
-frame.customPanel.custom.removeButton:SetPoint("TOPLEFT", 145, -81)
-frame.customPanel.custom.removeButton:SetText(L["Options_Remove"])
-frame.customPanel.custom.removeButton:SetScript("OnClick", function()
-    local mount = frame.customPanel.custom.mountEditBox:GetText()
-    Chocobo:RemoveCustomMusic(mount)
-end)
-frame.customPanel.custom.listButton = CreateFrame("Button", nil, frame.customPanel.custom, "OptionsButtonTemplate")
-frame.customPanel.custom.listButton:SetSize(80, 22)
-frame.customPanel.custom.listButton:SetPoint("TOPLEFT", 227, -81)
-frame.customPanel.custom.listButton:SetText(L["Options_List"])
-frame.customPanel.custom.listButton:SetScript("OnClick", function()
-    Chocobo:PrintMusic()
-end)
+frame.mounts = createList(
+    frame,
+    L["SongsAndMounts_Mounts"],
+    function()
+        local items = {}
+        for k, _ in pairs(C.Global.CUSTOM) do
+            items[#items + 1] = k
+        end
+        sort(items)
+        return items
+    end,
+    function(item)
+        C:AddCustomMusic(nil, item)
+        frame.songs:Clear()
+    end,
+    function(item)
+        C:RemoveCustomMusic(item)
+        frame.songs:Clear()
+    end,
+    function() end,
+    function(item)
+        frame.songs.mount = item
+        frame.songs:RefreshLayout()
+        frame.songs.Header:SetText(L["SongsAndMounts_SongsForMount"]:format(item))
+    end)
+frame.mounts:SetPoint("TOP", frame.description, "BOTTOM")
+frame.mounts:SetPoint("LEFT", 5, 0)
+frame.mounts:SetPoint("RIGHT", frame, "BOTTOM", -20, 0)
+frame.mounts:SetPoint("BOTTOM", 0, 5)
+frame.mounts.ResetButton:Disable()
+
+frame.songs = createList(
+    frame,
+    L["SongsAndMounts_Songs"],
+    function()
+        local mount = frame.songs.mount
+        if not mount then return nil end
+        return C:GetCustomMusic(mount)
+    end,
+    function(item)
+        local mount = frame.songs.mount
+        if not mount then return end
+        C:AddCustomMusic(item, mount)
+    end,
+    function(item)
+        local mount = frame.songs.mount
+        if not mount then return end
+        C:RemoveCustomMusic(mount, item)
+    end,
+    function()
+        local mount = frame.songs.mount
+        if not mount then return end
+        C:RemoveCustomMusic(mount)
+        frame.mounts:RefreshLayout()
+    end)
+frame.songs:SetPoint("TOP", frame.mounts, "TOP")
+frame.songs:SetPoint("LEFT", frame, "BOTTOM")
+frame.songs:SetPoint("RIGHT", -25, 0)
+frame.songs:SetPoint("BOTTOM", frame.mounts, "BOTTOM")
+function frame.songs:Clear()
+    self.mount = nil
+    self.Header:SetText(L["SongsAndMounts_Songs"])
+    self:RefreshLayout()
+end
 
 function CSP:Update()
-    frame.customPanel.custom.songEditBox:SetText(L["CustomSongPanel_SongEditDefault"])
-    frame.customPanel.custom.mountEditBox:SetText(L["CustomSongPanel_MountEditDefault"])
+    frame.mounts:ClearHighlights()
+    frame.songs.mount = nil
+    frame.songs.Header:SetText(L["SongsAndMounts_Songs"])
+    frame.songs:RefreshLayout()
 end
 
 frame:SetScript("OnShow", function() CSP:Update() end)

@@ -27,6 +27,7 @@ stds.wow = {
     "PlayMusic",
     "SetCVar",
     "StopMusic",
+    "sort",
     "UnitBuff",
     "wipe"
   }
