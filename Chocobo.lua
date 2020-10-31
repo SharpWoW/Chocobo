@@ -414,23 +414,31 @@ function C:RemoveMusic(list, songName) -- Remove a song from the list
 end
 
 function C:AddCustomMusic(song, mount)
-    song = CLib:Trim(tostring(song))
+    if song then
+        song = CLib:Trim(tostring(song))
+    end
     mount = mount:lower()
     if song == "" or type(song) ~= "string" then
-        self:ErrorMsg((L["AddCustomInvalidSong"]):format(tostring(song)))
-        return
-    elseif type(mount) ~= "string" then
-        self:ErrorMsg((L["AddCustomInvalidMount"]):format(tostring(mount)))
+        song = nil
+        --self:ErrorMsg((L["AddCustomInvalidSong"]):format(tostring(song)))
+        --return
     end
-    if self.Global["CUSTOM"][mount] then
-        if CLib:InTable(self.Global["CUSTOM"][mount], song) then
+    if type(mount) ~= "string" or mount == "" then
+        self:ErrorMsg((L["AddCustomInvalidMount"]):format(tostring(mount)))
+        return
+    end
+    if self.Global.CUSTOM[mount] then
+        if song and CLib:InTable(self.Global.CUSTOM[mount], song) then
             self:ErrorMsg((L["AddCustomExists"]):format(song, mount))
             return
         end
-        table.insert(self.Global["CUSTOM"][mount], song)
+        if not song then return end
+        table.insert(self.Global.CUSTOM[mount], song)
         self:Msg((L["AddCustomSuccess"]):format(song, mount))
     else
-        self.Global["CUSTOM"][mount] = {song}
+        self.Global.CUSTOM[mount] = {}
+        if not song then return end
+        table.insert(self.Global.CUSTOM[mount], song)
         self:Msg((L["AddCustomSuccess"]):format(song, mount))
     end
 end
