@@ -316,13 +316,14 @@ function C:PlayMusic(song, isMount)
     local songFile
     if isMount then
         song = song:lower()
-        if self.Global["CUSTOM"][song] then
-            local id = math.random(1, #self.Global["CUSTOM"][song])
-            songFile = self.Global["CUSTOM"][song][id]
-            if #self.Global["CUSTOM"][song] > 1 and self.Global["PREVENTDUPE"] and songFile == nowPlaying then
+        local mountSongs = self.Global.CUSTOM[song]
+        if mountSongs and #mountSongs > 0 then
+            local id = math.random(1, #mountSongs)
+            songFile = mountSongs[id]
+            if #mountSongs > 1 and self.Global["PREVENTDUPE"] and songFile == nowPlaying then
                 while songFile == nowPlaying do
-                    id = math.random(1, #self.Global["CUSTOM"][song])
-                    songFile = self.Global["CUSTOM"][song][id]
+                    id = math.random(1, #mountSongs)
+                    songFile = mountSongs[id]
                 end
             end
             self:DebugMsg((L["PlayingSong"]):format(id, songFile))
