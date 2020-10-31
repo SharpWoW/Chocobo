@@ -413,6 +413,16 @@ function C:RemoveMusic(list, songName) -- Remove a song from the list
     return false
 end
 
+function C:GetCustomMusic(mount)
+    mount = CLib:Trim(tostring(mount)):lower()
+
+    if type(self.Global.CUSTOM[mount]) ~= "table" then
+        self.Global.CUSTOM[mount] = {}
+    end
+
+    return self.Global.CUSTOM[mount]
+end
+
 function C:AddCustomMusic(song, mount)
     if song then
         song = CLib:Trim(tostring(song))
