@@ -383,11 +383,15 @@ function C:AddMusic(songName) -- Add a song the the list
     return true
 end
 
-function C:RemoveMusic(songName) -- Remove a song from the list
+function C:RemoveMusic(list, songName) -- Remove a song from the list
+    if type(list) ~= "table" then
+        songName = list
+        list = self.Global.MUSIC
+    end
     if type(songName) == "number" then
-        if self.Global["MUSIC"][songName] then
-            local name = self.Global["MUSIC"][songName]
-            table.remove(self.Global["MUSIC"], songName)
+        if list[songName] then
+            local name = list[songName]
+            table.remove(list, songName)
             self:Msg((L["RemovedSong"]):format(name))
             return true
         end
@@ -398,9 +402,9 @@ function C:RemoveMusic(songName) -- Remove a song from the list
         self:ErrorMsg(L["NoFile"])
         return false
     end
-    for i,v in ipairs(self.Global["MUSIC"]) do -- Loop through all the songs in the list until...
+    for i,v in ipairs(list) do -- Loop through all the songs in the list until...
         if v == songName then -- ... the desired one is found and then...
-            table.remove(self.Global["MUSIC"], i) -- ... remove it from the list.
+            table.remove(list, i) -- ... remove it from the list.
             self:Msg((L["RemovedSong"]):format(songName))
             return true
         end
@@ -431,15 +435,20 @@ function C:AddCustomMusic(song, mount)
     end
 end
 
-function C:RemoveCustomMusic(mount)
+function C:RemoveCustomMusic(mount, song)
     mount = mount:lower()
     if type(mount) ~= "string" then
         self:ErrorMsg((L["RemoveCustomInvalidMount"]):format(tostring(mount)))
     end
-    if self.Global["CUSTOM"][mount] then
-        wipe(self.Global["CUSTOM"][mount])
-        self.Global["CUSTOM"][mount] = nil
-        self:Msg((L["RemoveCustomSuccess"]):format(mount))
+    local list = self.Global.CUSTOM[mount]
+    if list then
+        if song then
+            self:RemoveMusic(list, song)
+        else
+            wipe(list)
+            self.Global.CUSTOM[mount] = nil
+            self:Msg((L["RemoveCustomSuccess"]):format(mount))
+        end
     else
         self:ErrorMsg((L["RemoveCustomNotExist"]):format(mount))
     end
