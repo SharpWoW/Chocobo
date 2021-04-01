@@ -76,6 +76,7 @@ Chocobo = {
             [101542] = "Flametalon of Alysrazor" -- (Fire version of Raven Lord)
         },
         DruidForms = { -- When AllMounts is enabled
+            [783] = "Travel Form",
             [33943] = "Flight form",
             [40120] = "Swift Flight Form"
         }
