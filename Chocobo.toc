@@ -10,6 +10,7 @@
 ## X-Project-Slug: chocobo
 ## X-Curse-Project-ID: 27585
 ## X-WoWI-ID: 20953
+## X-Wago-ID: rkGrYgKy
 
 #@no-lib-strip@
 libs\LibStub\LibStub.lua
