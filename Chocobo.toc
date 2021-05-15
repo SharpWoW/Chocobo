@@ -1,7 +1,7 @@
 ## Interface: 90005
 ## Interface-Retail: 90005
 ## Interface-Classic: 11306
-## Interface-BC: 20501
+## Interface-BCC: 20501
 ## Version: @project-version@
 ## Title: Chocobo
 ## Notes: Plays the Chocobo song when you mount on a hawkstrider! |cffFF0000Version @project-version@|r |cff00CCFFBy F16Gaming|r
