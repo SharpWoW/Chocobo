@@ -35,9 +35,18 @@ Chocobo = {
         -- Please note that you can't add custom songs here,
         -- this is only used when restoring default settings or on initial setup
         "chocobo.ogg",
+        "chocobo_ffii.ogg",
+        "chocobo_ffiii.ogg",
         "chocobo_ffiv.ogg",
+        "chocobo_ffv.ogg",
+        "chocobo_ffvi.ogg",
+        "chocobo_ffvii.ogg",
+        "chocobo_ffviii.ogg",
+        "chocobo_ffix.ogg",
+        "chocobo_ffx.ogg",
         "chocobo_ffxii.ogg",
-        "chocobo_ffxiii.ogg"
+        "chocobo_ffxiii.ogg",
+        "chocobo_ffxiv.ogg"
     },
 
     -- Values are overridden later with the return from GetSpellInfo
