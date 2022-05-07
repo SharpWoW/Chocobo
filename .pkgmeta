@@ -1,5 +1,6 @@
 package-as: Chocobo
 
+enable-toc-creation: yes
 enable-nolib-creation: yes
 
 externals:
