@@ -65,6 +65,7 @@ local function createList(parent, header, listGetter, addFunc, removeFunc, reset
         end
 
         local buttons = HybridScrollFrame_GetButtons(self.ListScrollFrame)
+        if not buttons then return end
         local offset = HybridScrollFrame_GetOffset(self.ListScrollFrame)
 
         for buttonIndex = 1, #buttons do
@@ -99,6 +100,7 @@ local function createList(parent, header, listGetter, addFunc, removeFunc, reset
     end
     function list:ClearHighlights()
         local buttons = HybridScrollFrame_GetButtons(self.ListScrollFrame)
+        if not buttons then return end
         for _, btn in pairs(buttons) do
             btn:UnlockHighlight()
         end
