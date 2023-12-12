@@ -203,4 +203,15 @@ end
 
 frame:SetScript("OnShow", function() CSP:Update() end)
 
-InterfaceOptions_AddCategory(frame)
+frame.OnCommit = function() end
+frame.OnDefault = function() end
+frame.OnRefresh = function() CSP:Update() end
+
+if Settings and SettingsPanel then
+    local category = Settings.GetCategory(C.Name)
+    local subcategory = Settings.RegisterCanvasLayoutSubcategory(category, frame, "Custom Songs")
+    Settings.RegisterAddOnCategory(subcategory)
+else
+    InterfaceOptions_AddCategory(frame, C.Name)
+end
+

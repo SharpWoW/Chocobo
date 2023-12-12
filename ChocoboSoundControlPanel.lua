@@ -21,8 +21,10 @@ local L = _G["ChocoboLocale"]
 
 Chocobo.SoundControl.Options = {}
 
+local checkButtonTemplate = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE and "OptionsBaseCheckButtonTemplate" or "OptionsCheckButtonTemplate"
+
 local function checkbox(name, parent)
-    local f = CreateFrame("CheckButton", name, parent, "OptionsCheckButtonTemplate")
+    local f = CreateFrame("CheckButton", name, parent, checkButtonTemplate)
     f:SetSize(40, 40)
     f.label = _G[f:GetName() .. "Text"]
 
@@ -109,6 +111,20 @@ frame.defaultNote.label:SetPoint("TOPLEFT")
 frame.defaultNote.label:SetPoint("BOTTOMRIGHT")
 frame.defaultNote.label:SetText(L["SoundControl_DefaultNote"])
 
+local panelTabButtonTemplate = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE and "PanelTabButtonTemplate" or "CharacterFrameTabButtonTemplate"
+local bd = {
+    bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
+    edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
+    tile = true,
+    edgeSize = 16,
+    tileSize = 32,
+    insets = {
+        left = 2.5,
+        right = 2.5,
+        top = 2.5,
+        bottom = 2.5
+    }
+}
 frame.panelContainer = CreateFrame(
     "Frame",
     "ChocoboSoundControlOptionsPanelContainer",
@@ -116,14 +132,12 @@ frame.panelContainer = CreateFrame(
     BackdropTemplateMixin and "BackdropTemplate")
 frame.panelContainer:SetSize(500, 240)
 frame.panelContainer:SetPoint("TOP", 0, -200)
-frame.panelContainer:SetBackdrop(_G.BACKDROP_TOOLTIP_16_16_5555)
-frame.panelContainer:SetBackdropColor(0.2, 0.2, 0.2, 0.9)
-frame.panelContainer:SetBackdropBorderColor(0.3, 0.3, 0.3, 1)
+frame.panelContainer:SetBackdrop(bd)
 frame.panelContainer.tab1 = CreateFrame(
     "Button",
     "ChocoboSoundControlOptionsPanelContainerTab1",
     frame.panelContainer,
-    "CharacterFrameTabButtonTemplate")
+    panelTabButtonTemplate)
 frame.panelContainer.tab1:SetPoint("LEFT", frame.panelContainer, "BOTTOMLEFT", 5, -12)
 frame.panelContainer.tab1:SetText(L["SoundControl_Music"])
 frame.panelContainer.tab1:SetScript("OnClick", function()
@@ -136,7 +150,7 @@ frame.panelContainer.tab2 = CreateFrame(
     "Button",
     "ChocoboSoundControlOptionsPanelContainerTab2",
     frame.panelContainer,
-    "CharacterFrameTabButtonTemplate")
+    panelTabButtonTemplate)
 frame.panelContainer.tab2:SetPoint("LEFT", frame.panelContainer.tab1, "RIGHT", -10, 0)
 frame.panelContainer.tab2:SetText(L["SoundControl_SFX"])
 frame.panelContainer.tab2:SetScript("OnClick", function()
@@ -149,7 +163,7 @@ frame.panelContainer.tab3 = CreateFrame(
     "Button",
     "ChocoboSoundControlOptionsPanelContainerTab3",
     frame.panelContainer,
-    "CharacterFrameTabButtonTemplate")
+    panelTabButtonTemplate)
 frame.panelContainer.tab3:SetPoint("LEFT", frame.panelContainer.tab2, "RIGHT", -10, 0)
 frame.panelContainer.tab3:SetText(L["SoundControl_Ambience"])
 frame.panelContainer.tab3:SetScript("OnClick", function()
@@ -352,8 +366,12 @@ frame.panelContainer.page3.volumeSlider:SetScript("OnMouseWheel", function(self,
 end)
 
 function CSCO:Open()
-    InterfaceOptionsFrame_OpenToCategory(frame)
-    InterfaceOptionsFrame_OpenToCategory(frame)
+    if Settings and SettingsPanel then
+        Settings.OpenToCategory(Chocobo.Name)
+    else
+        InterfaceOptionsFrame_OpenToCategory(frame)
+        InterfaceOptionsFrame_OpenToCategory(frame)
+    end
 end
 
 function CSCO:Update()
@@ -512,7 +530,17 @@ end
 
 frame:SetScript("OnShow", function() CSCO:Update() end)
 
+frame.OnCommit = function() end
+frame.OnDefault = function() end
+frame.OnRefresh = function() CSCO:Update() end
+
 PanelTemplates_SetNumTabs(frame.panelContainer, 3)
 PanelTemplates_SetTab(frame.panelContainer, 1)
 
-InterfaceOptions_AddCategory(frame)
+if Settings and SettingsPanel then
+    local category = Settings.GetCategory(Chocobo.Name)
+    local subcategory = Settings.RegisterCanvasLayoutSubcategory(category, frame, "Sound Control")
+    Settings.RegisterAddOnCategory(subcategory)
+else
+    InterfaceOptions_AddCategory(frame, Chocobo.Name)
+end

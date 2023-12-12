@@ -25,6 +25,8 @@ C.Options = {}
 
 local CO = C.Options
 
+local checkButtonTemplate = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE and "OptionsBaseCheckButtonTemplate" or "OptionsCheckButtonTemplate"
+
 local function createList(parent, header, listGetter, addFunc, removeFunc, resetFunc)
     local list = CreateFrame("Frame", nil, parent, "ChocoboSongsAndMountsListTemplate")
     list.items = {}
@@ -155,7 +157,7 @@ frame.preventDupeToggle = CreateFrame(
     "CheckButton",
     "ChocoboOptionsPreventDupeToggle",
     frame,
-    "OptionsCheckButtonTemplate")
+    checkButtonTemplate)
 frame.preventDupeToggle:SetSize(40, 40)
 frame.preventDupeToggle:SetPoint("BOTTOMLEFT", 20, 160)
 frame.preventDupeToggle:SetScript("OnClick", function()
@@ -168,7 +170,7 @@ frame.plainstriderToggle = CreateFrame(
     "CheckButton",
     "ChocoboOptionsPlainstriderToggle",
     frame,
-    "OptionsCheckButtonTemplate")
+    checkButtonTemplate)
 frame.plainstriderToggle:SetSize(40, 40)
 frame.plainstriderToggle:SetPoint("BOTTOMLEFT", frame.preventDupeToggle, 0, -40)
 frame.plainstriderToggle:SetScript("OnClick", function()
@@ -177,7 +179,7 @@ frame.plainstriderToggle:SetScript("OnClick", function()
 end)
 frame.plainstriderToggle.label = _G[frame.plainstriderToggle:GetName() .. "Text"]
 frame.plainstriderToggle.label:SetText(L["Options_PlainstriderToggle"])
-frame.ravenLordToggle = CreateFrame("CheckButton", "ChocoboOptionsRavenLordToggle", frame, "OptionsCheckButtonTemplate")
+frame.ravenLordToggle = CreateFrame("CheckButton", "ChocoboOptionsRavenLordToggle", frame, checkButtonTemplate)
 frame.ravenLordToggle:SetSize(40, 40)
 frame.ravenLordToggle:SetPoint("BOTTOMLEFT", frame.plainstriderToggle, 0, -40)
 frame.ravenLordToggle:SetScript("OnClick", function()
@@ -190,7 +192,7 @@ frame.flametalonToggle = CreateFrame(
     "CheckButton",
     "ChocoboOptionsFlametalonToggle",
     frame,
-    "OptionsCheckButtonTemplate")
+    checkButtonTemplate)
 frame.flametalonToggle:SetSize(40, 40)
 frame.flametalonToggle:SetPoint("BOTTOMLEFT", frame.ravenLordToggle, 0, -40)
 frame.flametalonToggle:SetScript("OnClick", function()
@@ -203,7 +205,7 @@ frame.ridingCraneToggle = CreateFrame(
     "CheckButton",
     "ChocoboOptionsRidingCraneToggle",
     frame,
-    "OptionsCheckButtonTemplate")
+    checkButtonTemplate)
 frame.ridingCraneToggle:SetSize(40, 40)
 frame.ridingCraneToggle:SetPoint("BOTTOMLEFT", frame.flametalonToggle, 0, -40)
 frame.ridingCraneToggle:SetScript("OnClick", function()
@@ -214,8 +216,12 @@ frame.ridingCraneToggle.label = _G[frame.ridingCraneToggle:GetName() .. "Text"]
 frame.ridingCraneToggle.label:SetText(L["Options_RidingCraneToggle"])
 
 function CO:Open()
-    InterfaceOptionsFrame_OpenToCategory(frame)
-    InterfaceOptionsFrame_OpenToCategory(frame)
+    if Settings and SettingsPanel then
+        Settings.OpenToCategory(frame.name)
+    else
+        InterfaceOptionsFrame_OpenToCategory(frame)
+        InterfaceOptionsFrame_OpenToCategory(frame)
+    end
 end
 
 function CO:Update()
@@ -254,4 +260,14 @@ end
 
 frame:SetScript("OnShow", function() CO:Update() end)
 
-InterfaceOptions_AddCategory(frame)
+frame.OnCommit = function() end
+frame.OnDefault = function() end
+frame.OnRefresh = function() CO:Update() end
+
+if Settings and SettingsPanel then
+    local category = Settings.RegisterCanvasLayoutCategory(frame, C.Name)
+    category.ID = C.Name
+    Settings.RegisterAddOnCategory(category)
+else
+    InterfaceOptions_AddCategory(frame, C.Name)
+end

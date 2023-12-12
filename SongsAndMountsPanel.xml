@@ -53,14 +53,14 @@
           <Anchor point="LEFT" x="5" y="0" />
         </Anchors>
       </EditBox>
-      <Button parentKey="AddButton" inherits="OptionsButtonTemplate">
+      <Button parentKey="AddButton" inherits="UIPanelButtonTemplate">
         <Anchors>
           <Anchor point="TOPLEFT" relativeKey="$parent.EditBox" relativePoint="TOPRIGHT" />
           <Anchor point="BOTTOMLEFT" relativeKey="$parent.EditBox" relativePoint="BOTTOMRIGHT" />
           <Anchor point="RIGHT" x="20" y="0" />
         </Anchors>
       </Button>
-      <Button parentKey="ResetButton" inherits="OptionsButtonTemplate">
+      <Button parentKey="ResetButton" inherits="UIPanelButtonTemplate">
         <Size y="30" />
         <Anchors>
           <Anchor point="BOTTOMLEFT" />
