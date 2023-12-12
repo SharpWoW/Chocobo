@@ -26,9 +26,13 @@ stds.wow = {
     "PanelTemplates_SetTab",
     "PlayMusic",
     "SetCVar",
+    "Settings",
+    "SettingsPanel",
     "StopMusic",
     "sort",
     "UnitBuff",
+    "WOW_PROJECT_ID",
+    "WOW_PROJECT_MAINLINE",
     "wipe"
   }
 }

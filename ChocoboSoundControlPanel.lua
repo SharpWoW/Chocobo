@@ -21,7 +21,8 @@ local L = _G["ChocoboLocale"]
 
 Chocobo.SoundControl.Options = {}
 
-local checkButtonTemplate = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE and "OptionsBaseCheckButtonTemplate" or "OptionsCheckButtonTemplate"
+local checkButtonTemplate = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE and "OptionsBaseCheckButtonTemplate"
+    or "OptionsCheckButtonTemplate"
 
 local function checkbox(name, parent)
     local f = CreateFrame("CheckButton", name, parent, checkButtonTemplate)
@@ -111,7 +112,9 @@ frame.defaultNote.label:SetPoint("TOPLEFT")
 frame.defaultNote.label:SetPoint("BOTTOMRIGHT")
 frame.defaultNote.label:SetText(L["SoundControl_DefaultNote"])
 
-local panelTabButtonTemplate = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE and "PanelTabButtonTemplate" or "CharacterFrameTabButtonTemplate"
+local panelTabButtonTemplate = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE and "PanelTabButtonTemplate"
+    or "CharacterFrameTabButtonTemplate"
+
 local bd = {
     bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
     edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",

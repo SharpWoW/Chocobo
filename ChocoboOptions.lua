@@ -25,7 +25,8 @@ C.Options = {}
 
 local CO = C.Options
 
-local checkButtonTemplate = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE and "OptionsBaseCheckButtonTemplate" or "OptionsCheckButtonTemplate"
+local checkButtonTemplate = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE and "OptionsBaseCheckButtonTemplate"
+    or "OptionsCheckButtonTemplate"
 
 local function createList(parent, header, listGetter, addFunc, removeFunc, resetFunc)
     local list = CreateFrame("Frame", nil, parent, "ChocoboSongsAndMountsListTemplate")
