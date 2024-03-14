@@ -59,10 +59,26 @@ end
 --[[ChocoboLib Specific Functions]]--
 -- Buff/Aura functions
 
+local G_UnitBuff = _G.UnitBuff
+local UnitBuff
+
+if WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC then
+    UnitBuff = function(unit, index, filter)
+        local name, _, _, _, _, _, _, _, _, id = G_UnitBuff(unit, index, filter)
+        return name, id
+    end
+else
+    UnitBuff = function(unit, index, filter)
+        local aura = C_UnitAuras.GetBuffDataByIndex(unit, index, filter)
+        if not aura then return nil, nil end
+        return aura.name, aura.spellId
+    end
+end
+
 local function GetBuffs()
     local buffs = {}
     for i=1,40 do -- Loop through all 40 possible buff indexes
-        local name, _, _, _, _, _, _, _, _, id = UnitBuff("player", i, "PLAYER CANCELABLE") -- Get buff on index i
+        local name, id = UnitBuff("player", i, "PLAYER CANCELABLE") -- Get buff on index i
         -- Insert it into the buffs table, break if buff is nil (that means no other buffs exist on the player)
         if name and id then buffs[name] = id else break end
     end

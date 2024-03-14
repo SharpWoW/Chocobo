@@ -212,7 +212,13 @@ function C:CheckMount()
                     local found = false
                     local index = 1
                     repeat
-                        local name = UnitBuff("player", index, "PLAYER CANCELABLE")
+                        local name
+                        if WOW_PROJECT_ID == WOW_PROJECT_WRATH_CLASSIC then
+                            name = UnitBuff("player", index, "PLAYER CANCELABLE")
+                        else
+                            local aura = C_UnitAuras.GetBuffDataByIndex("player", index, "PLAYER CANCELABLE")
+                            name = aura and aura.name
+                        end
                         if not name then break end -- No more buffs to check
                         if self.Global["CUSTOM"][name:lower()] then
                             self:PlayRandomMusic(name)
