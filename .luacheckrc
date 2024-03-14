@@ -7,6 +7,7 @@ stds.wow = {
   read_globals = {
     "BackdropTemplateMixin",
     "C_Timer",
+    "C_UnitAuras",
     "CreateFrame",
     "DEFAULT_CHAT_FRAME",
     "GetAddOnMetadata",
@@ -33,6 +34,7 @@ stds.wow = {
     "UnitBuff",
     "WOW_PROJECT_ID",
     "WOW_PROJECT_MAINLINE",
+    "WOW_PROJECT_WRATH_CLASSIC",
     "wipe"
   }
 }
