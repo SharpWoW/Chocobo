@@ -429,7 +429,7 @@ function C:AddCustomMusic(song, mount)
     if song then
         song = CLib:Trim(tostring(song))
     end
-    mount = mount:lower()
+    mount = CLib:Trim(mount:lower())
     if song == "" or type(song) ~= "string" then
         song = nil
         --self:ErrorMsg((L["AddCustomInvalidSong"]):format(tostring(song)))
