@@ -217,12 +217,7 @@ frame.ridingCraneToggle.label = _G[frame.ridingCraneToggle:GetName() .. "Text"]
 frame.ridingCraneToggle.label:SetText(L["Options_RidingCraneToggle"])
 
 function CO:Open()
-    if Settings and SettingsPanel then
-        Settings.OpenToCategory(frame.name)
-    else
-        InterfaceOptionsFrame_OpenToCategory(frame)
-        InterfaceOptionsFrame_OpenToCategory(frame)
-    end
+    Settings.OpenToCategory(frame.name)
 end
 
 function CO:Update()
@@ -265,10 +260,6 @@ frame.OnCommit = function() end
 frame.OnDefault = function() end
 frame.OnRefresh = function() CO:Update() end
 
-if Settings and SettingsPanel then
-    local category = Settings.RegisterCanvasLayoutCategory(frame, C.Name)
-    category.ID = C.Name
-    Settings.RegisterAddOnCategory(category)
-else
-    InterfaceOptions_AddCategory(frame, C.Name)
-end
+local category = Settings.RegisterCanvasLayoutCategory(frame, C.Name)
+category.ID = C.Name
+Settings.RegisterAddOnCategory(category)

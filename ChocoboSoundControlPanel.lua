@@ -540,10 +540,6 @@ frame.OnRefresh = function() CSCO:Update() end
 PanelTemplates_SetNumTabs(frame.panelContainer, 3)
 PanelTemplates_SetTab(frame.panelContainer, 1)
 
-if Settings and SettingsPanel then
-    local category = Settings.GetCategory(Chocobo.Name)
-    local subcategory = Settings.RegisterCanvasLayoutSubcategory(category, frame, "Sound Control")
-    Settings.RegisterAddOnCategory(subcategory)
-else
-    InterfaceOptions_AddCategory(frame, Chocobo.Name)
-end
+local category = Settings.GetCategory(Chocobo.Name)
+local subcategory = Settings.RegisterCanvasLayoutSubcategory(category, frame, "Sound Control")
+Settings.RegisterAddOnCategory(subcategory)
