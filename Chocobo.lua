@@ -24,7 +24,7 @@
 
 Chocobo = {
     Name = "Chocobo",
-    Version = GetAddOnMetadata("Chocobo", "Version"),
+    Version = C_AddOns.GetAddOnMetadata("Chocobo", "Version"),
     Loaded = false,
     Mounted = false,
     Running = false, -- True if the OnUpdate handler is running.
@@ -683,6 +683,11 @@ for k,_ in pairs(C.Events) do
     else
         C.Frame:RegisterEvent(k)
     end
+end
+
+local GetSpellInfo = GetSpellInfo
+if not GetSpellInfo then
+    GetSpellInfo = C_Spell.GetSpellName
 end
 
 for _, section in pairs(C.Mounts) do

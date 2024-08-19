@@ -6,6 +6,8 @@ stds.wow = {
   },
   read_globals = {
     "BackdropTemplateMixin",
+    "C_AddOns",
+    "C_Spell",
     "C_Timer",
     "C_UnitAuras",
     "CreateFrame",
