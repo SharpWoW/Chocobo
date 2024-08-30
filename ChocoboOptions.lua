@@ -25,8 +25,25 @@ C.Options = {}
 
 local CO = C.Options
 
-local checkButtonTemplate = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE and "OptionsBaseCheckButtonTemplate"
-    or "OptionsCheckButtonTemplate"
+local function check(name, parent, label, handler)
+    local c = CreateFrame(
+        "CheckButton",
+        name,
+        parent,
+        "UICheckButtonTemplate")
+    c:SetSize(40, 40)
+    c:SetScript("OnClick", function(s)
+        if (s:GetChecked()) then
+            PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON);
+        else
+            PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_OFF);
+        end
+        handler()
+    end)
+    c.label = _G[c:GetName() .. "Text"]
+    c.label:SetText(label)
+    return c
+end
 
 local function createList(parent, header, listGetter, addFunc, removeFunc, resetFunc)
     local list = CreateFrame("Frame", nil, parent, "ChocoboSongsAndMountsListTemplate")
@@ -154,67 +171,31 @@ frame.toggleButton:SetScript("OnClick", function()
     CO:Update()
 end)
 
-frame.preventDupeToggle = CreateFrame(
-    "CheckButton",
-    "ChocoboOptionsPreventDupeToggle",
-    frame,
-    checkButtonTemplate)
-frame.preventDupeToggle:SetSize(40, 40)
-frame.preventDupeToggle:SetPoint("BOTTOMLEFT", 20, 160)
-frame.preventDupeToggle:SetScript("OnClick", function()
+frame.preventDupeToggle = check("ChocoboOptionsPreventDupeToggle", frame, L["Options_PreventDupeToggle"], function()
     Chocobo:PreventDupeToggle(true)
     CO:Update()
 end)
-frame.preventDupeToggle.label = _G[frame.preventDupeToggle:GetName() .. "Text"]
-frame.preventDupeToggle.label:SetText(L["Options_PreventDupeToggle"])
-frame.plainstriderToggle = CreateFrame(
-    "CheckButton",
-    "ChocoboOptionsPlainstriderToggle",
-    frame,
-    checkButtonTemplate)
-frame.plainstriderToggle:SetSize(40, 40)
-frame.plainstriderToggle:SetPoint("BOTTOMLEFT", frame.preventDupeToggle, 0, -40)
-frame.plainstriderToggle:SetScript("OnClick", function()
+frame.preventDupeToggle:SetPoint("BOTTOMLEFT", 20, 160)
+frame.plainstriderToggle = check("ChocoboOptionsPlainstriderToggle", frame, L["Options_PlainstriderToggle"], function()
     Chocobo:PlainstriderToggle(true)
     CO:Update()
 end)
-frame.plainstriderToggle.label = _G[frame.plainstriderToggle:GetName() .. "Text"]
-frame.plainstriderToggle.label:SetText(L["Options_PlainstriderToggle"])
-frame.ravenLordToggle = CreateFrame("CheckButton", "ChocoboOptionsRavenLordToggle", frame, checkButtonTemplate)
-frame.ravenLordToggle:SetSize(40, 40)
-frame.ravenLordToggle:SetPoint("BOTTOMLEFT", frame.plainstriderToggle, 0, -40)
-frame.ravenLordToggle:SetScript("OnClick", function()
+frame.plainstriderToggle:SetPoint("BOTTOMLEFT", frame.preventDupeToggle, 0, -40)
+frame.ravenLordToggle = check("ChocoboOptionsRavenLordToggle", frame, L["Options_RavenLordToggle"], function()
     Chocobo:RavenLordToggle(true)
     CO:Update()
 end)
-frame.ravenLordToggle.label = _G[frame.ravenLordToggle:GetName() .. "Text"]
-frame.ravenLordToggle.label:SetText(L["Options_RavenLordToggle"])
-frame.flametalonToggle = CreateFrame(
-    "CheckButton",
-    "ChocoboOptionsFlametalonToggle",
-    frame,
-    checkButtonTemplate)
-frame.flametalonToggle:SetSize(40, 40)
-frame.flametalonToggle:SetPoint("BOTTOMLEFT", frame.ravenLordToggle, 0, -40)
-frame.flametalonToggle:SetScript("OnClick", function()
+frame.ravenLordToggle:SetPoint("BOTTOMLEFT", frame.plainstriderToggle, 0, -40)
+frame.flametalonToggle = check("ChocoboOptionsFlametalonToggle", frame, L["Options_FlametalonToggle"], function()
     Chocobo:FlametalonToggle(true)
     CO:Update()
 end)
-frame.flametalonToggle.label = _G[frame.flametalonToggle:GetName() .. "Text"]
-frame.flametalonToggle.label:SetText(L["Options_FlametalonToggle"])
-frame.ridingCraneToggle = CreateFrame(
-    "CheckButton",
-    "ChocoboOptionsRidingCraneToggle",
-    frame,
-    checkButtonTemplate)
-frame.ridingCraneToggle:SetSize(40, 40)
-frame.ridingCraneToggle:SetPoint("BOTTOMLEFT", frame.flametalonToggle, 0, -40)
-frame.ridingCraneToggle:SetScript("OnClick", function()
+frame.flametalonToggle:SetPoint("BOTTOMLEFT", frame.ravenLordToggle, 0, -40)
+frame.ridingCraneToggle = check("ChocoboOptionsRidingCraneToggle", frame, L["Options_RidingCraneToggle"], function()
     Chocobo:RidingCraneToggle(true)
     CO:Update()
 end)
-frame.ridingCraneToggle.label = _G[frame.ridingCraneToggle:GetName() .. "Text"]
-frame.ridingCraneToggle.label:SetText(L["Options_RidingCraneToggle"])
+frame.ridingCraneToggle:SetPoint("BOTTOMLEFT", frame.flametalonToggle, 0, -40)
 
 function CO:Open()
     Settings.OpenToCategory(frame.name)
