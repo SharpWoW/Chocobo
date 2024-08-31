@@ -107,10 +107,12 @@ end)
 frame.toggle:SetPoint("TOPLEFT", 10, -85)
 frame.toggle.label:SetTextColor(1, 1, 1)
 
-frame.toggleDefault = checkbox("ChocoboSoundControlOptionsToggleDefault", frame, L["SoundControl_ToggleDefault"], function()
-    Chocobo.SoundControl:ToggleDefault(true)
-    CSCO:Update()
-end)
+frame.toggleDefault = checkbox(
+    "ChocoboSoundControlOptionsToggleDefault", frame, L["SoundControl_ToggleDefault"],
+    function()
+        Chocobo.SoundControl:ToggleDefault(true)
+        CSCO:Update()
+    end)
 frame.toggleDefault:SetPoint("TOPLEFT", 10, -125)
 
 frame.defaultHelp = CreateFrame("Frame", nil, frame)
@@ -208,10 +210,12 @@ frame.panelContainer.page1.panel.desc:SetFont([[Fonts\FRIZQT__.TTF]], 12, "OUTLI
 frame.panelContainer.page1.panel.desc:SetPoint("TOPLEFT")
 frame.panelContainer.page1.panel.desc:SetPoint("BOTTOMRIGHT")
 frame.panelContainer.page1.panel.desc:SetText(L["SoundControl_MusicDesc"])
-frame.panelContainer.page1.enable = checkbox("ChocoboSoundControlOptionsPage1Enable", frame.panelContainer.page1, L["SoundControl_MusicEnable"], function()
-    Chocobo.SoundControl:ToggleMusic(true)
-    CSCO:Update()
-end)
+frame.panelContainer.page1.enable = checkbox(
+    "ChocoboSoundControlOptionsPage1Enable", frame.panelContainer.page1, L["SoundControl_MusicEnable"],
+    function()
+        Chocobo.SoundControl:ToggleMusic(true)
+        CSCO:Update()
+    end)
 frame.panelContainer.page1.enable:SetPoint("TOPLEFT", 10, -25)
 frame.panelContainer.page1.enableMount = checkbox(
     "ChocoboSoundControlOptionsPage1EnableMount",
@@ -270,10 +274,12 @@ frame.panelContainer.page2.panel.desc:SetFont([[Fonts\FRIZQT__.TTF]], 12, "OUTLI
 frame.panelContainer.page2.panel.desc:SetPoint("TOPLEFT")
 frame.panelContainer.page2.panel.desc:SetPoint("BOTTOMRIGHT")
 frame.panelContainer.page2.panel.desc:SetText(L["SoundControl_SFXDesc"])
-frame.panelContainer.page2.enable = checkbox("ChocoboSoundControlOptionsPage2Enable", frame.panelContainer.page2, L["SoundControl_SFXEnable"], function()
-    Chocobo.SoundControl:ToggleSFX(true)
-    CSCO:Update()
-end)
+frame.panelContainer.page2.enable = checkbox(
+    "ChocoboSoundControlOptionsPage2Enable", frame.panelContainer.page2, L["SoundControl_SFXEnable"],
+    function()
+        Chocobo.SoundControl:ToggleSFX(true)
+        CSCO:Update()
+    end)
 frame.panelContainer.page2.enable:SetPoint("TOPLEFT", 10, -25)
 frame.panelContainer.page2.enableMount = checkbox(
     "ChocoboSoundControlOptionsPage2EnableMount",
@@ -332,10 +338,12 @@ frame.panelContainer.page3.panel.desc:SetFont([[Fonts\FRIZQT__.TTF]], 12, "OUTLI
 frame.panelContainer.page3.panel.desc:SetPoint("TOPLEFT")
 frame.panelContainer.page3.panel.desc:SetPoint("BOTTOMRIGHT")
 frame.panelContainer.page3.panel.desc:SetText(L["SoundControl_AmbienceDesc"])
-frame.panelContainer.page3.enable = checkbox("ChocoboSoundControlOptionsPage3Enable", frame.panelContainer.page3, L["SoundControl_AmbienceEnable"], function()
-    Chocobo.SoundControl:ToggleAmbience(true)
-    CSCO:Update()
-end)
+frame.panelContainer.page3.enable = checkbox(
+    "ChocoboSoundControlOptionsPage3Enable", frame.panelContainer.page3, L["SoundControl_AmbienceEnable"],
+    function()
+        Chocobo.SoundControl:ToggleAmbience(true)
+        CSCO:Update()
+    end)
 frame.panelContainer.page3.enable:SetPoint("TOPLEFT", 10, -25)
 frame.panelContainer.page3.enableMount = checkbox(
     "ChocoboSoundControlOptionsPage3EnableMount",
