@@ -355,7 +355,7 @@ end
 function C:PlayRandomMusic(mount)
     if mount then
         self:PlayMusic(mount, true)
-    else
+    elseif #self.Global["MUSIC"] > 0 then
         local id = math.random(1, #self.Global["MUSIC"])
         if self.Global["PREVENTDUPE"] and #self.Global["MUSIC"] > 1 then
             local name = self.Global["MUSIC"][id]
